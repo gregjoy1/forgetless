@@ -1,19 +1,11 @@
 module.exports = function(mysql, config){
-    var connection = mysql.createConnection({
+
+    return mysql.createPool({
         host: config.db_host,
         user: config.db_user,
-        password: config.db_password
+        password: config.db_password,
+        database: config.db_schema
     });
-
-    connection.connect();
-
-    connection.query('USE ' + config.db_schema + ';', function(err){
-        if(err){
-            throw err;
-        }
-    });
-
-    return connection;
 
     // TODO make sure this closes properly
 
