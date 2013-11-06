@@ -4,7 +4,7 @@ module.exports = function(id, loadWithJson, callback){
 
     model.loadFromId = function(id, callback){
         GLOBAL.dbPool.getConnection(function(err, connection){
-            connection.query('SELECT * FROM user WHERE id = ' + id, null, function(err, rows){
+            connection.query('SELECT * FROM audit WHERE id = ' + id, null, function(err, rows){
                 if(err){
                     callback(true, model);
                 } else {
@@ -34,45 +34,33 @@ module.exports = function(id, loadWithJson, callback){
                 ''
         );
 
-        model.title = (
-            object.hasOwnProperty('title') ?
-                object.title :
+        model.dateCreated = (
+            object.hasOwnProperty('date_created') ?
+                object.date_created :
                 ''
         );
 
-        model.firstName = (
-            object.hasOwnProperty('first_name') ?
-                object.first_name :
+        model.dateDeleted = (
+            object.hasOwnProperty('date_deleted') ?
+                object.date_deleted :
                 ''
         );
 
-        model.lastName = (
-            object.hasOwnProperty('last_name') ?
-                object.last_name :
+        model.lastModified = (
+            object.hasOwnProperty('last_modified') ?
+                object.last_modified :
                 ''
         );
 
-        model.email = (
-            object.hasOwnProperty('email') ?
-                object.email :
+        model.lastModifiedBy = (
+            object.hasOwnProperty('last_modified_by') ?
+                object.last_modified_by :
                 ''
         );
 
-        model.passwordHash = (
-            object.hasOwnProperty('password_hash') ?
-                object.password_hash :
-                ''
-        );
-
-        model.resetPasswordHash = (
-            object.hasOwnProperty('reset_password_hash') ?
-                object.reset_password_hash :
-                ''
-        );
-
-        model.userTokenHash = (
-            object.hasOwnProperty('user_token_hash') ?
-                object.user_token_hash :
+        model.auditLog = (
+            object.hasOwnProperty('audit_log') ?
+                object.audit_log :
                 ''
         );
 
@@ -85,11 +73,11 @@ module.exports = function(id, loadWithJson, callback){
     model.save = function(callback){
         GLOBAL.dbPool.getConnection(function(err, connection){
             if(model.id == ''){
-                connection.query('UPDATE user SET ?? WHERE id = ?', [model, model.id], function(err, rows){
+                connection.query('UPDATE audit SET ?? WHERE id = ?', [model, model.id], function(err, rows){
                     callback(err);
                 });
             } else {
-                connection.query('INSERT user SET ?', model, function(err, rows){
+                connection.query('INSERT audit SET ?', model, function(err, rows){
                     callback(err);
                 });
             }
@@ -104,13 +92,11 @@ module.exports = function(id, loadWithJson, callback){
             exportObject.id = model.id;
         }
 
-        exportObject.title = model.title;
-        exportObject.first_name = model.firstName;
-        exportObject.last_name = model.lastName;
-        exportObject.email = model.email;
-        exportObject.password_hash = model.passwordHash;
-        exportObject.reset_password_hash = model.resetPasswordHash;
-        exportObject.user_token_hash = model.userTokenHash;
+        exportObject.date_created = model.dateCreated;
+        exportObject.date_deleted = model.dateDeleted;
+        exportObject.last_modified = model.last_modified;
+        exportObject.last_modified_by = model.lastModifiedBy;
+        exportObject.audit_log = model.auditLog;
 
         callback(exportObject);
 

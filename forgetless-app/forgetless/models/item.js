@@ -4,7 +4,7 @@ module.exports = function(id, loadWithJson, callback){
 
     model.loadFromId = function(id, callback){
         GLOBAL.dbPool.getConnection(function(err, connection){
-            connection.query('SELECT * FROM user WHERE id = ' + id, null, function(err, rows){
+            connection.query('SELECT * FROM item WHERE id = ' + id, null, function(err, rows){
                 if(err){
                     callback(true, model);
                 } else {
@@ -34,45 +34,45 @@ module.exports = function(id, loadWithJson, callback){
                 ''
         );
 
+        model.zoneId = (
+            object.hasOwnProperty('zone_id') ?
+                object.zone_id :
+                ''
+        );
+
         model.title = (
             object.hasOwnProperty('title') ?
                 object.title :
                 ''
         );
 
-        model.firstName = (
-            object.hasOwnProperty('first_name') ?
-                object.first_name :
+        model.content = (
+            object.hasOwnProperty('content') ?
+                object.connect :
                 ''
         );
 
-        model.lastName = (
-            object.hasOwnProperty('last_name') ?
-                object.last_name :
+        model.duration = (
+            object.hasOwnProperty('duration') ?
+                object.duration :
                 ''
         );
 
-        model.email = (
-            object.hasOwnProperty('email') ?
-                object.email :
+        model.auditID = (
+            object.hasOwnProperty('audit_id') ?
+                object.audit_id :
                 ''
         );
 
-        model.passwordHash = (
-            object.hasOwnProperty('password_hash') ?
-                object.password_hash :
+        model.deadline = (
+            object.hasOwnProperty('deadline') ?
+                object.deadline :
                 ''
         );
 
-        model.resetPasswordHash = (
-            object.hasOwnProperty('reset_password_hash') ?
-                object.reset_password_hash :
-                ''
-        );
-
-        model.userTokenHash = (
-            object.hasOwnProperty('user_token_hash') ?
-                object.user_token_hash :
+        model.itemType = (
+            object.hasOwnProperty('item_type') ?
+                object.item_type :
                 ''
         );
 
@@ -104,13 +104,13 @@ module.exports = function(id, loadWithJson, callback){
             exportObject.id = model.id;
         }
 
+        exportObject.zone_id = model.zoneId;
         exportObject.title = model.title;
-        exportObject.first_name = model.firstName;
-        exportObject.last_name = model.lastName;
-        exportObject.email = model.email;
-        exportObject.password_hash = model.passwordHash;
-        exportObject.reset_password_hash = model.resetPasswordHash;
-        exportObject.user_token_hash = model.userTokenHash;
+        exportObject.content = model.content;
+        exportObject.duration = model.duration;
+        exportObject.audit_id = model.auditID;
+        exportObject.deadline = model.deadline;
+        exportObject.item_type = model.itemType;
 
         callback(exportObject);
 
