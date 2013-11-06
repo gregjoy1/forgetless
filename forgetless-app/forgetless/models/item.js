@@ -1,30 +1,6 @@
 module.exports = function(id, loadWithJson, callback){
 
-    var model = Object;
-
-    model.loadFromId = function(id, callback){
-        GLOBAL.dbPool.getConnection(function(err, connection){
-            connection.query('SELECT * FROM item WHERE id = ' + id, null, function(err, rows){
-                if(err){
-                    callback(true, model);
-                } else {
-                    model.loadWithObject(rows[0], callback);
-                }
-                connection.release();
-            });
-        });
-    };
-
-    model.loadFromJson = function(json, callback){
-
-        json = JSON.parse(json);
-
-        if(json){
-            model.loadWithObject(json, callback(false, model));
-        } else {
-            callback("Invalid JSON.", model);
-        }
-    };
+    var model = require('./forgetless_db_model.js');
 
     model.loadWithObject = function(object, callback){
 
@@ -82,20 +58,6 @@ module.exports = function(id, loadWithJson, callback){
 
     };
 
-    model.save = function(callback){
-        GLOBAL.dbPool.getConnection(function(err, connection){
-            if(model.id == ''){
-                connection.query('UPDATE user SET ?? WHERE id = ?', [model, model.id], function(err, rows){
-                    callback(err);
-                });
-            } else {
-                connection.query('INSERT user SET ?', model, function(err, rows){
-                    callback(err);
-                });
-            }
-        });
-    };
-
     model.createDbExportObject = function(skipId, callback){
 
         var exportObject = Object;
@@ -117,9 +79,9 @@ module.exports = function(id, loadWithJson, callback){
     };
 
     if(loadWithJson != null && loadWithJson){
-        model.loadFromJson(id, callback);
+        model.loadFromJson(loadWithJson, callback);
     } else {
-        model.loadFromId(id, callback);
+        model.loadFromId(id, 'item', 1, callback);
     }
 
 };
