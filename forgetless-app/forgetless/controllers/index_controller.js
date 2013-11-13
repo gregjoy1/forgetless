@@ -1,9 +1,9 @@
 exports.index = function(req, res){
 
-    var auditModel = require('../models/audit.js');
+    var listHelper = GLOBAL.defs.ListHelper;
 
-    var audit = new auditModel(1, false, function(error, model){
-        console.log(model);
+    listHelper.getSchemaDrop(1, function(err, object) {
+        console.log(object);
     });
 
     res.render('index.html', { title: 'Express' });

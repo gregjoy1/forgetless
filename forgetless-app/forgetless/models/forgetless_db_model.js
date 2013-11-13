@@ -1,6 +1,6 @@
 var model = Object;
 
-model.loadFromId = function(id, tableName, zoneID, callback){
+model.prototype.loadFromId = function(id, tableName, zoneID, callback){
 
     var sql = 'SELECT * FROM ' + tableName + ' WHERE id = ? ';
     var escapeArray = '';
@@ -14,7 +14,6 @@ model.loadFromId = function(id, tableName, zoneID, callback){
 
     GLOBAL.dbPool.getConnection(function(err, connection){
         connection.query(sql, escapeArray, function(err, rows){
-            console.log(err);
             if(err){
                 callback(err, model);
             } else {
@@ -25,33 +24,39 @@ model.loadFromId = function(id, tableName, zoneID, callback){
     });
 };
 
-model.loadFromJson = function(json, callback){
+model.prototype.loadFromJson = function(json, callback){
 
-    json = JSON.parse(json);
+    if(typeof json == 'string')
+    {
+        json = JSON.parse(json);
+    }
 
-    if(json){
-        model.loadWithObject(json, callback(false, model));
+    if(json && (typeof json == 'object')){
+        model.loadWithObject(json, callback);
     } else {
         callback("Invalid JSON.", model);
     }
 };
 
-model.loadWithObject = function(object, callback){};
+model.prototype.loadWithObject = function(object, callback){};
 
-model.save = function(tableName, callback){
-    GLOBAL.dbPool.getConnection(function(err, connection){
-        if(model.id == ''){
-            connection.query('UPDATE ? SET ?? WHERE id = ?', [tableName, model, model.id], function(err, rows){
-                callback(err);
-            });
-        } else {
-            connection.query('INSERT ? SET ??', [tableName, model], function(err, rows){
-                callback(err);
-            });
-        }
-    });
+model.prototype.save = function(tableName, callback){
+//    GLOBAL.dbPool.getConnection(function(err, connection){
+//        if(model.id == ''){
+//            connection.query('UPDATE ? SET ?? WHERE id = ?', [tableName, model, model.id], function(err, rows){
+//                callback(err);
+//            });
+//        } else {
+//            connection.query('INSERT ? SET ??', [tableName, model], function(err, rows){
+//                callback(err);
+//            });
+//        }
+//    });
+    console.log('hi');
 };
 
-model.createDbExportObject = function(skipId, callback){};
+model.prototype.createDbExportObject = function(skipId, callback){};
+
+model.prototype.loadChildren = function(callback){};
 
 module.exports = model;

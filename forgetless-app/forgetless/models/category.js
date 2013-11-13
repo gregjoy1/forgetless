@@ -1,8 +1,10 @@
 module.exports = function(id, loadWithJson, callback){
 
-    var model = require('./forgetless_db_model.js');
+    var model = GLOBAL.defs.DbModelBase;
 
     model.loadWithObject = function(object, callback){
+
+        var model = Object.create(GLOBAL.defs.DbModelBase);
 
         model.id = (
             object.hasOwnProperty('id') ?
@@ -22,9 +24,7 @@ module.exports = function(id, loadWithJson, callback){
                 ''
             );
 
-        process.nextTick(function(){
-            callback(false, model)
-        });
+        callback(false, model)
 
     };
 
@@ -43,10 +43,12 @@ module.exports = function(id, loadWithJson, callback){
 
     };
 
-    if(loadWithJson != null && loadWithJson){
+    if(loadWithJson != null && loadWithJson) {
         model.loadFromJson(loadWithJson, callback);
-    } else {
+    } else if(id != null) {
         model.loadFromId(id, 'category', 1, callback);
+    } else {
+        callback(null, model);
     }
 
 };

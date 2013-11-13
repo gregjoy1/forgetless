@@ -1,6 +1,6 @@
 module.exports = function(id, loadWithJson, callback){
 
-    var model = require('./forgetless_db_model.js');
+    var model = GLOBAL.defs.DbModelBase;
 
     model.loadWithObject = function(object, callback){
 

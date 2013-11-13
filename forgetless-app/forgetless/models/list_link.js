@@ -1,6 +1,6 @@
 module.exports = function(id, loadWithJson, callback){
 
-    var model = require('./forgetless_db_model.js');
+    var model = GLOBAL.defs.DbModelBase;
 
     model.loadWithObject = function(object, callback){
 
@@ -57,10 +57,39 @@ module.exports = function(id, loadWithJson, callback){
 
     };
 
+    model.GetAllListLinksForUser = function(userID, categoryID, callback){
+        var sql = 'SELECT * FROM list_link WHERE user_id = ? AND category_id = ?';
+        var escapeArray = [userID, categoryID];
+
+        GLOBAL.dbPool.getConnection(function(err, connection){
+            connection.query(sql, escapeArray, function(err, rows){
+                if(err){
+                    console.log(err, model);
+                } else {
+
+                    var ListLinks = [];
+
+                    for(var inc = 0; inc < rows.length; inc++){
+                        new GLOBAL.defs.ListLink(null, rows[inc], function(err, object){
+                            ListLinks.push(object);
+
+                            if(ListLinks.length == rows.length){
+                                callback(null, ListLinks);
+                            }
+                        });
+                    }
+                }
+                connection.release();
+            });
+        });
+    };
+
     if(loadWithJson != null && loadWithJson){
         model.loadFromJson(loadWithJson, callback);
-    } else {
+    } else if(id != null) {
         model.loadFromId(id, 'list_link', null, callback);
+    } else {
+        callback(null, model);
     }
 
 };
