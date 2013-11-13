@@ -2,8 +2,6 @@ module.exports = function(id, loadWithJson, callback){
 
     var model = GLOBAL.defs.DbModelBase;
 
-    model.isCategoryLink = 'yes';
-
     model.loadWithObject = function(object, callback){
 
         var model = Object.create(GLOBAL.defs.DbModelBase);

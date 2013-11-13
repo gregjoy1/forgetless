@@ -41,18 +41,17 @@ model.prototype.loadFromJson = function(json, callback){
 model.prototype.loadWithObject = function(object, callback){};
 
 model.prototype.save = function(tableName, callback){
-//    GLOBAL.dbPool.getConnection(function(err, connection){
-//        if(model.id == ''){
-//            connection.query('UPDATE ? SET ?? WHERE id = ?', [tableName, model, model.id], function(err, rows){
-//                callback(err);
-//            });
-//        } else {
-//            connection.query('INSERT ? SET ??', [tableName, model], function(err, rows){
-//                callback(err);
-//            });
-//        }
-//    });
-    console.log('hi');
+    GLOBAL.dbPool.getConnection(function(err, connection){
+        if(model.id == ''){
+            connection.query('UPDATE ? SET ?? WHERE id = ?', [tableName, model, model.id], function(err, rows){
+                callback(err);
+            });
+        } else {
+            connection.query('INSERT ? SET ??', [tableName, model], function(err, rows){
+                callback(err);
+            });
+        }
+    });
 };
 
 model.prototype.createDbExportObject = function(skipId, callback){};

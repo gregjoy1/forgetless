@@ -4,6 +4,8 @@ module.exports = function(id, loadWithJson, callback){
 
     model.loadWithObject = function(object, callback){
 
+        var model = Object.create(GLOBAL.defs.DbModelBase);
+
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
@@ -34,9 +36,7 @@ module.exports = function(id, loadWithJson, callback){
                 ''
             );
 
-        process.nextTick(function(){
-            callback(false, model)
-        });
+        callback(false, model);
 
     };
 
@@ -68,7 +68,6 @@ module.exports = function(id, loadWithJson, callback){
                 } else {
 
                     var ListLinks = [];
-
                     for(var inc = 0; inc < rows.length; inc++){
                         new GLOBAL.defs.ListLink(null, rows[inc], function(err, object){
                             ListLinks.push(object);
