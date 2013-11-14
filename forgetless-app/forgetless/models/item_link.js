@@ -4,6 +4,8 @@ module.exports = function(id, loadWithJson, callback){
 
     model.loadWithObject = function(object, callback){
 
+        var model = Object.create(GLOBAL.defs.DbModelBase);
+
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
@@ -57,10 +59,38 @@ module.exports = function(id, loadWithJson, callback){
 
     };
 
+    model.GetAllItemLinksForUser = function(userID, listID, callback){
+        var sql = 'SELECT * FROM item_link WHERE user_id = ? AND list_id = ?';
+        var escapeArray = [userID, listID];
+
+        GLOBAL.dbPool.getConnection(function(err, connection){
+            connection.query(sql, escapeArray, function(err, rows){
+                if(err){
+                    console.log(err, model);
+                } else {
+
+                    var ItemLinks = [];
+                    for(var inc = 0; inc < rows.length; inc++){
+                        new GLOBAL.defs.ItemLink(null, rows[inc], function(err, object){
+                            ItemLinks.push(object);
+
+                            if(ItemLinks.length == rows.length){
+                                callback(null, ItemLinks);
+                            }
+                        });
+                    }
+                }
+                connection.release();
+            });
+        });
+    };
+
     if(loadWithJson != null && loadWithJson){
         model.loadFromJson(loadWithJson, callback);
-    } else {
+    } else if(id != null) {
         model.loadFromId(id, 'item_link', 1, callback);
+    } else {
+        callback(null, model);
     }
 
 };

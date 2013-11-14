@@ -43,7 +43,7 @@ module.exports = {
                         var categoryIndex = catInc;
                         for(var listInc = 0; listInc < categoryLinks[catInc].Category.ListLinks.length; listInc++){
                             var listIndex = listInc;
-                            var listId = categoryLinks[categoryIndex].Category.ListLinks[listIndex].ListId;
+                            var listId = categoryLinks[categoryIndex].Category.ListLinks[listIndex].listId;
                             new GLOBAL.defs.List(listId, null, function(err, list) {
                                 categoryLinks[categoryIndex].Category.ListLinks[listIndex].List = list;
                                 count++;
@@ -51,6 +51,28 @@ module.exports = {
                                     callback(null, categoryLinks);
                                 }
                             });
+                        }
+                    }
+                },
+                function(categoryLinks, callback){
+                    var count = 0;
+                    for(var catInc = 0; catInc < categoryLinks.length; catInc++){
+                        var categoryIndex = catInc;
+                        for(var listInc = 0; listInc < categoryLinks[catInc].Category.ListLinks.length; listInc++){
+                            var listIndex = listInc;
+                            var listId = categoryLinks[categoryIndex].Category.ListLinks[listIndex].List.id;
+                            new GLOBAL.defs.ItemLink(null, null, function(err, list){
+
+                                list.GetAllItemLinksForUser(userId, listId, function(err, itemLinks){
+                                    categoryLinks[categoryIndex].Category.ListLinks[listIndex].List.ItemLinks = itemLinks;
+                                    count++;
+                                    if(count == categoryLinks[categoryIndex].Category.ListLinks.length){
+                                        callback(null, categoryLinks);
+                                    }
+                                });
+
+                            });
+
                         }
                     }
                 }

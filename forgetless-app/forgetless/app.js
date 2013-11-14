@@ -21,7 +21,7 @@ GLOBAL.defs = {
     'Category':require('./models/category.js'),
     'ListLink':require('./models/list_link.js'),
     'List':require('./models/list.js'),
-    'ItemLink':require('./models/item.js'),
+    'ItemLink':require('./models/item_link.js'),
     'Item':require('./models/item.js'),
     'Reminder':require('./models/reminder.js'),
     'Audit':require('./models/audit.js'),
