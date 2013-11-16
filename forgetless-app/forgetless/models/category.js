@@ -12,6 +12,12 @@ module.exports = function(id, loadWithJson, callback){
                 ''
             );
 
+        model.auditID = (
+            object.hasOwnProperty('audit_id') ?
+                object.audit_id :
+                ''
+        );
+
         model.zoneId = (
             object.hasOwnProperty('zone_id') ?
                 object.zone_id :

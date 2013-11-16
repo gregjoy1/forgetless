@@ -4,6 +4,8 @@ module.exports = function(id, loadWithJson, callback){
 
     model.loadWithObject = function(object, callback){
 
+        var model = Object.create(GLOBAL.defs.DbModelBase);
+
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
@@ -24,7 +26,7 @@ module.exports = function(id, loadWithJson, callback){
 
         model.content = (
             object.hasOwnProperty('content') ?
-                object.connect :
+                object.content :
                 ''
         );
 

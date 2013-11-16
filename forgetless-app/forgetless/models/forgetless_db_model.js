@@ -40,25 +40,25 @@ model.prototype.loadFromJson = function(json, callback){
 
 model.prototype.loadWithObject = function(object, callback){};
 
-//model.prototype.save = function(tableName, callback){
-//    GLOBAL.dbPool.getConnection(function(err, connection){
-//        if(model.id == ''){
-//            model.prototype.createDbExportObject(false, function(object){
-//                connection.query('UPDATE ? SET ?? WHERE id = ?', [tableName, object, model.id], function(err, rows){
-//                    callback(err);
-//                    connection.release();
-//                });
-//            });
-//        } else {
-//            model.prototype.createDbExportObject(true, function(object){
-//                connection.query('INSERT ? SET ??', [tableName, object], function(err, rows){
-//                    callback(err);
-//                    connection.release();
-//                });
-//            });
-//        }
-//    });
-//};
+model.prototype.saveModel = function(tableName, callback){
+    GLOBAL.dbPool.getConnection(function(err, connection){
+        if(model.id == ''){
+            model.prototype.createDbExportObject(false, function(object){
+                connection.query('UPDATE ? SET ?? WHERE id = ?', [tableName, object, model.id], function(err, rows){
+                    callback(err);
+                    connection.release();
+                });
+            });
+        } else {
+            model.prototype.createDbExportObject(true, function(object){
+                connection.query('INSERT ? SET ??', [tableName, object], function(err, rows){
+                    callback(err);
+                    connection.release();
+                });
+            });
+        }
+    });
+};
 
 model.prototype.createDbExportObject = function(skipId, callback){};
 
