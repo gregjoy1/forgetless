@@ -14,7 +14,8 @@ module.exports = function(express, app, path) {
         db_host:        '127.0.0.1',
         db_user:        'root',
         db_password:    '',
-        db_schema:      'forgetless'
+        db_schema:      'forgetless',
+        pw_salt:        'L7WVS0YyWv2Y774M3glqbVp5Cioce2GI'
     };
 
     // all environments

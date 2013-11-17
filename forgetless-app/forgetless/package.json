@@ -9,6 +9,7 @@
     "express": "3.4.4",
     "ejs": "*",
     "mysql":"2.0.0-alpha9",
-    "async":"*"
+    "async":"*",
+    "sha1": "*"
   }
 }

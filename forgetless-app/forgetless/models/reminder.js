@@ -4,6 +4,8 @@ module.exports = function(id, loadWithJson, callback){
 
     model.loadWithObject = function(object, callback){
 
+        var model = Object.create(GLOBAL.defs.DbModelBase);
+
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
@@ -66,8 +68,10 @@ module.exports = function(id, loadWithJson, callback){
 
     if(loadWithJson != null && loadWithJson){
         model.loadFromJson(loadWithJson, callback);
-    } else {
+    } else if(id != null) {
         model.loadFromId(id, 'reminder', 1, callback);
+    } else {
+        callback(null, model);
     }
 
 };

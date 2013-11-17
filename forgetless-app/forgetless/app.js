@@ -25,7 +25,8 @@ GLOBAL.defs = {
     'Item':require('./models/item.js'),
     'Reminder':require('./models/reminder.js'),
     'Audit':require('./models/audit.js'),
-    'ListHelper':require('./helpers/list_helper.js')
+    'ListHelper':require('./helpers/list_helper.js'),
+    'HashHelper':require('./helpers/hash_helper.js')
 };
 
 var router = require('./router/router.js');

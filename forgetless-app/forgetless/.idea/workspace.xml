@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/app.js" line="36" />
+    <bookmark url="file://$PROJECT_DIR$/app.js" line="37" />
+    <bookmark url="file://$PROJECT_DIR$/helpers/list_helper.js" line="125" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b61e194-31a6-4583-b4db-a7cebaf54fa6" name="Default" comment="" />
@@ -26,28 +27,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="item_link.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/item_link.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="58" selection-start="1431" selection-end="1431" vertical-scroll-proportion="0.0" vertical-offset="41" max-vertical-offset="1515">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="category_link.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/category_link.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="58" selection-start="212" selection-end="212" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1380">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="list_helper.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="list_helper.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helpers/list_helper.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="0" selection-start="3074" selection-end="3074" vertical-scroll-proportion="0.5852535" vertical-offset="459" max-vertical-offset="1830">
+            <state line="17" column="48" selection-start="878" selection-end="878" vertical-scroll-proportion="-10.2" vertical-offset="0" max-vertical-offset="1965">
               <folding />
             </state>
           </provider>
@@ -71,28 +54,50 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index_controller.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/controllers/index_controller.js">
+      <file leaf-file-name="user.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/models/user.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="35" selection-start="180" selection-end="180" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="240">
+            <state line="186" column="30" selection-start="5811" selection-end="5811" vertical-scroll-proportion="0.4804217" vertical-offset="2471" max-vertical-offset="3135">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="item.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/item.js">
+      <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="0" selection-start="880" selection-end="880" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1410">
+            <state line="30" column="0" selection-start="943" selection-end="943" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="705">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="audit.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/audit.js">
+      <file leaf-file-name="config.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/config.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="0" selection-start="1640" selection-end="1640" vertical-scroll-proportion="0.0" vertical-offset="536" max-vertical-offset="1230">
+            <state line="18" column="0" selection-start="687" selection-end="687" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="750">
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="hash_helper.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helpers/hash_helper.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="2" selection-start="481" selection-end="481" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
+              <folding>
+                <marker date="1384645941061" expanded="true" signature="192:271" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sha1.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/sha1/sha1.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1320">
               <folding />
             </state>
           </provider>
@@ -101,16 +106,16 @@
       <file leaf-file-name="forgetless_db_model.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/forgetless_db_model.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="7" selection-start="887" selection-end="887" vertical-scroll-proportion="0.0" vertical-offset="151" max-vertical-offset="1080">
+            <state line="24" column="7" selection-start="94" selection-end="684" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1095">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="session.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/express/node_modules/connect/lib/middleware/session/session.js">
+      <file leaf-file-name="package.json" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="7" selection-start="1187" selection-end="1187" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1830">
+            <state line="14" column="0" selection-start="245" selection-end="245" vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="300">
               <folding />
             </state>
           </provider>
@@ -126,22 +131,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/utils/utils.js" />
-        <option value="$PROJECT_DIR$/models/user.js" />
-        <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/models/reminder.js" />
-        <option value="$PROJECT_DIR$/models/category_link.js" />
         <option value="$PROJECT_DIR$/models/list_link.js" />
         <option value="$PROJECT_DIR$/models/item_link.js" />
         <option value="$PROJECT_DIR$/router/router.js" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/models/audit.js" />
-        <option value="$PROJECT_DIR$/models/forgetless_db_model.js" />
-        <option value="$PROJECT_DIR$/controllers/index_controller.js" />
         <option value="$PROJECT_DIR$/models/list.js" />
         <option value="$PROJECT_DIR$/models/item.js" />
         <option value="$PROJECT_DIR$/models/category.js" />
+        <option value="$PROJECT_DIR$/models/reminder.js" />
+        <option value="$PROJECT_DIR$/models/forgetless_db_model.js" />
+        <option value="$PROJECT_DIR$/controllers/index_controller.js" />
         <option value="$PROJECT_DIR$/helpers/list_helper.js" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/config/config.js" />
+        <option value="$PROJECT_DIR$/helpers/hash_helper.js" />
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/models/user.js" />
       </list>
     </option>
   </component>
@@ -186,6 +191,20 @@
               <option name="myItemType" value="" />
             </PATH_ELEMENT>
             <PATH_ELEMENT USER_OBJECT="forgetless">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="forgetless">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="node_modules">
               <option name="myItemId" value="" />
               <option name="myItemType" value="" />
             </PATH_ELEMENT>
@@ -474,72 +493,9 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/models/reminder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="40" selection-start="96" selection-end="96" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1170">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/NodeJS/lib/NodeJS.jar!/com/jetbrains/nodejs/library/node_globals.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="9" selection-start="195" selection-end="195" vertical-scroll-proportion="0.13824885" vertical-offset="0" max-vertical-offset="12495">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/user.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="10" selection-start="542" selection-end="542" vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="1950">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/router/router.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="49" selection-start="158" selection-end="158" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="240">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="45" selection-start="403" selection-end="403" vertical-scroll-proportion="0.0" vertical-offset="26" max-vertical-offset="690">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/list_link.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="10" selection-start="1359" selection-end="1359" vertical-scroll-proportion="0.0" vertical-offset="754" max-vertical-offset="1485">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/item_link.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="58" selection-start="1431" selection-end="1431" vertical-scroll-proportion="0.0" vertical-offset="761" max-vertical-offset="1515">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/express/node_modules/connect/lib/middleware/session/session.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="61" column="7" selection-start="1187" selection-end="1187" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1830">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/forgetless_db_model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="7" selection-start="887" selection-end="887" vertical-scroll-proportion="0.0" vertical-offset="151" max-vertical-offset="1080">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/audit.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="0" selection-start="1640" selection-end="1640" vertical-scroll-proportion="0.0" vertical-offset="536" max-vertical-offset="1230">
           <folding />
         </state>
       </provider>
@@ -551,16 +507,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/models/audit.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="59" selection-start="162" selection-end="213" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1230">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/reminder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="76" column="2" selection-start="1794" selection-end="1794" vertical-scroll-proportion="0.0" vertical-offset="566" max-vertical-offset="1230">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/models/item.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="0" selection-start="880" selection-end="880" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1410">
+        <state line="6" column="59" selection-start="162" selection-end="213" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1410">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/index_controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="35" selection-start="180" selection-end="180" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="240">
+        <state line="5" column="29" selection-start="174" selection-end="174" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="240">
           <folding />
         </state>
       </provider>
@@ -581,7 +551,60 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/helpers/list_helper.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="0" selection-start="3074" selection-end="3074" vertical-scroll-proportion="0.5852535" vertical-offset="459" max-vertical-offset="1830">
+        <state line="17" column="48" selection-start="878" selection-end="878" vertical-scroll-proportion="-10.2" vertical-offset="0" max-vertical-offset="1965">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="0" selection-start="245" selection-end="245" vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="300">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/sha1/sha1.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/forgetless_db_model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="7" selection-start="94" selection-end="684" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1095">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpers/hash_helper.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="2" selection-start="481" selection-end="481" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
+          <folding>
+            <marker date="1384645941061" expanded="true" signature="192:271" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="0" selection-start="687" selection-end="687" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="750">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="0" selection-start="943" selection-end="943" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="705">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="186" column="30" selection-start="5811" selection-end="5811" vertical-scroll-proportion="0.4804217" vertical-offset="2471" max-vertical-offset="3135">
           <folding />
         </state>
       </provider>

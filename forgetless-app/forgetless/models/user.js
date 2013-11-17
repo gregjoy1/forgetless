@@ -1,32 +1,10 @@
 module.exports = function(id, loadWithJson, callback){
 
-    var model = Object;
-
-    model.loadFromId = function(id, callback){
-        GLOBAL.dbPool.getConnection(function(err, connection){
-            connection.query('SELECT * FROM user WHERE id = ' + id, null, function(err, rows){
-                if(err){
-                    callback(true, model);
-                } else {
-                    model.loadWithObject(rows[0], callback);
-                }
-                connection.release();
-            });
-        });
-    };
-
-    model.loadFromJson = function(json, callback){
-
-        json = JSON.parse(json);
-
-        if(json){
-            model.loadWithObject(json, callback(false, model));
-        } else {
-            callback("Invalid JSON.", model);
-        }
-    };
+    var model = GLOBAL.defs.DbModelBase;
 
     model.loadWithObject = function(object, callback){
+
+        var model = Object.create(GLOBAL.defs.DbModelBase);
 
         model.id = (
             object.hasOwnProperty('id') ?
@@ -76,24 +54,46 @@ module.exports = function(id, loadWithJson, callback){
                 ''
         );
 
-        process.nextTick(function(){
-            callback(false, model)
-        });
+        callback(false, model);
 
     };
 
-    model.save = function(callback){
-        GLOBAL.dbPool.getConnection(function(err, connection){
-            if(model.id == ''){
-                connection.query('UPDATE user SET ?? WHERE id = ?', [model, model.id], function(err, rows){
-                    callback(err);
-                });
-            } else {
-                connection.query('INSERT user SET ?', model, function(err, rows){
-                    callback(err);
-                });
-            }
-        });
+    model.loadDumpSafeObjectFromModel = function(model, callback){
+
+        var dumpSafeModel = Object.create({});
+
+        dumpSafeModel.id = (
+            model.hasOwnProperty('id') ?
+                model.id :
+                ''
+        );
+
+        dumpSafeModel.title = (
+            model.hasOwnProperty('title') ?
+                model.title :
+                ''
+        );
+
+        dumpSafeModel.firstName = (
+            model.hasOwnProperty('firstName') ?
+                model.firstName :
+                ''
+        );
+
+        dumpSafeModel.lastName = (
+            model.hasOwnProperty('lastName') ?
+                model.lastName :
+                ''
+        );
+
+        dumpSafeModel.email = (
+            model.hasOwnProperty('email') ?
+                model.email :
+                ''
+        );
+
+        callback(false, dumpSafeModel);
+
     };
 
     model.createDbExportObject = function(skipId, callback){
@@ -116,10 +116,89 @@ module.exports = function(id, loadWithJson, callback){
 
     };
 
+    model.loadDumpSafeUserFromId = function(id, callback){
+        model.loadFromId(id, 'user', null, function(err, user){
+            model.loadDumpSafeObjectFromModel(user, callback);
+        });
+    };
+
+    model.login = function(email, password, callback){
+        if(email == '' || password == ''){
+            callback(false, null);
+        } else {
+            GLOBAL.dbPool.getConnection(function(err, connection){
+                var sql = 'SELECT id, password_hash FROM user WHERE email = ?';
+                connection.query(sql, email, function(err, rows){
+                    if(err){
+                        console.log(err);
+                        callback(err, model);
+                    } else {
+                        if(rows.length == 0) {
+                            callback(false, null);
+                        } else {
+                            GLOBAL.defs.HashHelper.EmailPasswordHashMatch(
+                                rows[0].password_hash,
+                                email,
+                                password,
+                                function(success){
+                                    if(success){
+                                        this.loadFromId(
+                                            rows[0].id,
+                                            'user',
+                                            null,
+                                            function(err, usermodel){
+                                                callback(true, usermodel);
+                                            }
+                                        );
+                                    } else {
+                                        callback(false, null);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                    connection.release();
+                });
+            });
+        }
+    };
+
+    model.checkUserTokenHash = function(userTokenHash, callback){
+        if(userTokenHash == ''){
+            callback(false, null);
+        } else {
+            GLOBAL.dbPool.getConnection(function(err, connection){
+                var sql = 'SELECT id FROM user WHERE user_token_hash = ?';
+                connection.query(sql, userTokenHash, function(err, rows){
+                    if(err){
+                        console.log(err);
+                        callback(err, model);
+                    } else {
+                        if(rows.length == 0) {
+                            callback(false, null);
+                        } else {
+                            this.loadFromId(
+                                rows[0].id,
+                                'user',
+                                null,
+                                function(err, usermodel){
+                                    callback(true, usermodel);
+                                }
+                            );
+                        }
+                    }
+                    connection.release();
+                });
+            });
+        }
+    };
+
     if(loadWithJson != null && loadWithJson){
         model.loadFromJson(id, callback);
+    } else if(id != null) {
+        model.loadFromId(id, 'user', null, callback);
     } else {
-        model.loadFromId(id, callback);
+        callback(null, model);
     }
 
 };

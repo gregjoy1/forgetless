@@ -15,6 +15,7 @@ model.prototype.loadFromId = function(id, tableName, zoneID, callback){
     GLOBAL.dbPool.getConnection(function(err, connection){
         connection.query(sql, escapeArray, function(err, rows){
             if(err){
+                console.log(err);
                 callback(err, model);
             } else {
                 model.loadWithObject(rows[0], callback);
