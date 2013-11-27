@@ -1,10 +1,9 @@
 module.exports = {
     setUpAndStartRouting:function(app){
-        app.get('/', function(request, response){
-            require('../controllers/index_controller.js').index(request, response);
-        });
 
+        require('./page_router')(app);
 
+        require('./ajax_router')(app);
 
     }
 };

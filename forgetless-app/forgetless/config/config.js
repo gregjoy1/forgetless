@@ -1,10 +1,3 @@
-/* Bootstraps the application and returns the config
- * @param express
- * @param app
- * @param path
- * @returns {{port: number, view_path: (*|string|join), public_path: (*|string|join), db_host: string, db_user: string, db_password: string, db_schema: string}}
- */
-
 module.exports = function(express, app, path) {
 
     var config = {
@@ -15,7 +8,8 @@ module.exports = function(express, app, path) {
         db_user:        'root',
         db_password:    '',
         db_schema:      'forgetless',
-        pw_salt:        'L7WVS0YyWv2Y774M3glqbVp5Cioce2GI'
+        pw_salt:        'L7WVS0YyWv2Y774M3glqbVp5Cioce2GI',
+        token_salt:     '12fsWw1k9so56O4uZ5zu3TRiFs9rnh3f'
     };
 
     // all environments
@@ -31,7 +25,7 @@ module.exports = function(express, app, path) {
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(express.methodOverride());
-    app.use(express.cookieParser('your secret here'));
+    app.use(express.cookieParser('131xkGXI8argN47t0m3A1b7VT6Y9Lgiw'));
     app.use(express.session());
     app.use(app.router);
     app.use(express.static(config.public_path));

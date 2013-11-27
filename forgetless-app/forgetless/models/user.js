@@ -147,6 +147,7 @@ module.exports = function(id, loadWithJson, callback){
                                             'user',
                                             null,
                                             function(err, usermodel){
+                                                // TODO set cookie
                                                 callback(true, usermodel);
                                             }
                                         );
