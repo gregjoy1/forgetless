@@ -1,10 +1,12 @@
 module.exports = function(id, loadWithJson, callback){
 
-    var model = GLOBAL.defs.DbModelBase;
+    var model = Object.create(GLOBAL.defs.DbModelBase);
+
+    model.TABLE_NAME = 'category';
 
     model.loadWithObject = function(object, callback){
 
-        var model = Object.create(GLOBAL.defs.DbModelBase);
+//        var model = Object.create(GLOBAL.defs.DbModelBase);
 
         model.id = (
             object.hasOwnProperty('id') ?
@@ -36,7 +38,7 @@ module.exports = function(id, loadWithJson, callback){
 
     model.createDbExportObject = function(skipId, callback){
 
-        var exportObject = Object;
+        var exportObject = {};
 
         if(!skipId){
             exportObject.id = model.id;
@@ -49,10 +51,14 @@ module.exports = function(id, loadWithJson, callback){
 
     };
 
+    model.save = function(callback) {
+        model.saveModel(model.TABLE_NAME, model, callback);
+    };
+
     if(loadWithJson != null && loadWithJson) {
-        model.loadFromJson(loadWithJson, callback);
+        model.loadFromJson(loadWithJson, model, callback);
     } else if(id != null) {
-        model.loadFromId(id, 'category', 1, callback);
+        model.loadFromId(id, 'category', model, 1, callback);
     } else {
         callback(null, model);
     }

@@ -1,10 +1,11 @@
 module.exports = function(id, loadWithJson, callback){
 
-    var model = GLOBAL.defs.DbModelBase;
+    var model = Object.create(GLOBAL.defs.DbModelBase);
+
+    model.TABLE_NAME = 'user';
 
     model.loadWithObject = function(object, callback){
-
-        var model = Object.create(GLOBAL.defs.DbModelBase);
+//        var model = Object.create(GLOBAL.defs.DbModelBase);
 
         model.id = (
             object.hasOwnProperty('id') ?
@@ -60,7 +61,7 @@ module.exports = function(id, loadWithJson, callback){
 
     model.loadDumpSafeObjectFromModel = function(model, callback){
 
-        var dumpSafeModel = Object.create({});
+        var dumpSafeModel = {};
 
         dumpSafeModel.id = (
             model.hasOwnProperty('id') ?
@@ -98,7 +99,7 @@ module.exports = function(id, loadWithJson, callback){
 
     model.createDbExportObject = function(skipId, callback){
 
-        var exportObject = Object;
+        var exportObject = {};
 
         if(!skipId){
             exportObject.id = model.id;
@@ -117,7 +118,7 @@ module.exports = function(id, loadWithJson, callback){
     };
 
     model.loadDumpSafeUserFromId = function(id, callback){
-        model.loadFromId(id, 'user', null, function(err, user){
+        model.loadFromId(id, 'user', model, null, function(err, user){
             model.loadDumpSafeObjectFromModel(user, callback);
         });
     };
@@ -142,9 +143,10 @@ module.exports = function(id, loadWithJson, callback){
                                 password,
                                 function(success){
                                     if(success){
-                                        this.loadFromId(
+                                        model.loadFromId(
                                             rows[0].id,
-                                            'user',
+                                            model.TABLE_NAME,
+                                            model,
                                             null,
                                             function(err, usermodel){
                                                 // TODO set cookie
@@ -178,9 +180,10 @@ module.exports = function(id, loadWithJson, callback){
                         if(rows.length == 0) {
                             callback(false, null);
                         } else {
-                            this.loadFromId(
+                            model.loadFromId(
                                 rows[0].id,
-                                'user',
+                                model.TABLE_NAME,
+                                model,
                                 null,
                                 function(err, usermodel){
                                     callback(true, usermodel);
@@ -195,9 +198,9 @@ module.exports = function(id, loadWithJson, callback){
     };
 
     if(loadWithJson != null && loadWithJson){
-        model.loadFromJson(id, callback);
+        model.loadFromJson(id, model, callback);
     } else if(id != null) {
-        model.loadFromId(id, 'user', null, callback);
+        model.loadFromId(id, 'user', model, null, callback);
     } else {
         callback(null, model);
     }

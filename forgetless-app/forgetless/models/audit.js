@@ -1,10 +1,12 @@
 module.exports = function(id, loadWithJson, callback){
 
-    var model = GLOBAL.defs.DbModelBase;
+    var model = Object.create(GLOBAL.defs.DbModelBase);
+
+    model.TABLE_NAME = 'audit';
 
     model.loadWithObject = function(object, callback){
 
-        var model = Object.create(GLOBAL.defs.DbModelBase);
+//        var model = Object.create(GLOBAL.defs.DbModelBase);
 
         model.id = (
             object.hasOwnProperty('id') ?
@@ -50,7 +52,7 @@ module.exports = function(id, loadWithJson, callback){
 
     model.createDbExportObject = function(skipId, callback){
 
-        var exportObject = Object;
+        var exportObject = {};
 
         if(!skipId){
             exportObject.id = model.id;
@@ -58,7 +60,7 @@ module.exports = function(id, loadWithJson, callback){
 
         exportObject.date_created = model.dateCreated;
         exportObject.date_deleted = model.dateDeleted;
-        exportObject.last_modified = model.last_modified;
+        exportObject.last_modified = model.lastModified;
         exportObject.last_modified_by = model.lastModifiedBy;
         exportObject.audit_log = model.auditLog;
 
@@ -66,10 +68,14 @@ module.exports = function(id, loadWithJson, callback){
 
     };
 
+    model.save = function(callback) {
+        model.saveModel(model.TABLE_NAME, model, callback);
+    };
+
     if(loadWithJson != null && loadWithJson){
-        model.loadFromJson(loadWithJson, callback);
+        model.loadFromJson(loadWithJson, model, callback);
     } else if(id != null) {
-        model.loadFromId(id, 'audit', null, callback);
+        model.loadFromId(id, 'audit', model, null, callback);
     } else {
         callback(null, model);
     }
