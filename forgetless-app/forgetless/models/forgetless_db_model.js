@@ -51,7 +51,7 @@ var model = {
                 });
             } else {
                 saveModel.createDbExportObject(false, function(object){
-                    connection.query('UPDATE ? SET ?? WHERE id = ?', [tableName, object, saveModel.id], function(err, rows){
+                    connection.query('UPDATE ?? SET ? WHERE id = ?', [tableName, object, saveModel.id], function(err, rows){
                         callback(err);
                         connection.release();
                     });

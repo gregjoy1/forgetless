@@ -123,78 +123,15 @@ module.exports = function(id, loadWithJson, callback){
         });
     };
 
-    model.login = function(email, password, callback){
-        if(email == '' || password == ''){
-            callback(false, null);
-        } else {
-            GLOBAL.dbPool.getConnection(function(err, connection){
-                var sql = 'SELECT id, password_hash FROM user WHERE email = ?';
-                connection.query(sql, email, function(err, rows){
-                    if(err){
-                        console.log(err);
-                        callback(err, model);
-                    } else {
-                        if(rows.length == 0) {
-                            callback(false, null);
-                        } else {
-                            GLOBAL.defs.HashHelper.EmailPasswordHashMatch(
-                                rows[0].password_hash,
-                                email,
-                                password,
-                                function(success){
-                                    if(success){
-                                        model.loadFromId(
-                                            rows[0].id,
-                                            model.TABLE_NAME,
-                                            model,
-                                            null,
-                                            function(err, usermodel){
-                                                // TODO set cookie
-                                                callback(true, usermodel);
-                                            }
-                                        );
-                                    } else {
-                                        callback(false, null);
-                                    }
-                                }
-                            );
-                        }
-                    }
-                    connection.release();
-                });
-            });
-        }
+    model.generateNewUserToken = function(callback) {
+        GLOBAL.defs.HashHelper.GenerateHashToken(model.passwordHash, function(hash) {
+            model.userTokenHash = hash;
+            callback(model);
+        });
     };
 
-    model.checkUserTokenHash = function(userTokenHash, callback){
-        if(userTokenHash == ''){
-            callback(false, null);
-        } else {
-            GLOBAL.dbPool.getConnection(function(err, connection){
-                var sql = 'SELECT id FROM user WHERE user_token_hash = ?';
-                connection.query(sql, userTokenHash, function(err, rows){
-                    if(err){
-                        console.log(err);
-                        callback(err, model);
-                    } else {
-                        if(rows.length == 0) {
-                            callback(false, null);
-                        } else {
-                            model.loadFromId(
-                                rows[0].id,
-                                model.TABLE_NAME,
-                                model,
-                                null,
-                                function(err, usermodel){
-                                    callback(true, usermodel);
-                                }
-                            );
-                        }
-                    }
-                    connection.release();
-                });
-            });
-        }
+    model.save = function(callback) {
+        model.saveModel(model.TABLE_NAME, model, callback);
     };
 
     if(loadWithJson != null && loadWithJson){

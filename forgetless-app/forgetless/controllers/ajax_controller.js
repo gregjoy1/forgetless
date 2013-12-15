@@ -3,5 +3,13 @@ module.exports.dump = function(req, res){
         res.end(JSON.stringify(object));
         console.log(JSON.stringify(object));
     });
+};
 
+module.exports.login = function(req, res){
+
+    if(req.cookies.usertoken != null) {
+        if(req.body.email != undefined && req.body.password != undefined) {
+
+        }
+    }
 };

@@ -6,14 +6,15 @@ module.exports = {
         callback(this._sha1(string));
     },
 
-    HashEmailPassword:function(email, password, callback){
-        callback(this._sha1(email + GLOBAL.config.pw_salt + password));
+    HashEmailPassword:function(email, password, callback, overrideSalt){
+        var salt = (overrideSalt == undefined ? GLOBAL.config.pw_salt : overrideSalt);
+        callback(this._sha1(email + salt + password));
     },
 
-    EmailPasswordHashMatch:function(hash, email, password, callback){
+    EmailPasswordHashMatch:function(hash, email, password, callback, overrideSalt){
         this.HashEmailPassword(email, password, function(generatedHash){
             callback(hash == generatedHash);
-        });
+        }, overrideSalt);
     },
 
     GenerateHashToken:function(uniqueString, callback){
