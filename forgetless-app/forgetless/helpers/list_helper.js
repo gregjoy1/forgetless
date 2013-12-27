@@ -1,5 +1,5 @@
 module.exports = {
-    getCompleteJSONDump:function(userId, callback){
+    getCompleteJSONStackDump:function(userId, callback){
         GLOBAL.async.waterfall(
             [
                 // Gets all category links for a specified user
@@ -19,17 +19,17 @@ module.exports = {
                         });
                     });
                 },
-                // Gets the category linked to the categery links
+                // Gets the category linked to the category links
                 function(user, callback){
                     var count = 0;
-                    for(var inc = 0; inc < user.CategoryLinks.length; inc++){
+                    for(var inc = 0; inc < user.CategoryLinks.length; inc++) {
                         var index = inc;
                         new GLOBAL.defs.Category(user.CategoryLinks[inc].categoryID, null, function(err, category){
                             new GLOBAL.defs.Audit(category.auditID, null, function(err, audit){
                                 category.Audit = audit;
                                 user.CategoryLinks[index].Category = category;
                                 count++;
-                                if(count == user.CategoryLinks.length){
+                                if(count == user.CategoryLinks.length) {
                                     callback(null, user);
                                 }
                             });
@@ -39,7 +39,7 @@ module.exports = {
                 // Gets all the list links for a category
                 function(user, callback){
                     var count = 0;
-                    for(var inc = 0; inc < user.CategoryLinks.length; inc++){
+                    for(var inc = 0; inc < user.CategoryLinks.length; inc++) {
                         var index = inc;
                         new GLOBAL.defs.ListLink(null, null, function(err, listLink) {
                             listLink.GetAllListLinksForUser(userId, user.CategoryLinks[index].Category.id, function(err, listLinks){

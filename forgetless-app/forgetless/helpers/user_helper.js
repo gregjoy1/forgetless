@@ -94,5 +94,13 @@ module.exports = {
                 });
             });
         }
+    },
+    IsUserLoggedIn:function(request, callback){
+        var userToken = request.cookies.usertoken;
+        if(userToken != null) {
+            this.LoginWithUserToken(userToken, callback);
+        } else {
+            callback(false, null);
+        }
     }
 };

@@ -2,26 +2,39 @@ module.exports = function(app) {
 
     var ajaxController = require('../controllers/ajax_controller.js');
 
-    app.get('/ajax/', function(request, response){
-        ajaxController.dump(request, response);
+    app.get('/ajax/', function(request, response) {
+        ajaxController.stackDump(request, response);
     });
 
-    app.post('/ajax/user/login', function(request, response){
-
+    app.get('/ajax/stack/dump', function(request, response) {
+        ajaxController.stackDump(request, response);
     });
 
-    app.get('/ajax/test', function(request, response){
+    app.post('/ajax/user/login', function(request, response) {
+        ajaxController.login(request, response);
+    });
+
+    app.get('/ajax/test', function(request, response) {
 
 //        GLOBAL.defs.UserHelper.Login('greg@greg.com', 'password', response, function(success, userModel) {
 //            console.log(success, userModel);
 //            response.end('test');
 //        });
 
-        response.end(request.cookies.usertoken);
+//        response.end(request.cookies.usertoken);
+
+        GLOBAL.defs.UserHelper.IsUserLoggedIn(request, function(success, user) {
+            response.end(success ? 'yay' : 'no yay');
+        });
 
 //        if(request.cookies.usertoken != null) {
 //            GLOBAL.defs.UserHelper.LoginWithUserToken(request.cookies.usertoken, function(success, userModel) {
 //                console.log(success, userModel);
+//                if(success) {
+//                    response.write('YAY');
+//                } else {
+//                    response.write('OH NO! D:');
+//                }
 //                response.end('test');
 //            });
 //        } else {

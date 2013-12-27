@@ -27,7 +27,8 @@ GLOBAL.defs = {
     'Audit':require('./models/audit.js'),
     'ListHelper':require('./helpers/list_helper.js'),
     'HashHelper':require('./helpers/hash_helper.js'),
-    'UserHelper':require('./helpers/user_helper.js')
+    'UserHelper':require('./helpers/user_helper.js'),
+    'StatusCodeHelper':require('./helpers/status_code_helper.js')
 };
 
 var router = require('./router/router.js');
