@@ -12,27 +12,29 @@ module.exports = function(express, app, path) {
         token_salt:     '12fsWw1k9so56O4uZ5zu3TRiFs9rnh3f'
     };
 
-    // all environments
-    app.set('port', 8080);
+    if(app && express) {
+        // all environments
+        app.set('port', 8080);
 
-    app.set('views', config.view_path);
-    app.set('view engine', 'ejs');
+        app.set('views', config.view_path);
+        app.set('view engine', 'ejs');
 
-    app.engine('html', require('ejs').renderFile);
+        app.engine('html', require('ejs').renderFile);
 
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
-    app.use(express.json());
-    app.use(express.urlencoded());
-    app.use(express.methodOverride());
-    app.use(express.cookieParser('131xkGXI8argN47t0m3A1b7VT6Y9Lgiw'));
-    app.use(express.session());
-    app.use(app.router);
-    app.use(express.static(config.public_path));
+        app.use(express.favicon());
+        app.use(express.logger('dev'));
+        app.use(express.json());
+        app.use(express.urlencoded());
+        app.use(express.methodOverride());
+        app.use(express.cookieParser('131xkGXI8argN47t0m3A1b7VT6Y9Lgiw'));
+        app.use(express.session());
+        app.use(app.router);
+        app.use(express.static(config.public_path));
 
-    // development only
-    if ('development' == app.get('env')) {
-        app.use(express.errorHandler());
+        // development only
+        if ('development' == app.get('env')) {
+            app.use(express.errorHandler());
+        }
     }
 
     return config;

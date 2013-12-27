@@ -55,6 +55,12 @@ module.exports = function(id, loadWithJson, callback){
                 ''
         );
 
+        model.zoneId = (
+            object.hasOwnProperty('zone_id') ?
+                object.zone_id :
+                ''
+        );
+
         callback(false, model);
 
     };
@@ -93,6 +99,12 @@ module.exports = function(id, loadWithJson, callback){
                 ''
         );
 
+        dumpSafeModel.zoneId = (
+            model.hasOwnProperty('zoneId') ?
+                model.zoneId :
+                ''
+        );
+
         callback(false, dumpSafeModel);
 
     };
@@ -112,6 +124,7 @@ module.exports = function(id, loadWithJson, callback){
         exportObject.password_hash = model.passwordHash;
         exportObject.reset_password_hash = model.resetPasswordHash;
         exportObject.user_token_hash = model.userTokenHash;
+        exportObject.zone_id = model.zoneId;
 
         callback(exportObject);
 
@@ -128,6 +141,39 @@ module.exports = function(id, loadWithJson, callback){
             model.userTokenHash = hash;
             callback(model);
         });
+    };
+
+    model.generateNewPasswordHash = function(password, callback) {
+        GLOBAL.defs.HashHelper.HashEmailPassword(model.email, password, function(hash) {
+            model.passwordHash = hash;
+            callback(model);
+        });
+    };
+
+    model.createNewUser = function(title, firstName, lastName, email, password, callback) {
+        model.title = title;
+        model.firstName = firstName;
+        model.lastName = lastName;
+        model.email = email;
+        model.zoneId = 1;
+
+        model.generateNewPasswordHash('password', function(model) {
+            model.generateNewUserToken(function(model) {
+                callback(model);
+            });
+        });
+
+    };
+
+    model.disableUser = function(callback) {
+        model.changeZone(0, function(model) {
+            callback(model);
+        });
+    };
+
+    model.changeZone = function(zone, callback) {
+        model.zoneId = zone;
+        callback(model);
     };
 
     model.save = function(callback) {
