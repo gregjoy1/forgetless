@@ -83,7 +83,25 @@ module.exports.login = function(request, response){
     });
 };
 
-// Not sure this is needed.
 module.exports.checkUser = function(request, response, callback) {
     GLOBAL.defs.UserHelper.IsUserLoggedIn(request, callback);
+};
+
+module.exports.displayUserLoginStatus = function(request, response) {
+    module.exports.checkUser(request, response, function(success, user) {
+        if(success) {
+            // if logged in, returns dump safe user model (to avoid sending hashes etc)
+            user.loadDumpSafeObjectFromModel(user, function(err, dumpSafeUser) {
+                response.end(JSON.stringify(dumpSafeUser));
+            });
+            // if no one is logged in, sends not logged in JSON encoded error status object
+        } else {
+            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                GLOBAL.defs.StatusCodeHelper.StatusCodes.NOT_LOGGED_IN,
+                function(errorJSONString) {
+                    response.end(errorJSONString);
+                }
+            );
+        }
+    });
 };

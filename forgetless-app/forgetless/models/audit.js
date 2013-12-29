@@ -14,38 +14,55 @@ module.exports = function(id, loadWithJson, callback){
                 ''
         );
 
-        model.dateCreated = (
+        var dateCreated = (
             object.hasOwnProperty('date_created') ?
                 object.date_created :
-                ''
+                0
         );
 
-        model.dateDeleted = (
-            object.hasOwnProperty('date_deleted') ?
-                object.date_deleted :
-                ''
-        );
-
-        model.lastModified = (
+        var lastModified = (
             object.hasOwnProperty('last_modified') ?
                 object.last_modified :
-                ''
+                0
         );
 
-        model.lastModifiedBy = (
-            object.hasOwnProperty('last_modified_by') ?
-                object.last_modified_by :
-                ''
+        var dateDeleted = (
+            object.hasOwnProperty('date_deleted') ?
+                object.date_deleted :
+                null
         );
 
-        model.auditLog = (
-            object.hasOwnProperty('audit_log') ?
-                object.audit_log :
-                ''
-        );
+        GLOBAL.defs.Utils.GetDateFromISODate(dateCreated, function(date) {
+            model.dateCreated = date;
 
-        process.nextTick(function(){
-            callback(false, model)
+            GLOBAL.defs.Utils.GetDateFromISODate(lastModified, function(date) {
+                model.lastModified = date;
+
+                GLOBAL.defs.Utils.GetDateFromISODate(dateDeleted, function(date) {
+                    model.dateDeleted = date;
+
+                    model.lastModifiedBy = (
+                        object.hasOwnProperty('last_modified_by') ?
+                            object.last_modified_by :
+                            ''
+                        );
+
+                    try {
+                        model.auditLog = (
+                            object.hasOwnProperty('audit_log') ?
+                                JSON.parse(object.audit_log) :
+                                []
+                            );
+                    } catch (exception) {
+                        model.audit_log = [];
+                        // TODO add proper forgetless logging facility
+                    }
+
+                    callback(false, model);
+
+                });
+            });
+
         });
 
     };
@@ -58,14 +75,40 @@ module.exports = function(id, loadWithJson, callback){
             exportObject.id = model.id;
         }
 
-        exportObject.date_created = model.dateCreated;
-        exportObject.date_deleted = model.dateDeleted;
-        exportObject.last_modified = model.lastModified;
-        exportObject.last_modified_by = model.lastModifiedBy;
-        exportObject.audit_log = model.auditLog;
+        GLOBAL.defs.Utils.GetTimeStampFromDate(model.dateCreated, function(timestamp) {
+            exportObject.date_created = timestamp;
 
-        callback(exportObject);
+            GLOBAL.defs.Utils.GetTimeStampFromDate(model.dateDeleted, function(timestamp) {
+                exportObject.date_deleted = timestamp;
 
+                GLOBAL.defs.Utils.GetTimeStampFromDate(model.lastModified, function(timestamp) {
+                    exportObject.last_modified = timestamp;
+
+                    exportObject.last_modified_by = model.lastModifiedBy;
+                    exportObject.audit_log = JSON.stringify(model.auditLog);
+
+                    callback(exportObject);
+
+                });
+            });
+        });
+
+    };
+
+    model.addAuditLogEntry = function(log, user, callback) {
+
+        var date = new Date();
+
+        model.auditLog.push({
+            date: date.toJSON(),
+            user: user,
+            log: log
+        });
+
+        model.lastModified = date;
+        model.lastModifiedBy = user;
+
+        callback(model);
     };
 
     model.save = function(callback) {
