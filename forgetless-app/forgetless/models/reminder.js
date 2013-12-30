@@ -11,7 +11,7 @@ module.exports = function(id, loadWithJson, callback){
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
-                ''
+                undefined
         );
 
         model.itemId = (
@@ -52,20 +52,42 @@ module.exports = function(id, loadWithJson, callback){
 
     model.createDbExportObject = function(skipId, callback){
 
-        var exportObject = {};
+        GLOBAL.defs.Utils.GetDateFromISODate(model.dateCreated, function(date) {
+            var exportObject = {};
 
-        if(!skipId){
-            exportObject.id = model.id;
+            if(!skipId) {
+                exportObject.id = model.id;
+            }
+
+            exportObject.item_id = model.itemId;
+            exportObject.user_id = model.userId;
+            exportObject.date_created = date;
+            exportObject.repeat = model.repeat;
+            exportObject.zone_id = model.zoneId;
+
+            callback(exportObject);
+        });
+
+    };
+
+    model.createNewReminder = function(date, repeat, itemId, userId, callback) {
+        model.dateTime = date;
+
+        if(repeat != (undefined || null)) {
+            model.repeat = repeat;
         }
 
-        exportObject.item_id = model.itemId;
-        exportObject.user_id = model.userId;
-        exportObject.date_created = model.dateCreated;
-        exportObject.repeat = model.repeat;
-        exportObject.zone_id = model.zoneId;
+        model.itemId = itemId;
+        model.userId = userId;
 
-        callback(exportObject);
+        model.save(function(err, reminderModel) {
+            if(err) {
+                // TODO implement logging...
+            }
 
+            callback(reminderModel);
+
+        });
     };
 
     model.save = function(callback) {

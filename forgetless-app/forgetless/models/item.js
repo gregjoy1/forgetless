@@ -11,7 +11,7 @@ module.exports = function(id, loadWithJson, callback){
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
-                ''
+                undefined
         );
 
         model.zoneId = (
@@ -38,7 +38,7 @@ module.exports = function(id, loadWithJson, callback){
                 ''
         );
 
-        model.auditID = (
+        model.auditId = (
             object.hasOwnProperty('audit_id') ?
                 object.audit_id :
                 ''
@@ -56,9 +56,7 @@ module.exports = function(id, loadWithJson, callback){
                 ''
         );
 
-        process.nextTick(function(){
-            callback(false, model)
-        });
+        callback(false, model)
 
     };
 
@@ -74,11 +72,46 @@ module.exports = function(id, loadWithJson, callback){
         exportObject.title = model.title;
         exportObject.content = model.content;
         exportObject.duration = model.duration;
-        exportObject.audit_id = model.auditID;
+        exportObject.audit_id = model.auditId;
         exportObject.deadline = model.deadline;
         exportObject.item_type = model.itemType;
 
         callback(exportObject);
+
+    };
+
+    model.createNewItem = function(title, content, duration, deadline, itemType, user, callback) {
+
+        GLOBAL.defs.Audit.createNewAudit(user, function(auditModel) {
+            model.zoneId = 1;
+            model.title = title;
+
+            if(content != (undefined || null)) {
+                model.content = content;
+            }
+
+            if(duration != (undefined || null)) {
+                model.duration = duration;
+            }
+
+            if(deadline != (undefined || null)) {
+                model.deadline = deadline;
+            }
+
+            model.itemType = itemType;
+
+            model.auditId = auditModel.id;
+
+            model.save(function(err, itemModel) {
+
+                if(err) {
+                    // TODO add proper logging...
+                }
+
+                callback(itemModel);
+            });
+
+        });
 
     };
 

@@ -11,7 +11,7 @@ module.exports = function(id, loadWithJson, callback){
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
-                ''
+                undefined
         );
 
         model.title = (
@@ -32,7 +32,7 @@ module.exports = function(id, loadWithJson, callback){
                 ''
         );
 
-        model.auditID = (
+        model.auditId = (
             object.hasOwnProperty('audit_id') ?
                 object.audit_id :
                 ''
@@ -53,9 +53,34 @@ module.exports = function(id, loadWithJson, callback){
         exportObject.title = model.title;
         exportObject.description = model.description;
         exportObject.zone_id = model.zoneId;
-        exportObject.audit_id = model.auditID;
+        exportObject.audit_id = model.auditId;
 
         callback(exportObject);
+
+    };
+
+    model.createNewList = function(title, description, user, callback) {
+
+        GLOBAL.defs.Audit.createNewAudit(user, function(audit) {
+            model.title = title;
+
+            if(description != (undefined || null)) {
+                model.description = description;
+            }
+
+            model.auditId = audit.id;
+            model.zoneId = 1;
+
+            model.save(function(err, listModel) {
+
+                if(err) {
+                    // TODO implement logging...
+                }
+
+                callback(listModel);
+            });
+
+        });
 
     };
 

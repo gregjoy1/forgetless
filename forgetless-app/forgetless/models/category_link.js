@@ -11,7 +11,7 @@ module.exports = function(id, loadWithJson, callback){
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
-                ''
+                undefined
             );
 
         model.title = (
@@ -26,7 +26,7 @@ module.exports = function(id, loadWithJson, callback){
                 ''
             );
 
-        model.categoryID = (
+        model.categoryId = (
             object.hasOwnProperty('category_id') ?
                 object.category_id :
                 ''
@@ -46,15 +46,15 @@ module.exports = function(id, loadWithJson, callback){
 
         exportObject.title = model.title;
         exportObject.user_id = model.userId;
-        exportObject.category_id = model.categoryID;
+        exportObject.category_id = model.categoryId;
 
         callback(exportObject);
 
     };
 
-    model.GetAllCategoryLinksForUser = function(userID, callback){
+    model.GetAllCategoryLinksForUser = function(userId, callback){
         var sql = 'SELECT * FROM category_link WHERE user_id = ?';
-        var escapeArray = userID;
+        var escapeArray = userId;
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err, rows){
@@ -75,6 +75,21 @@ module.exports = function(id, loadWithJson, callback){
                 }
                 connection.release();
             });
+        });
+    };
+
+    model.createNewCategoryLink = function(title, categoryId, userId, callback) {
+        model.title = title;
+        model.categoryId = categoryId;
+        model.userId = userId;
+
+        model.save(function(err, categoryLinkModel) {
+            if(err) {
+                // TODO implement logging
+            }
+
+            callback(categoryLinkModel);
+
         });
     };
 

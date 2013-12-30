@@ -10,6 +10,7 @@ module.exports.stackDump = function(request, response){
         } else {
             GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
                 GLOBAL.defs.StatusCodeHelper.StatusCodes.NOT_LOGGED_IN,
+                'No user is currently logged in.',
                 function(errorJSONString) {
                     response.end(errorJSONString);
                 }
@@ -39,6 +40,7 @@ module.exports.login = function(request, response){
                     } else {
                         GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
                             GLOBAL.defs.StatusCodeHelper.StatusCodes.NOT_LOGGED_IN,
+                            'No user is currently logged in.',
                             function(errorJSONString) {
                                 response.end(errorJSONString);
                             }
@@ -53,6 +55,7 @@ module.exports.login = function(request, response){
                     // if not, it JSON encodes error status to tell frontend
                     GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
                         GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_LOGIN_CREDENTIALS,
+                        'No user is currently logged in.',
                         function(errorJSONString) {
                             response.end(errorJSONString);
                         }
@@ -70,6 +73,7 @@ module.exports.login = function(request, response){
                         } else {
                             GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
                                 GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_LOGIN_CREDENTIALS,
+                                'No user is currently logged in.',
                                 function(errorJSONString) {
                                     response.end(errorJSONString);
                                 }
@@ -98,6 +102,7 @@ module.exports.displayUserLoginStatus = function(request, response) {
         } else {
             GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
                 GLOBAL.defs.StatusCodeHelper.StatusCodes.NOT_LOGGED_IN,
+                'No user is currently logged in.',
                 function(errorJSONString) {
                     response.end(errorJSONString);
                 }

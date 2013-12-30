@@ -11,32 +11,38 @@ module.exports = function(id, loadWithJson, callback){
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
-                ''
-            );
+                undefined
+        );
 
         model.userId = (
             object.hasOwnProperty('user_id') ?
                 object.user_id :
                 ''
-            );
+        );
 
         model.listId = (
             object.hasOwnProperty('list_id') ?
                 object.list_id :
                 ''
-            );
+        );
 
         model.parentListId = (
             object.hasOwnProperty('parent_id') ?
                 object.parent_id :
                 ''
-            );
+        );
 
         model.title = (
             object.hasOwnProperty('title') ?
                 object.title :
                 ''
-            );
+        );
+
+        model.categoryId = (
+            object.hasOwnProperty('category_id') ?
+                object.category_id :
+                ''
+        );
 
         callback(false, model);
 
@@ -54,14 +60,15 @@ module.exports = function(id, loadWithJson, callback){
         exportObject.list_id = model.listId;
         exportObject.parent_list_id = model.parentListId;
         exportObject.title = model.title;
+        exportObject.category_id = model.categoryId;
 
         callback(exportObject);
 
     };
 
-    model.GetAllListLinksForUser = function(userID, categoryID, callback){
+    model.GetAllListLinksForUser = function(userId, categoryId, callback){
         var sql = 'SELECT * FROM list_link WHERE user_id = ? AND category_id = ?';
-        var escapeArray = [userID, categoryID];
+        var escapeArray = [userId, categoryId];
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err, rows){
@@ -83,6 +90,28 @@ module.exports = function(id, loadWithJson, callback){
                 connection.release();
             });
         });
+    };
+
+    model.createNewListLink = function(title, userId, parentListId, listId, categoryId, callback) {
+        model.title = title;
+        model.userId = userId;
+
+        if(parentListId != (undefined || null)) {
+            model.parentListId = parentListId;
+        }
+
+        model.listId = listId;
+        model.categoryId = categoryId;
+
+        model.save(function(listLinkModel) {
+
+            if(err) {
+                // TODO add logging
+            }
+
+            callback(model);
+        });
+
     };
 
     model.save = function(callback) {

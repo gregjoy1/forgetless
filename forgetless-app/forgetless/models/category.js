@@ -11,10 +11,10 @@ module.exports = function(id, loadWithJson, callback){
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
-                ''
+                undefined
             );
 
-        model.auditID = (
+        model.auditId = (
             object.hasOwnProperty('audit_id') ?
                 object.audit_id :
                 ''
@@ -49,6 +49,23 @@ module.exports = function(id, loadWithJson, callback){
 
         callback(exportObject);
 
+    };
+
+    model.createNewCategory = function(title, user, callback) {
+        GLOBAL.defs.Audit.createNewAudit(user, function(auditModel) {
+            model.zoneId = 1;
+            model.title = title;
+            model.auditId = auditModel.id;
+
+            model.save(function(err, categoryModel) {
+                if(err) {
+                    // TODO proper logging
+                }
+
+                callback(categoryModel);
+
+            });
+        });
     };
 
     model.save = function(callback) {

@@ -72,7 +72,7 @@ module.exports = function(id, loadWithJson, callback){
         dumpSafeModel.id = (
             model.hasOwnProperty('id') ?
                 model.id :
-                ''
+                undefined
         );
 
         dumpSafeModel.title = (
@@ -151,6 +151,7 @@ module.exports = function(id, loadWithJson, callback){
     };
 
     model.createNewUser = function(title, firstName, lastName, email, password, callback) {
+
         model.title = title;
         model.firstName = firstName;
         model.lastName = lastName;

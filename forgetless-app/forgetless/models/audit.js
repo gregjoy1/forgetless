@@ -11,7 +11,7 @@ module.exports = function(id, loadWithJson, callback){
         model.id = (
             object.hasOwnProperty('id') ?
                 object.id :
-                ''
+                undefined
         );
 
         var dateCreated = (
@@ -88,6 +88,28 @@ module.exports = function(id, loadWithJson, callback){
                     exportObject.audit_log = JSON.stringify(model.auditLog);
 
                     callback(exportObject);
+
+                });
+            });
+        });
+
+    };
+
+    model.createNewAudit = function(user, callback) {
+
+        GLOBAL.def.Utils.GetTimeStampFromDate(new Date(), function(timeStamp) {
+            model.dateCreated = timeStamp;
+            model.dateDeleted = null;
+            model.lastModified = timeStamp;
+            model.lastModifiedBy = user;
+
+            model.addAuditLogEntry("Created", user, function(auditModel) {
+                auditModel.save(function(err, auditModel) {
+                    if(err) {
+                        // TODO add proper logging...
+                    }
+
+                    callback(auditModel);
 
                 });
             });
