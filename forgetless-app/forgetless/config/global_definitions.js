@@ -18,6 +18,7 @@ module.exports = function(express, app) {
         'Item':require('../models/item.js'),
         'Reminder':require('../models/reminder.js'),
         'Audit':require('../models/audit.js'),
+        'StackHelper':require('../helpers/stack_helper.js'),
         'CategoryHelper':require('../helpers/category_helper.js'),
         'ListHelper':require('../helpers/list_helper.js'),
         'ItemHelper':require('../helpers/item_helper.js'),

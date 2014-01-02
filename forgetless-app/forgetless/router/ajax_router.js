@@ -32,43 +32,11 @@ module.exports = function(app) {
     // AJAX TESTS - TODO disregard
     app.get('/ajax/test', function(request, response) {
 
-//        GLOBAL.defs.UserHelper.Login('greg@greg.com', 'password', response, function(success, userModel) {
-//            console.log(success, userModel);
-//            response.end('test');
-//        });
-
-//        response.end(request.cookies.usertoken);
-
-        GLOBAL.defs.UserHelper.IsUserLoggedIn(request, function(success, user) {
-            response.end(success ? 'yay' : 'no yay');
+        GLOBAL.defs.ReminderHelper.GetAllRemindersForUser(false, 1, function(err, reminders) {
+            console.log(err, reminders);
+            response.end(JSON.stringify(reminders));
         });
 
-//        if(request.cookies.usertoken != null) {
-//            GLOBAL.defs.UserHelper.LoginWithUserToken(request.cookies.usertoken, function(success, userModel) {
-//                console.log(success, userModel);
-//                if(success) {
-//                    response.write('YAY');
-//                } else {
-//                    response.write('OH NO! D:');
-//                }
-//                response.end('test');
-//            });
-//        } else {
-//            console.log('so this is awkward. No user token :/');
-//            response.end('sheet');
-//        }
-
-//        GLOBAL.defs.Item(null, null, function(err, item) {
-//            item.zoneId = 1;
-//            item.title = "testing";
-//            item.content = "Im testing.";
-//            item.audit_id = 1;
-//            item.save(function(err){
-//                console.log(err);
-//                console.log('done');
-//                response.end('done');
-//            });
-//        });
     });
 
 };

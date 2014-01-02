@@ -1,4 +1,4 @@
-module.exports = function(id, loadWithJson, callback){
+module.exports = function(id, loadWithJson, callback, zoneIdOverride){
 
     var model = Object.create(GLOBAL.defs.DbModelBase);
 
@@ -7,6 +7,8 @@ module.exports = function(id, loadWithJson, callback){
     model.loadWithObject = function(object, callback){
 
 //        var model = Object.create(GLOBAL.defs.DbModelBase);
+
+        object = (object == undefined ? {} : object);
 
         model.id = (
             object.hasOwnProperty('id') ?
@@ -94,10 +96,12 @@ module.exports = function(id, loadWithJson, callback){
         model.saveModel(model.TABLE_NAME, model, callback);
     };
 
+    zoneIdOverride = (zoneIdOverride == undefined ? 1 : null);
+
     if(loadWithJson != null && loadWithJson){
         model.loadFromJson(loadWithJson, model, callback);
     } else if(id != null) {
-        model.loadFromId(id, 'reminder', model, 1, callback);
+        model.loadFromId(id, 'reminder', model, zoneIdOverride, callback);
     } else {
         callback(null, model);
     }

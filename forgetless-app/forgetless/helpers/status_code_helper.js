@@ -25,14 +25,33 @@ module.exports.StatusCodes = {
     },
 
     // User orientated Statuses
-    "CORRECT_LOGIN_CREDENTIALS" : {
+    "LOGGED_IN" : {
         "code"          : 'US-1',
+        "description"   : "User logged in.",
+        "error"         : false
+    },
+    "CORRECT_LOGIN_CREDENTIALS" : {
+        "code"          : 'US-2',
         "description"   : "Correct login credentials.",
         "error"         : false
     },
     "CORRECT_USER_PRIVILEGES" : {
-        "code"          : 'US-2',
+        "code"          : 'US-3',
         "description"   : "Correct user privileges.",
+        "error"         : false
+    },
+
+    // Stack Related errors
+    "UNABLE_TO_DUMP_STACK" : {
+        "code"          : 'SE-1',
+        "description"   : "Unable to dump stack.",
+        "error"         : true
+    },
+
+    // Stack Related statuses
+    "STACK_DUMPED_SUCCESSFULLY" : {
+        "code"          : 'SS-1',
+        "description"   : "Stack dumped successfully.",
         "error"         : false
     },
 

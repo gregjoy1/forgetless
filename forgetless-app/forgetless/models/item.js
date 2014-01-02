@@ -5,6 +5,7 @@ module.exports = function(id, loadWithJson, callback){
     model.loadWithObject = function(object, callback){
 
 //        var model = Object.create(GLOBAL.defs.DbModelBase);
+        object = (object == undefined ? {} : object);
 
         model.TABLE_NAME = 'item';
 

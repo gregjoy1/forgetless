@@ -2,9 +2,15 @@ module.exports.stackDump = function(request, response){
     // checks if user is logged in and provides user object for dumping stack
     module.exports.checkUser(request, response, function(success, user) {
         if(success) {
-            GLOBAL.defs.ListHelper.getCompleteJSONStackDump(user.id, function(err, object) {
-                response.end(JSON.stringify(object));
-                console.log(JSON.stringify(object));
+            GLOBAL.defs.StackHelper.getCompleteJSONStackDump(user.id, function(err, stackDump) {
+                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LOGGED_IN,
+                    stackDump,
+                    function(status) {
+                        response.end(status);
+                        console.log(status);
+                    }
+                );
             });
         // if no one is logged in, sends not logged in JSON encoded error status object
         } else {
@@ -96,7 +102,13 @@ module.exports.displayUserLoginStatus = function(request, response) {
         if(success) {
             // if logged in, returns dump safe user model (to avoid sending hashes etc)
             user.loadDumpSafeObjectFromModel(user, function(err, dumpSafeUser) {
-                response.end(JSON.stringify(dumpSafeUser));
+                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LOGGED_IN,
+                    dumpSafeUser,
+                    function(errorJSONString) {
+                        response.end(errorJSONString);
+                    }
+                );
             });
             // if no one is logged in, sends not logged in JSON encoded error status object
         } else {
