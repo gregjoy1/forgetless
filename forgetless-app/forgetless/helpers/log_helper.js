@@ -65,7 +65,6 @@ var checkCreateAndReadLog = function(callback) {
             function(callback) {
                 getLogFolderMonthString(function(logMonthFolderName) {
                     var logMonthFolderPath = path.join(GLOBAL.config.log_path, logMonthFolderName);
-                    console.log(logMonthFolderName);
                     fileSystem.exists(logMonthFolderPath, function(exists) {
                         if(exists) {
                             callback(null, logMonthFolderPath);
@@ -85,7 +84,7 @@ var checkCreateAndReadLog = function(callback) {
             },
             function(logMonthFolderPath, callback) {
                 getDateString(function(logDateString) {
-                    var logFilePath = path.join(logMonthFolderPath, logDateString);
+                    var logFilePath = path.join(logMonthFolderPath, logDateString + '.json');
                     fileSystem.exists(logFilePath, function(exist) {
                         if(exist) {
                             fileSystem.readFile(logFilePath, function(err, content) {
