@@ -71,9 +71,14 @@ module.exports.StatusCodes = {
         "description"   : "Unable to remove item association.",
         "error"         : true
     },
-    "UNABLE_TO_TO_FIND_PREEXISTING_ITEM" : {
+    "UNABLE_TO_FIND_PREEXISTING_ITEM" : {
         "code"          : 'IE-4',
         "description"   : "Unable to find pre-existing item.",
+        "error"         : true
+    },
+    "UNABLE_TO_FIND_PREEXISTING_ITEMS" : {
+        "code"          : 'IE-5',
+        "description"   : "Unable to find pre-existing items.",
         "error"         : true
     },
 
@@ -85,12 +90,61 @@ module.exports.StatusCodes = {
     },
     "ITEM_CREATED_AND_ASSOCIATED_SUCCESSFULLY" : {
         "code"          : 'IS-2',
-        "description"   : "Item created and associated item successfully.",
+        "description"   : "Item created and associated successfully.",
+        "error"         : false
+    },
+    "ITEM_FOUND_AND_REMOVED_SUCCESSFULLY" : {
+        "code"          : 'IS-3',
+        "description"   : "Item found and removed successfully.",
         "error"         : false
     },
     "ITEM_FOUND_AND_ASSOCIATED_SUCCESSFULLY" : {
-        "code"          : 'IS-3',
+        "code"          : 'IS-4',
         "description"   : "Item found and associated item successfully.",
+        "error"         : false
+    },
+    "ITEMS_FOUND_AND_ASSOCIATED_SUCCESSFULLY" : {
+        "code"          : 'IS-5',
+        "description"   : "Items found and associated items successfully.",
+        "error"         : false
+    },
+
+    // List helper orientated errors
+    "UNABLE_TO_CREATE_LIST" : {
+        "code"          : 'LE-1',
+        "description"   : "Unable to create list.",
+        "error"         : true
+    },
+    "UNABLE_TO_CREATE_AND_ASSOCIATE_LIST" : {
+        "code"          : 'LE-2',
+        "description"   : "Unable to create and associate list.",
+        "error"         : true
+    },
+    "UNABLE_TO_REMOVE_LIST_ASSOCIATION" : {
+        "code"          : 'LE-3',
+        "description"   : "Unable to remove list association.",
+        "error"         : true
+    },
+    "UNABLE_TO_FIND_PREEXISTING_LIST" : {
+        "code"          : 'LE-4',
+        "description"   : "Unable to find pre-existing list.",
+        "error"         : true
+    },
+
+    // List helper orientated statuses
+    "LIST_CREATED_SUCCESSFULLY" : {
+        "code"          : 'LS-1',
+        "description"   : "list created successfully.",
+        "error"         : false
+    },
+    "LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY" : {
+        "code"          : 'LS-2',
+        "description"   : "List created and associated item successfully.",
+        "error"         : false
+    },
+    "LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY" : {
+        "code"          : 'LS-3',
+        "description"   : "List found and associated item successfully.",
         "error"         : false
     }
 

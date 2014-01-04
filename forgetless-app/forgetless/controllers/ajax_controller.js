@@ -122,3 +122,103 @@ module.exports.displayUserLoginStatus = function(request, response) {
         }
     });
 };
+
+module.exports.CreateItem = function(callback) {
+
+    // TODO make all these come from request...
+    var userId, listId, title, content, duration, deadline, itemType;
+
+    GLOBAL.defs.ItemHelper.CreateAndAssociateItemToList(
+        userId,
+        listId,
+        title,
+        content,
+        duration,
+        deadline,
+        itemType,
+        function(itemLink) {
+            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                GLOBAL.defs.StatusCodeHelper.ITEM_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                itemLink,
+                callback
+            );
+        }
+    );
+};
+
+module.exports.LinkPreExistingItemToList = function(callback) {
+
+    var userId, listId, itemId;
+
+    GLOBAL.defs.AssociatePreExistingItemToList(userId, listId, itemId, function(err, itemLink) {
+        if(err) {
+            // TODO logging...
+            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_ITEM,
+                err,
+                callback
+            );
+        } else {
+            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                itemLink,
+                callback
+            );
+        }
+    });
+};
+
+module.exports.RemoveLinkToPreExistingItem = function(callback) {
+
+    var userId, listId, itemId;
+
+    GLOBAL.defs.ItemHelper.RemoveItemAssociationToList(userId, listId, itemId, function(err) {
+        if(err) {
+            // TODO logging...
+            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                GLOBAL.defs.StatusCodeHelper.UNABLE_TO_REMOVE_ITEM_ASSOCIATION,
+                err,
+                callback
+            );
+        } else {
+            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY,
+                GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY.description,
+                callback
+            );
+        }
+    });
+};
+
+module.exports.LinkAllItemsInListToNewUser = function(callback) {
+
+    var userId, fromUserId, listId;
+
+    GLOBAL.defs.ItemHelper.AssociateListOfItemsToUser(userId, fromUserId, listId, function(err, itemLinks) {
+
+        if(err) {
+
+            var logDetails = JSON.stringify({
+                location:       'AssociateListOfItemsToUser',
+                'userId':       userId,
+                'fromUserId':   fromUserId,
+                'listId':       listId,
+                'error':        err
+            });
+
+            GLOBAL.defs.LogHelper.WriteToLog(logDetails, function() {
+                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_ITEM,
+                    err,
+                    callback
+                );
+            });
+        } else {
+            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                GLOBAL.defs.StatusCodeHelper.ITEMS_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                itemLinks,
+                callback
+            );
+        }
+    })
+};
