@@ -2,8 +2,9 @@ module.exports = function(express, app, path) {
 
     var config = {
         port:           8080,
-        view_path:      path.join(__dirname + '/../', 'views'),
-        public_path:    path.join(__dirname + '/../', 'public'),
+        view_path:      path.join(__dirname, '/../', 'views'),
+        public_path:    path.join(__dirname, '/../', 'public'),
+        log_path:       path.join(__dirname, '/../', 'logs'),
         db_host:        '127.0.0.1',
         db_user:        'root',
         db_password:    '',

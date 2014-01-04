@@ -27,6 +27,7 @@ module.exports = function(express, app) {
         'HashHelper':require('../helpers/hash_helper.js'),
         'UserHelper':require('../helpers/user_helper.js'),
         'StatusCodeHelper':require('../helpers/status_code_helper.js'),
-        'Utils':require('../utils/utils.js')
+        'Utils':require('../utils/utils.js'),
+        'LogHelper': require('../helpers/log_helper.js')
     };
 };
