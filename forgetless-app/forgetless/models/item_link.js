@@ -111,7 +111,7 @@ module.exports = function(id, loadWithJson, callback){
         model.userId = userId;
         model.itemId = itemId;
         model.listId = listId;
-        model.flag = 1;
+        model.flag = 0;
 
         model.save(function(err, itemLinkObject) {
             if(err) {
@@ -131,7 +131,7 @@ module.exports = function(id, loadWithJson, callback){
     if(loadWithJson != null && loadWithJson){
         model.loadFromJson(loadWithJson, model, callback);
     } else if(id != null) {
-        model.loadFromId(id, 'item_link', model, 1, callback);
+        model.loadFromId(id, 'item_link', model, null, callback);
     } else {
         callback(null, model);
     }

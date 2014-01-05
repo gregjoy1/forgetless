@@ -81,6 +81,11 @@ module.exports.StatusCodes = {
         "description"   : "Unable to find pre-existing items.",
         "error"         : true
     },
+    "UNABLE_TO_FIND_AND_UPDATE_ITEM" : {
+        "code"          : 'IE-6',
+        "description"   : "Unable to find and update item.",
+        "error"         : true
+    },
 
     // Item helper orientated statuses
     "ITEM_CREATED_SUCCESSFULLY" : {
@@ -108,6 +113,12 @@ module.exports.StatusCodes = {
         "description"   : "Items found and associated items successfully.",
         "error"         : false
     },
+    "ITEM_FOUND_AND_UPDATED_SUCCESSFULLY" : {
+        "code"          : 'IS-6',
+        "description"   : "Item found and updated item successfully.",
+        "error"         : false
+    },
+
 
     // List helper orientated errors
     "UNABLE_TO_CREATE_LIST" : {
@@ -131,6 +142,7 @@ module.exports.StatusCodes = {
         "error"         : true
     },
 
+
     // List helper orientated statuses
     "LIST_CREATED_SUCCESSFULLY" : {
         "code"          : 'LS-1',
@@ -142,8 +154,13 @@ module.exports.StatusCodes = {
         "description"   : "List created and associated item successfully.",
         "error"         : false
     },
-    "LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY" : {
+    "LIST_FOUND_AND_REMOVED_SUCCESSFULLY" : {
         "code"          : 'LS-3',
+        "description"   : "List found and removed successfully.",
+        "error"         : false
+    },
+    "LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY" : {
+        "code"          : 'LS-4',
         "description"   : "List found and associated item successfully.",
         "error"         : false
     }

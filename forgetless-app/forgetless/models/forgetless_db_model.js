@@ -15,6 +15,8 @@ var model = {
             connection.query(sql, escapeArray, function(err, rows){
                 if(err){
                     callback(err, model);
+                } else if(rows.length == 0) {
+                    callback('Empty Result Set', model);
                 } else {
                     loadModel.loadWithObject(rows[0], callback);
                 }

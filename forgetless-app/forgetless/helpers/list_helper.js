@@ -4,56 +4,76 @@ module.exports = {
         GLOBAL.defs.List.createNewList(title, description, userId, function(list) {
             GLOBAL.defs.ListLink.createNewListLink(title, userId, parentListId, list.id, categoryId, function(listLink) {
                 listLink.List = list;
-
-                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
-                    listLink,
-                    callback
-                );
+                callback(listLink);
             });
         });
     },
-    AssociatePreExistingListToCategory: function(userId, listId, categoryId, title, parentListId, description, callback) {
+    AssociatePreExistingListToCategory: function(userId, fromUserId, listId, categoryId, parentListId, callback) {
         GLOBAL.defs.List(listId, null, function(err, list) {
             if(err) {
-                // TODO logging...
-                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_TO_FIND_PREEXISTING_LIST,
-                    err,
-                    callback
-                );
+                callback(err, null);
             } else {
-                GLOBAL.defs.ListLink.createNewListLink(userId, userId, parentListId, listId, categoryId, function(listLink) {
+                GLOBAL.defs.ListLink.createNewListLink(list.title, userId, parentListId, listId, categoryId, function(listLink) {
                     listLink.List = list;
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
-                        listLink,
-                        callback
-                        // TODO add child linking..
+                    GLOBAL.defs.ItemHelper.AssociateListOfItemsToUser(
+                        userId,
+                        fromUserId,
+                        listId,
+                        function(err, itemLinks) {
+                            listLink.List.ItemLink = itemLinks;
+                            callback(err, listLink);
+                        }
                     );
                 });
             }
         });
     },
-    RemoveListAssociationToCategory: function(userId, listId, itemId, callback) {
-//        GLOBAL.defs.Item(itemId, null, function(err, item) {
-//            if(err) {
-//                // TODO logging...
-//                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-//                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_TO_FIND_PREEXISTING_ITEM,
-//                    err,
-//                    callback
-//                );
-//            } else {
-//                GLOBAL.defs.ItemLink.createNewItemLink(userId, itemId, listId, function(itemLink) {
-//                    itemLink.Item = item;
-//                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-//                        GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
-//                        itemLink,
-//                        callback
-//                    );
-//                });
-//            }
-//        });
+    RemoveListAssociationToCategory: function(userId, listId, callback) {
+        // using waterfall as 2 step process
+        GLOBAL.async.waterfall(
+            [
+                // query finds all items linked to list that linked and uses helper method
+                // to delete items
+                function(callback) {
+                    var sql = 'SELECT id FROM item_link WHERE user_id = ? AND list_id = ?';
+
+                    var escapeArray = [userId, listId];
+
+                    GLOBAL.dbPool.getConnection(function(err, connection){
+                        connection.query(sql, escapeArray, function(err, rows){
+                            var errors = [];
+                            for(var inc = 0; inc <  rows.length; inc++) {
+                                GLOBAL.defs.ItemHelper.RemoveItemAssociationToList(userId, listId, rows[inc].id, function(err) {
+                                    if(err) {
+                                        errors.push(err);
+                                    }
+                                    if(inc == (rows.length - 1)) {
+                                        callback((errors.length > 0 ? errors : null));
+                                    }
+                                });
+                            }
+                        });
+                    });
+                },
+                // deletes list link
+                function(callback) {
+                    var sql = 'DELETE FROM list_link WHERE user_id = ? AND list_id = ?';
+
+                    var escapeArray = [userId, listId];
+
+                    GLOBAL.dbPool.getConnection(function(err, connection){
+                        connection.query(sql, escapeArray, function(err){
+                            if(err) {
+                                errors.push(err);
+                            }
+                            callback((errors.length > 0 ? errors : null));
+                        });
+                    });
+                }
+            ],
+            function(err) {
+                callback(err)
+            }
+        );
     }
 };

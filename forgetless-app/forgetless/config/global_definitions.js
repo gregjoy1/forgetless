@@ -7,6 +7,7 @@ module.exports = function(express, app) {
     GLOBAL.config = require('../config/config.js')(express, app, path);
     GLOBAL.dbPool = require('../config/database.js')(mysql, GLOBAL.config);
 
+    // Acting as a "service locator"
     GLOBAL.defs = {
         'DbModelBase':require('../models/forgetless_db_model.js'),
         'User':require('../models/user.js'),
