@@ -87,7 +87,7 @@ module.exports = function(id, loadWithJson, callback, zoneIdOverride){
                 // TODO implement logging...
             }
 
-            callback(reminderModel);
+            callback(err, reminderModel);
 
         });
     };

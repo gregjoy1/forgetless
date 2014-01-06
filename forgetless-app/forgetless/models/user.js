@@ -159,9 +159,11 @@ module.exports = function(id, loadWithJson, callback){
         model.email = email;
         model.zoneId = 1;
 
-        model.generateNewPasswordHash('password', function(model) {
-            model.generateNewUserToken(function(model) {
-                callback(model);
+        model.generateNewPasswordHash('password', function(userModel) {
+            userModel.generateNewUserToken(function(userModel) {
+                userModel.save(function(err, userModel) {
+                    callback(err, userModel);
+                });
             });
         });
 

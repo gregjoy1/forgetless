@@ -11,12 +11,10 @@ module.exports = {
                 'last-name',
                 'email',
                 'password',
-                function(user) {
-                    user.save(function(err, user) {
-                        test.equal(err, null, 'Save Query Failed: ' + err);
-                        testUser = user;
-                        test.done();
-                    });
+                function(err, user) {
+                    test.equal(err, null, 'Save Query Failed: ' + err);
+                    testUser = user;
+                    test.done();
                 }
             );
         });

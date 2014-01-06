@@ -62,14 +62,17 @@ module.exports = function(id, loadWithJson, callback){
 
     model.createNewList = function(title, description, user, callback) {
 
-        GLOBAL.defs.Audit.createNewAudit(user, function(audit) {
+        GLOBAL.defs.Audit.createNewAudit(user, function(err, audit) {
             model.title = title;
 
             if(description != (undefined || null)) {
                 model.description = description;
             }
 
-            model.auditId = audit.id;
+            if(!err) {
+                model.auditId = audit.id;
+            }
+
             model.zoneId = 1;
 
             model.save(function(err, listModel) {
@@ -78,7 +81,7 @@ module.exports = function(id, loadWithJson, callback){
                     // TODO implement logging...
                 }
 
-                callback(listModel);
+                callback(err, listModel);
             });
 
         });

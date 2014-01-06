@@ -30,11 +30,19 @@ module.exports = {
         });
     },
     CreateAndAssociateItemToList: function(userId, listId, title, content, duration, deadline, itemType, callback) {
-        GLOBAL.defs.Item.createNewItem(title, content, duration, deadline, itemType, userId, function(item) {
-            GLOBAL.defs.ItemLink.createNewItemLink(userId, item.id, listId, function(itemLink) {
-                itemLink.Item = item;
-                callback(itemLink);
-            });
+        GLOBAL.defs.Item.createNewItem(title, content, duration, deadline, itemType, userId, function(err, item) {
+            if(err) {
+                callback(err, null);
+            } else {
+                GLOBAL.defs.ItemLink.createNewItemLink(userId, item.id, listId, function(err, itemLink) {
+                    if(err) {
+                        callback(err, null);
+                    } else {
+                        itemLink.Item = item;
+                        callback(err, itemLink);
+                    }
+                });
+            }
         });
     },
     UpdateItemStack: function(itemId, userId, listId, title, content, duration, deadline, itemType, callback) {
@@ -87,16 +95,6 @@ module.exports = {
                 }
             );
 
-            itemLink.save(function(err) {
-                if(err) {
-                    callback(err, null);
-                } else {
-                    itemLink.Item.save(function(err) {
-
-                    });
-                }
-            });
-
         });
     },
     AssociatePreExistingItemToList: function(userId, listId, itemId, callback) {
@@ -104,9 +102,13 @@ module.exports = {
             if(err) {
                 callback(err, null);
             } else {
-                GLOBAL.defs.ItemLink.createNewItemLink(userId, itemId, listId, function(itemLink) {
-                    itemLink.Item = item;
-                    callback(err, itemLink);
+                GLOBAL.defs.ItemLink.createNewItemLink(userId, itemId, listId, function(err, itemLink) {
+                    if(err) {
+                        callback(err, null);
+                    } else {
+                        itemLink.Item = item;
+                        callback(err, itemLink);
+                    }
                 });
             }
         });
@@ -149,7 +151,7 @@ module.exports = {
                                         callback(false, itemLinks);
                                     }
                                 }
-                            )
+                            );
                         }
                     }
                 }

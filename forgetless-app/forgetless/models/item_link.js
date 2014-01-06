@@ -118,7 +118,7 @@ module.exports = function(id, loadWithJson, callback){
                 // TODO implment logging...
             }
 
-            callback(itemLinkObject);
+            callback(err, itemLinkObject);
         });
 
 

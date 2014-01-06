@@ -110,7 +110,7 @@ module.exports = function(id, loadWithJson, callback){
                         // TODO add proper logging...
                     }
 
-                    callback(auditModel);
+                    callback(err, auditModel);
 
                 });
             });

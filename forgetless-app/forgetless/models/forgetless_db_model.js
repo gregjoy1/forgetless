@@ -39,7 +39,7 @@ var model = {
         }
     },
 
-   loadWithObject:function(object, callback){},
+    loadWithObject:function(object, callback){},
 
     saveModel:function(tableName, saveModel, callback){
         GLOBAL.dbPool.getConnection(function(err, connection){

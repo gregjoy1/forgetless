@@ -89,7 +89,7 @@ module.exports = function(id, loadWithJson, callback){
                 // TODO implement logging
             }
 
-            callback(categoryLinkModel);
+            callback(err, categoryLinkModel);
 
         });
     };

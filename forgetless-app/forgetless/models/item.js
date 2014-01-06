@@ -83,7 +83,7 @@ module.exports = function(id, loadWithJson, callback){
 
     model.createNewItem = function(title, content, duration, deadline, itemType, user, callback) {
 
-        GLOBAL.defs.Audit.createNewAudit(user, function(auditModel) {
+        GLOBAL.defs.Audit.createNewAudit(user, function(err, auditModel) {
             model.zoneId = 1;
             model.title = title;
 
@@ -101,7 +101,9 @@ module.exports = function(id, loadWithJson, callback){
 
             model.itemType = itemType;
 
-            model.auditId = auditModel.id;
+            if(!err) {
+                model.auditId = auditModel.id;
+            }
 
             model.save(function(err, itemModel) {
 
@@ -109,7 +111,7 @@ module.exports = function(id, loadWithJson, callback){
                     // TODO add proper logging...
                 }
 
-                callback(itemModel);
+                callback(err, itemModel);
             });
 
         });

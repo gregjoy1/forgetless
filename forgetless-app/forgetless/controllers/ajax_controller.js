@@ -159,14 +159,24 @@ module.exports = {
             duration,
             deadline,
             itemType,
-            function(itemLink) {
-                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.ITEM_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
-                    itemLink,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
+            function(err, itemLink) {
+                if(err) {
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.UNABLE_TO_CREATE_AND_ASSOCIATE_ITEM,
+                        err,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                } else {
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.ITEM_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                        itemLink,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                }
             }
         );
     },
@@ -299,14 +309,24 @@ module.exports = {
             title,
             parentListId,
             description,
-            function(listLink) {
-                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
-                    listLink,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
+            function(err, listLink) {
+                if(err) {
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.UNABLE_TO_CREATE_AND_ASSOCIATE_LIST,
+                        err,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                } else {
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                        listLink,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                }
             }
         );
     },

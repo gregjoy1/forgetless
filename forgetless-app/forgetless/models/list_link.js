@@ -104,13 +104,13 @@ module.exports = function(id, loadWithJson, callback){
         model.listId = listId;
         model.categoryId = categoryId;
 
-        model.save(function(listLinkModel) {
+        model.save(function(err, listLinkModel) {
 
             if(err) {
                 // TODO add logging
             }
 
-            callback(model);
+            callback(err, listLinkModel);
         });
 
     };
