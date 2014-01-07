@@ -1,9 +1,15 @@
 // TODO populate this...
 module.exports.StatusCodes = {
-    // Generic error status... (shouldn't be used)
+    // Generic error status...
     "UNKNOWN_ERROR" : {
         "code"          : 'GE-0',
         "description"   : "Unknown error.",
+        "error"         : true
+    },
+
+    "INCORRECT_FORM_SUBMISSION" : {
+        "code"          : 'GE-1',
+        "description"   : "Incorrect form submission.",
         "error"         : true
     },
 
@@ -146,7 +152,7 @@ module.exports.StatusCodes = {
     // List helper orientated statuses
     "LIST_CREATED_SUCCESSFULLY" : {
         "code"          : 'LS-1',
-        "description"   : "list created successfully.",
+        "description"   : "List created successfully.",
         "error"         : false
     },
     "LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY" : {
@@ -162,6 +168,50 @@ module.exports.StatusCodes = {
     "LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY" : {
         "code"          : 'LS-4',
         "description"   : "List found and associated item successfully.",
+        "error"         : false
+    },
+
+    // Category helper orientated errors
+    "UNABLE_TO_CREATE_CATEGORY" : {
+        "code"          : 'CE-1',
+        "description"   : "Unable to create category.",
+        "error"         : true
+    },
+    "UNABLE_TO_CREATE_AND_ASSOCIATE_CATEGORY" : {
+        "code"          : 'CE-2',
+        "description"   : "Unable to create and associate category.",
+        "error"         : true
+    },
+    "UNABLE_TO_REMOVE_CATEGORY_ASSOCIATION" : {
+        "code"          : 'CE-3',
+        "description"   : "Unable to remove category association.",
+        "error"         : true
+    },
+    "UNABLE_TO_FIND_PREEXISTING_CATEGORY" : {
+        "code"          : 'CE-4',
+        "description"   : "Unable to find pre-existing category.",
+        "error"         : true
+    },
+
+    // Category helper orientated statuses
+    "CATEGORY_CREATED_SUCCESSFULLY" : {
+        "code"          : 'CS-1',
+        "description"   : "Category created successfully.",
+        "error"         : false
+    },
+    "CATEGORY_CREATED_AND_ASSOCIATED_SUCCESSFULLY" : {
+        "code"          : 'CS-2',
+        "description"   : "Category created and associated item successfully.",
+        "error"         : false
+    },
+    "CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY" : {
+        "code"          : 'CS-3',
+        "description"   : "Category found and removed successfully.",
+        "error"         : false
+    },
+    "CATEGORY_FOUND_AND_ASSOCIATED_SUCCESSFULLY" : {
+        "code"          : 'CS-4',
+        "description"   : "Category found and associated item successfully.",
         "error"         : false
     }
 
