@@ -32,10 +32,6 @@ module.exports = function(app) {
     // AJAX TESTS - TODO disregard
     app.get('/ajax/test', function(request, response) {
 
-        GLOBAL.defs.ReminderHelper.GetAllRemindersForUser(false, 1, function(err, reminders) {
-            console.log(err, reminders);
-            response.end(JSON.stringify(reminders));
-        });
 
     });
 

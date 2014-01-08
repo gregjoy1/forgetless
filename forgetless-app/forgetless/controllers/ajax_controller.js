@@ -70,42 +70,63 @@ module.exports = {
                         }
                     });
                 } else {
-                    var email = request.body.email;
-                    var password = request.body.password;
-                    // checks if email and password have actually been sent correctly
-                    if(email == undefined || password == undefined) {
-                        // if not, it JSON encodes error status to tell frontend
-                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                            GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_LOGIN_CREDENTIALS,
-                            'No user is currently logged in.',
-                            function(errorJSONString) {
-                                response.end(errorJSONString);
-                            }
-                        );
-                        // else if all good, then attempts login with provided credentials
-                    } else {
-                        GLOBAL.defs.UserHelper.Login(email, password, response, function(success, user) {
-                            // if so, it JSON encodes limited user object (to avoid sending pw hashes etc)
+
+                    // declare validation
+                    var expectedFields = [
+                        {
+                            name: 'email',
+                            type: 'string',
+                            required: true
+                        },
+                        {
+                            name: 'password',
+                            type: 'string',
+                            required: true
+                        }
+                    ];
+
+                    GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+                        request,
+                        expectedFields,
+                        function(success, obj) {
                             if(success) {
-                                user.loadDumpSafeObjectFromModel(user, function(err, dumpSafeUser) {
-                                    console.log(dumpSafeUser);
-                                    response.end(JSON.stringify(dumpSafeUser));
-                                });
-                                // else sends JSON encoded error status object
+                                GLOBAL.defs.UserHelper.Login(
+                                    obj.email,
+                                    obj.password,
+                                    response,
+                                    function(success, user) {
+                                        // if so, it JSON encodes limited user object (to avoid sending pw hashes etc)
+                                        if(success) {
+                                            user.loadDumpSafeObjectFromModel(user, function(err, dumpSafeUser) {
+                                                console.log(dumpSafeUser);
+                                                response.end(JSON.stringify(dumpSafeUser));
+                                            });
+                                            // else sends JSON encoded error status object
+                                        } else {
+                                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_LOGIN_CREDENTIALS,
+                                                'No user is currently logged in.',
+                                                function(errorJSONString) {
+                                                    response.end(errorJSONString);
+                                                }
+                                            );
+                                        }
+                                    }
+                                );
                             } else {
+                                // TODO consider logging these?
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_LOGIN_CREDENTIALS,
-                                    'No user is currently logged in.',
-                                    function(errorJSONString) {
-                                        response.end(errorJSONString);
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                    function(status) {
+                                        response.end(status);
                                     }
                                 );
                             }
-                        });
-                    }
+                        }
+                    );
                 }
             }
-
         });
     },
     // checks if a user is logged in
@@ -224,8 +245,8 @@ module.exports = {
                 } else {
                     // TODO consider logging these?
                     GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.INCORRECT_FORM_SUBMISSION,
-                        request.body,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
                         function(status) {
                             response.end(status);
                         }
@@ -318,8 +339,8 @@ module.exports = {
                 } else {
                     // TODO consider logging these?
                     GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.INCORRECT_FORM_SUBMISSION,
-                        request.body,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
                         function(status) {
                             response.end(status);
                         }
@@ -331,91 +352,211 @@ module.exports = {
     // creates an item association to link
     linkPreExistingItemToList: function(request, response) {
 
-        var userId, listId, itemId;
-
-        GLOBAL.defs.AssociatePreExistingItemToList(userId, listId, itemId, function(err, itemLink) {
-            if(err) {
-                // TODO logging...
-                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_ITEM,
-                    err,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
-            } else {
-                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
-                    itemLink,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'listId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'itemId',
+                type: 'number',
+                required: true
             }
-        });
-    },
-    // removes item association
-    removeLinkToPreExistingItem: function(request, response) {
+        ];
 
-        var userId, listId, itemId;
-
-        GLOBAL.defs.ItemHelper.RemoveItemAssociationToList(userId, listId, itemId, function(err) {
-            if(err) {
-                // TODO logging...
-                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_REMOVE_ITEM_ASSOCIATION,
-                    err,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
-            } else {
-                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY,
-                    GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY.description,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
-            }
-        });
-    },
-    // copies all item associations from one users list to another
-    linkAllItemsInListToUser: function(request, response) {
-
-        var userId, fromUserId, listId;
-
-        GLOBAL.defs.ItemHelper.AssociateListOfItemsToUser(userId, fromUserId, listId, function(err, itemLinks) {
-
-            if(err) {
-
-                var logDetails = JSON.stringify({
-                    location:       'AssociateListOfItemsToUser',
-                    'userId':       userId,
-                    'fromUserId':   fromUserId,
-                    'listId':       listId,
-                    'error':        err
-                });
-
-                GLOBAL.defs.LogHelper.WriteToLog(logDetails, function() {
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+                if(success) {
+                    GLOBAL.defs.AssociatePreExistingItemToList(
+                        obj.userId,
+                        obj.listId,
+                        obj.itemId,
+                        function(err, itemLink) {
+                            if(err) {
+                                // TODO logging...
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_ITEM,
+                                    err,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            } else {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                    itemLink,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
+                        }
+                    );
+                } else {
+                    // TODO consider logging these?
                     GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_ITEM,
-                        err,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
                         function(status) {
                             response.end(status);
                         }
                     );
-                });
-            } else {
-                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.ITEMS_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
-                    itemLinks,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
+                }
             }
-        })
+        );
+    },
+    // removes item association
+    removeLinkToPreExistingItem: function(request, response) {
+
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'listId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'itemId',
+                type: 'number',
+                required: true
+            }
+        ];
+
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+                if(success) {
+                    GLOBAL.defs.ItemHelper.RemoveItemAssociationToList(
+                        obj.userId,
+                        obj.listId,
+                        obj.itemId,
+                        function(err) {
+                            if(err) {
+                                // TODO logging...
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_REMOVE_ITEM_ASSOCIATION,
+                                    err,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            } else {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY.description,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
+                        }
+                    );
+                } else {
+                    // TODO consider logging these?
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                }
+            }
+        );
+
+    },
+    // copies all item associations from one users list to another
+    linkAllItemsInListToUser: function(request, response) {
+
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'fromUserId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'listId',
+                type: 'number',
+                required: true
+            }
+        ];
+
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+                if(success) {
+                    GLOBAL.defs.ItemHelper.AssociateListOfItemsToUser(
+                        obj.userId,
+                        obj.fromUserId,
+                        obj.listId,
+                        function(err, itemLinks) {
+
+                            if(err) {
+
+                                var logDetails = JSON.stringify({
+                                    location:       'AssociateListOfItemsToUser',
+                                    'userId':       userId,
+                                    'fromUserId':   fromUserId,
+                                    'listId':       listId,
+                                    'error':        err
+                                });
+
+                                GLOBAL.defs.LogHelper.WriteToLog(logDetails, function() {
+                                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                        GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_ITEM,
+                                        err,
+                                        function(status) {
+                                            response.end(status);
+                                        }
+                                    );
+                                });
+
+                            } else {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.ITEMS_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                    itemLinks,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
+                        }
+                    );
+                } else {
+                    // TODO consider logging these?
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                }
+            }
+        );
+
     },
 
     /*
@@ -426,27 +567,71 @@ module.exports = {
 
     createList: function(request, response) {
 
-        var userId, categoryId, title, parentListId, description;
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'categoryId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'title',
+                type: 'string',
+                required: true
+            },
+            {
+                name: 'parentListId',
+                type: 'number',
+                required: false
+            },
+            {
+                name: 'description',
+                type: 'string',
+                required: true
+            }
+        ];
 
-        GLOBAL.defs.ListHelper.CreateAndAssociateListToCategory(
-            userId,
-            categoryId,
-            title,
-            parentListId,
-            description,
-            function(err, listLink) {
-                if(err) {
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.UNABLE_TO_CREATE_AND_ASSOCIATE_LIST,
-                        err,
-                        function(status) {
-                            response.end(status);
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+                if(success) {
+                    GLOBAL.defs.ListHelper.CreateAndAssociateListToCategory(
+                        obj.userId,
+                        obj.categoryId,
+                        obj.title,
+                        obj.parentListId,
+                        obj.description,
+                        function(err, listLink) {
+                            if(err) {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_CREATE_AND_ASSOCIATE_LIST,
+                                    err,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            } else {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                                    listLink,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
                         }
                     );
                 } else {
+                    // TODO consider logging these?
                     GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
-                        listLink,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
                         function(status) {
                             response.end(status);
                         }
@@ -457,27 +642,71 @@ module.exports = {
     },
     linkPreExistingListToCategory: function(request, response) {
 
-        var userId, fromUserId, listId, categoryId, parentListId;
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'fromUserId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'listId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'categoryId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'parentListId',
+                type: 'number',
+                required: false
+            }
+        ];
 
-        GLOBAL.defs.ListHelper.AssociatePreExistingListToCategory(
-            userId,
-            fromUserId,
-            listId,
-            categoryId,
-            parentListId,
-            function(err, listLink) {
-                if(err) {
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.UNABLE_TO_TO_FIND_PREEXISTING_LIST,
-                        err,
-                        function(status) {
-                            response.end(status);
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+                if(success) {
+                    GLOBAL.defs.ListHelper.AssociatePreExistingListToCategory(
+                        obj.userId,
+                        obj.fromUserId,
+                        obj.listId,
+                        obj.categoryId,
+                        obj.parentListId,
+                        function(err, listLink) {
+                            if(err) {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_TO_FIND_PREEXISTING_LIST,
+                                    err,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            } else {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                    listLink,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
                         }
                     );
                 } else {
+                    // TODO consider logging these?
                     GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
-                        listLink,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
                         function(status) {
                             response.end(status);
                         }
@@ -485,30 +714,64 @@ module.exports = {
                 }
             }
         );
+
     },
     removeLinkToPreExistingList: function(request, response) {
 
-        var userId, listId;
-
-        GLOBAL.defs.ListHelper.RemoveListAssociationToCategory(userId, listId, function(err) {
-            if(err) {
-                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_REMOVE_LIST_ASSOCIATION,
-                    err,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
-            } else {
-                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.LIST_FOUND_AND_REMOVED_SUCCESSFULLY,
-                    GLOBAL.defs.StatusCodeHelper.LIST_FOUND_AND_REMOVED_SUCCESSFULLY.description,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'listId',
+                type: 'number',
+                required: true
             }
-        });
+        ];
+
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+                if(success) {
+                    GLOBAL.defs.ListHelper.RemoveListAssociationToCategory(
+                        obj.userId,
+                        obj.listId,
+                        function(err) {
+                            if(err) {
+                                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_REMOVE_LIST_ASSOCIATION,
+                                    err,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            } else {
+                                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.LIST_FOUND_AND_REMOVED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.LIST_FOUND_AND_REMOVED_SUCCESSFULLY.description,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
+                        }
+                    );
+                } else {
+                    // TODO consider logging these?
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                }
+            }
+        );
     },
 
     /*
@@ -519,25 +782,59 @@ module.exports = {
 
     createCategory: function(request, response) {
 
-        var title, categoryId, userId;
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'categoryId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'title',
+                type: 'string',
+                required: true
+            }
+        ];
 
-        GLOBAL.defs.CategoryHelper.CreateAndAssociateCategoryToUser(
-            title,
-            categoryId,
-            userId,
-            function(err, categoryLink) {
-                if(err) {
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.UNABLE_TO_CREATE_AND_ASSOCIATE_CATEGORY,
-                        err,
-                        function(status) {
-                            response.end(status);
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+                if(success) {
+                    GLOBAL.defs.CategoryHelper.CreateAndAssociateCategoryToUser(
+                        obj.title,
+                        obj.categoryId,
+                        obj.userId,
+                        function(err, categoryLink) {
+                            if(err) {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_CREATE_AND_ASSOCIATE_CATEGORY,
+                                    err,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            } else {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.CATEGORY_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                                    categoryLink,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
                         }
                     );
                 } else {
+                    // TODO consider logging these?
                     GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.CATEGORY_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
-                        categoryLink,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
                         function(status) {
                             response.end(status);
                         }
@@ -548,24 +845,53 @@ module.exports = {
     },
     linkPreExistingCategoryToUser: function(request, response) {
 
-        var userId, categoryId;
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'categoryId',
+                type: 'number',
+                required: true
+            }
+        ];
 
-        GLOBAL.defs.CategoryHelper.AssociatePreExistingCategoryToUser(
-            userId,
-            categoryId,
-            function(err, categoryLink) {
-                if(err) {
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_CATEGORY,
-                        err,
-                        function(status) {
-                            response.end(status);
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+                if(success) {
+                    GLOBAL.defs.CategoryHelper.AssociatePreExistingCategoryToUser(
+                        obj.userId,
+                        obj.categoryId,
+                        function(err, categoryLink) {
+                            if(err) {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_CATEGORY,
+                                    err,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            } else {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.CATEGORY_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                    categoryLink,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
                         }
                     );
                 } else {
+                    // TODO consider logging these?
                     GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.CATEGORY_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
-                        categoryLink,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
                         function(status) {
                             response.end(status);
                         }
@@ -573,29 +899,64 @@ module.exports = {
                 }
             }
         );
+
     },
     removeLinkToPreExistingCategory: function(request, response) {
 
-        var userId, categoryId;
-
-        GLOBAL.defs.CategoryHelper.RemoveCategoryAssociationToUser(userId, categoryId, function(err) {
-            if(err) {
-                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_REMOVE_CATEGORY_ASSOCIATION,
-                    err,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
-            } else {
-                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
-                    GLOBAL.defs.StatusCodeHelper.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY,
-                    GLOBAL.defs.StatusCodeHelper.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY.description,
-                    function(status) {
-                        response.end(status);
-                    }
-                );
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'categoryId',
+                type: 'number',
+                required: true
             }
-        });
+        ];
+
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+                if(success) {
+                    GLOBAL.defs.CategoryHelper.RemoveCategoryAssociationToUser(
+                        obj.userId,
+                        obj.categoryId,
+                        function(err) {
+                            if(err) {
+                                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_REMOVE_CATEGORY_ASSOCIATION,
+                                    err,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            } else {
+                                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY.description,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
+                        }
+                    );
+                } else {
+                    // TODO consider logging these?
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                }
+            }
+        );
+
     }
 };
