@@ -147,6 +147,12 @@ module.exports.StatusCodes = {
         "description"   : "Unable to find pre-existing list.",
         "error"         : true
     },
+    "UNABLE_TO_FIND_AND_UPDATE_LIST" : {
+        "code"          : 'LE-5',
+        "description"   : "Unable to find and update list.",
+        "error"         : true
+    },
+
 
 
     // List helper orientated statuses
@@ -168,6 +174,11 @@ module.exports.StatusCodes = {
     "LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY" : {
         "code"          : 'LS-4',
         "description"   : "List found and associated item successfully.",
+        "error"         : false
+    },
+    "LIST_FOUND_AND_UPDATED_SUCCESSFULLY" : {
+        "code"          : 'LS-5',
+        "description"   : "List found and updated item successfully.",
         "error"         : false
     },
 
@@ -192,6 +203,12 @@ module.exports.StatusCodes = {
         "description"   : "Unable to find pre-existing category.",
         "error"         : true
     },
+    "UNABLE_TO_FIND_AND_UPDATE_CATEGORY" : {
+        "code"          : 'CE-5',
+        "description"   : "Unable to find and update category.",
+        "error"         : true
+    },
+
 
     // Category helper orientated statuses
     "CATEGORY_CREATED_SUCCESSFULLY" : {
@@ -212,6 +229,11 @@ module.exports.StatusCodes = {
     "CATEGORY_FOUND_AND_ASSOCIATED_SUCCESSFULLY" : {
         "code"          : 'CS-4',
         "description"   : "Category found and associated item successfully.",
+        "error"         : false
+    },
+    "CATEGORY_FOUND_AND_UPDATED_SUCCESSFULLY" : {
+        "code"          : 'CS-5',
+        "description"   : "Category found and updated item successfully.",
         "error"         : false
     }
 

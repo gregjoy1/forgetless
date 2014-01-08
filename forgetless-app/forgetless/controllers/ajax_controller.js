@@ -225,7 +225,7 @@ module.exports = {
                         function(err, itemLink) {
                             if(err) {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_CREATE_AND_ASSOCIATE_ITEM,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_CREATE_AND_ASSOCIATE_ITEM,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -233,7 +233,7 @@ module.exports = {
                                 );
                             } else {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.ITEM_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
                                     itemLink,
                                     function(status) {
                                         response.end(status);
@@ -319,7 +319,7 @@ module.exports = {
                         function(err, itemStack) {
                             if(err) {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_AND_UPDATE_ITEM,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_AND_UPDATE_ITEM,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -327,7 +327,7 @@ module.exports = {
                                 );
                             } else {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_UPDATED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_UPDATED_SUCCESSFULLY,
                                     itemStack,
                                     function(status) {
                                         response.end(status);
@@ -384,7 +384,7 @@ module.exports = {
                             if(err) {
                                 // TODO logging...
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_ITEM,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_ITEM,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -392,7 +392,7 @@ module.exports = {
                                 );
                             } else {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
                                     itemLink,
                                     function(status) {
                                         response.end(status);
@@ -449,7 +449,7 @@ module.exports = {
                             if(err) {
                                 // TODO logging...
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_REMOVE_ITEM_ASSOCIATION,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_ITEM_ASSOCIATION,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -457,8 +457,8 @@ module.exports = {
                                 );
                             } else {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY,
-                                    GLOBAL.defs.StatusCodeHelper.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY.description,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY.description,
                                     function(status) {
                                         response.end(status);
                                     }
@@ -525,7 +525,7 @@ module.exports = {
 
                                 GLOBAL.defs.LogHelper.WriteToLog(logDetails, function() {
                                     GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                        GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_ITEM,
+                                        GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_ITEM,
                                         err,
                                         function(status) {
                                             response.end(status);
@@ -535,7 +535,7 @@ module.exports = {
 
                             } else {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.ITEMS_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEMS_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
                                     itemLinks,
                                     function(status) {
                                         response.end(status);
@@ -610,7 +610,7 @@ module.exports = {
                         function(err, listLink) {
                             if(err) {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_CREATE_AND_ASSOCIATE_LIST,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_CREATE_AND_ASSOCIATE_LIST,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -618,8 +618,90 @@ module.exports = {
                                 );
                             } else {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
                                     listLink,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
+                        }
+                    );
+                } else {
+                    // TODO consider logging these?
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                }
+            }
+        );
+    },
+    updateList: function(request, response) {
+
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'listId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'categoryId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'title',
+                type: 'string',
+                required: false
+            },
+            {
+                name: 'parentListId',
+                type: 'number',
+                required: false
+            },
+            {
+                name: 'description',
+                type: 'string',
+                required: false
+            }
+        ];
+
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+
+                if(success) {
+                    GLOBAL.defs.ListHelper.UpdateListStack(
+                        obj.userId,
+                        obj.listId,
+                        obj.categoryId,
+                        obj.title,
+                        obj.parentListId,
+                        obj.description,
+                        function(err, listStack) {
+                            if(err) {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_AND_UPDATE_LIST,
+                                    err,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            } else {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_UPDATED_SUCCESSFULLY,
+                                    itemStack,
                                     function(status) {
                                         response.end(status);
                                     }
@@ -685,7 +767,7 @@ module.exports = {
                         function(err, listLink) {
                             if(err) {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_TO_FIND_PREEXISTING_LIST,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_TO_FIND_PREEXISTING_LIST,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -693,7 +775,7 @@ module.exports = {
                                 );
                             } else {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
                                     listLink,
                                     function(status) {
                                         response.end(status);
@@ -743,7 +825,7 @@ module.exports = {
                         function(err) {
                             if(err) {
                                 GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_REMOVE_LIST_ASSOCIATION,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_LIST_ASSOCIATION,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -751,8 +833,8 @@ module.exports = {
                                 );
                             } else {
                                 GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.LIST_FOUND_AND_REMOVED_SUCCESSFULLY,
-                                    GLOBAL.defs.StatusCodeHelper.LIST_FOUND_AND_REMOVED_SUCCESSFULLY.description,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_REMOVED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_REMOVED_SUCCESSFULLY.description,
                                     function(status) {
                                         response.end(status);
                                     }
@@ -813,7 +895,7 @@ module.exports = {
                         function(err, categoryLink) {
                             if(err) {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_CREATE_AND_ASSOCIATE_CATEGORY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_CREATE_AND_ASSOCIATE_CATEGORY,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -821,8 +903,72 @@ module.exports = {
                                 );
                             } else {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.CATEGORY_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
                                     categoryLink,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            }
+                        }
+                    );
+                } else {
+                    // TODO consider logging these?
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                }
+            }
+        );
+    },
+    updateCategory: function(request, response) {
+
+        // declare validation
+        var expectedFields = [
+            {
+                name: 'userId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'categoryId',
+                type: 'number',
+                required: true
+            },
+            {
+                name: 'title',
+                type: 'string',
+                required: false
+            }
+        ];
+
+        GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+            request,
+            expectedFields,
+            function(success, obj) {
+
+                if(success) {
+                    GLOBAL.defs.CategoryHelper.UpdateCategoryStack(
+                        obj.title,
+                        obj.categoryId,
+                        obj.userId,
+                        function(err, categoryStack) {
+                            if(err) {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_AND_UPDATE_CATEGORY,
+                                    err,
+                                    function(status) {
+                                        response.end(status);
+                                    }
+                                );
+                            } else {
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_UPDATED_SUCCESSFULLY,
+                                    categoryStack,
                                     function(status) {
                                         response.end(status);
                                     }
@@ -870,7 +1016,7 @@ module.exports = {
                         function(err, categoryLink) {
                             if(err) {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_FIND_PREEXISTING_CATEGORY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_CATEGORY,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -878,7 +1024,7 @@ module.exports = {
                                 );
                             } else {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.CATEGORY_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
                                     categoryLink,
                                     function(status) {
                                         response.end(status);
@@ -928,7 +1074,7 @@ module.exports = {
                         function(err) {
                             if(err) {
                                 GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.UNABLE_TO_REMOVE_CATEGORY_ASSOCIATION,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_CATEGORY_ASSOCIATION,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -936,8 +1082,8 @@ module.exports = {
                                 );
                             } else {
                                 GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY,
-                                    GLOBAL.defs.StatusCodeHelper.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY.description,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY.description,
                                     function(status) {
                                         response.end(status);
                                     }
