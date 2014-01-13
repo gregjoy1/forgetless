@@ -1,10 +1,55 @@
 var forgetlessApp = angular.module('forgetlessApp', ['ngRoute']);
 
-forgetlessApp.controller('ContentController', function($scope) {
-    $scope.test = [];
+forgetlessApp.controller('ContentViewPointController', function($scope) {
+    $scope.stepClass = '';
 
-    for(var inc = 0; inc < 100; inc++) {
-        $scope.test.push(inc);
+    $scope.nextStep = function(step) {
+        switch(step) {
+            case 1:
+                $scope.stepClass = 'step-one';
+                break;
+            case 2:
+                $scope.stepClass = 'step-two';
+                break;
+            case 3:
+                $scope.stepClass = 'step-three';
+                break;
+            default:
+                $scope.stepClass = '';
+                break;
+        }
+    }
+
+});
+
+forgetlessApp.controller('ContentController', function($scope) {});
+
+forgetlessApp.controller('CategoryController', function($scope) {
+
+    $scope.categories = [];
+
+    for(var inc = 1; inc < 20; inc++) {
+        $scope.categories.push('Category ' + inc);
+    }
+
+});
+
+forgetlessApp.controller('ListController', function($scope) {
+
+    $scope.lists = [];
+
+    for(var inc = 1; inc < 20; inc++) {
+        $scope.lists.push('List ' + inc);
+    }
+
+});
+
+forgetlessApp.controller('ItemController', function($scope) {
+
+    $scope.items = [];
+
+    for(var inc = 1; inc < 20; inc++) {
+        $scope.items.push('Item ' + inc);
     }
 
 });

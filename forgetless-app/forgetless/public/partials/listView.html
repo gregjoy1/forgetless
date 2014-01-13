@@ -1,93 +1,33 @@
-<div class="sixteen columns fluid" id="content-container" data-sync-height>
+<div class="{{stepClass}}" id="content-container" data-sync-height>
 
-    <div class="content-pane">
-        <h1>
-            test 1
-        </h1>
-        <h1>
-            test 1
-        </h1>
-        <h1>
-            test 1
-        </h1>
-        <h1>
-            test 1
-        </h1>
-        <h1>
-            test 1
-        </h1>
-        <h1>
-            test 1
-        </h1>
-        <h1>
-            test 1
-        </h1>
-        <h1>
-            test 1
-        </h1>
-        <h1>
-            test 1
-        </h1>
+    <div class="content-pane" data-ng-controller="CategoryController" data-ng-click="nextStep(1)">
+
+        <div class="content-item" data-ng-repeat="category in categories">
+            {{category}}
+        </div>
+
     </div>
 
-    <div class="content-pane">
-        <h1>
-            test 2
-        </h1>
-        <h1>
-            test 2
-        </h1>
-        <h1>
-            test 2
-        </h1>
-        <h1>
-            test 2
-        </h1>
-        <h1>
-            test 2
-        </h1>
-        <h1>
-            test 2
-        </h1>
-        <h1>
-            test 2
-        </h1>
-        <h1>
-            test 2
-        </h1>
-        <h1>
-            test 2
-        </h1>
+    <div class="content-pane" data-ng-controller="ListController">
+
+        <div class="content-item" data-ng-repeat="list in lists" data-ng-click="nextStep(2)">
+            {{list}}
+        </div>
+
     </div>
 
-    <div class="content-pane">
-        <h1>
-            test 3
-        </h1>
-        <h1>
-            test 3
-        </h1>
-        <h1>
-            test 3
-        </h1>
-        <h1>
-            test 3
-        </h1>
-        <h1>
-            test 3
-        </h1>
-        <h1>
-            test 3
-        </h1>
-        <h1>
-            test 3
-        </h1>
-        <h1>
-            test 3
-        </h1>
-        <h1>
-            test 3
-        </h1>
+    <div class="content-pane" data-ng-controller="ItemController">
+
+        <div class="content-item" data-ng-repeat="item in items" data-ng-click="nextStep(3)">
+            {{item}}
+        </div>
+
+    </div>
+
+    <div class="content-pane" >
+
+        <h1>item details</h1>
+
     </div>
 
 </div>

@@ -42,22 +42,32 @@ html,body {
     -o-transition: left 0.2s ease;
 }
 
-#content-viewpoint #content-container .step-one {
+#content-viewpoint .step-one {
     left: 0;
 }
 
-#content-viewpoint #content-container .step-two {
+#content-viewpoint .step-two {
+    left: 0;
+}
+
+#content-viewpoint .step-three {
     left: 0;
 }
 
 #content-viewpoint #content-container .content-pane {
-    width: 33%;
-    height: 100%;
+    width: 25%;
+    height: 101%;
     overflow-y: auto;
     display: inline-block;
 }
 
 .content-pane .content-item {
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    height: 40px;
+    line-height: 40px;
+    font-size: 30px;
+    cursor: pointer;
 }
 
 /* #Medium Screens
@@ -91,12 +101,21 @@ html,body {
     }
 
     #content-viewpoint #content-container {
-        width: 150%;
+        width: 201%;
     }
 
-    #content-viewpoint #content-container .step-one {
+    #content-viewpoint .step-one {
         left: -50%;
     }
+
+    #content-viewpoint .step-two {
+        left: -100%;
+    }
+
+    #content-viewpoint .step-three {
+        left: -100%;
+    }
+
 
 }
 
@@ -124,15 +143,19 @@ html,body {
     }
 
     #content-viewpoint #content-container {
-        width: 300%;
+        width: 401%;
     }
 
-    #content-viewpoint #content-container .step-one {
-        left: -50%;
-    }
-
-    #content-viewpoint #content-container .step-two {
+    #content-viewpoint .step-one {
         left: -100%;
+    }
+
+    #content-viewpoint .step-two {
+        left: -200%;
+    }
+
+    #content-viewpoint .step-three {
+        left: -300%;
     }
 
 }
@@ -161,15 +184,19 @@ html,body {
     }
 
     #content-viewpoint #content-container {
-        width: 300%;
+        width: 400%;
     }
 
-    #content-viewpoint #content-container .step-one {
+    #content-viewpoint .step-one {
         left: -100%;
     }
 
-    #content-viewpoint #content-container .step-two {
+    #content-viewpoint .step-two {
         left: -200%;
+    }
+
+    #content-viewpoint .step-three {
+        left: -300%;
     }
 
 }
