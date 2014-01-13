@@ -1,0 +1,175 @@
+html,body {
+    height: 100%;
+}
+
+#header-outer-container {
+    background-color: #000000;
+    height: 30px;
+
+}
+
+#header-outer-container .menu-button {
+    height: 28px;
+    width: 28px;
+    float: right;
+    background-color: white;
+    border: 1px solid black
+}
+
+#header-outer-container #header-container {
+    height: 100%;
+}
+
+#header-outer-container #header-container > span {
+    color: white;
+    line-height: 100%;
+    font-size: 1.6em;
+}
+
+#content-viewpoint {
+    overflow: hidden;
+}
+
+#content-viewpoint #content-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+
+    transition: left 0.2s ease;
+    -webkit-transition: left 0.2s ease;
+    -moz-transition: left 0.2s ease;
+    -o-transition: left 0.2s ease;
+}
+
+#content-viewpoint #content-container .step-one {
+    left: 0;
+}
+
+#content-viewpoint #content-container .step-two {
+    left: 0;
+}
+
+#content-viewpoint #content-container .content-pane {
+    width: 33%;
+    height: 100%;
+    overflow-y: auto;
+    display: inline-block;
+}
+
+.content-pane .content-item {
+}
+
+/* #Medium Screens
+================================================== */
+
+@media only screen and (min-width: 960px) and (max-width: 1199px) {
+
+}
+
+/* #Tablet (Portrait)
+================================================== */
+
+/* Note: Design for a width of 768px */
+
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+
+    #header-outer-container {
+        height: 40px;
+    }
+
+    #header-outer-container #header-container > span {
+        font-size: 2.1em;
+    }
+
+    #header-outer-container .menu-button {
+        height: 38px;
+        width: 38px;
+        float: right;
+        background-color: white;
+        border: 1px solid black
+    }
+
+    #content-viewpoint #content-container {
+        width: 150%;
+    }
+
+    #content-viewpoint #content-container .step-one {
+        left: -50%;
+    }
+
+}
+
+/*  #Mobile (Portrait)
+================================================== */
+
+/* Note: Design for a width of 320px */
+
+@media only screen and (max-width: 767px) {
+
+    #header-outer-container {
+        height: 60px;
+    }
+
+    #header-outer-container #header-container > span {
+        font-size: 3em;
+    }
+
+    #header-outer-container .menu-button {
+        height: 58px;
+        width: 58px;
+        float: right;
+        background-color: white;
+        border: 1px solid black
+    }
+
+    #content-viewpoint #content-container {
+        width: 300%;
+    }
+
+    #content-viewpoint #content-container .step-one {
+        left: -50%;
+    }
+
+    #content-viewpoint #content-container .step-two {
+        left: -100%;
+    }
+
+}
+
+/* #Mobile (Landscape)
+================================================== */
+
+/* Note: Design for a width of 480px */
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+
+    #header-outer-container {
+        height: 60px;
+    }
+
+    #header-outer-container #header-container > span {
+        font-size: 3em;
+    }
+
+    #header-outer-container .menu-button {
+        height: 58px;
+        width: 58px;
+        float: right;
+        background-color: white;
+        border: 1px solid black
+    }
+
+    #content-viewpoint #content-container {
+        width: 300%;
+    }
+
+    #content-viewpoint #content-container .step-one {
+        left: -100%;
+    }
+
+    #content-viewpoint #content-container .step-two {
+        left: -200%;
+    }
+
+}
