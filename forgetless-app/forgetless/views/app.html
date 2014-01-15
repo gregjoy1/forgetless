@@ -32,10 +32,8 @@
         <![endif]-->
 
         <script src="/javascripts/angular.min.js"></script>
-        <script src="/javascripts/angular-route.min.js"></script>
+        <script src="/javascripts/angular-ui-router.min.js"></script>
         <script src="/javascripts/forgetless.js"></script>
-
-        <script src="/javascripts/app.js"></script>
 
     </head>
 
@@ -67,7 +65,10 @@
 
         <content>
 
-            <div class="container fluid" id="content-viewpoint" data-ng-controller="ContentViewPointController" data-ng-view data-sync-height>
+            <div class="container fluid"
+                 id="content-viewpoint"
+                 data-ng-controller="ContentViewPointController"
+                 data-ui-view data-sync-height>
             </div>
 
         </content>

@@ -1,11 +1,11 @@
 html,body {
     height: 100%;
+    color: #333333;
 }
 
 #header-outer-container {
-    background-color: #000000;
+    background-color: #222222;
     height: 30px;
-
 }
 
 #header-outer-container .menu-button {
@@ -13,7 +13,7 @@ html,body {
     width: 28px;
     float: right;
     background-color: white;
-    border: 1px solid black
+    border: 1px solid #222222;
 }
 
 #header-outer-container #header-container {
@@ -36,10 +36,14 @@ html,body {
     overflow: hidden;
     position: relative;
 
-    transition: left 0.2s ease;
+    transition: left 0.5s ease;
     -webkit-transition: left 0.2s ease;
     -moz-transition: left 0.2s ease;
     -o-transition: left 0.2s ease;
+}
+
+#content-viewpoint .step-zero {
+    left: 0;
 }
 
 #content-viewpoint .step-one {
@@ -58,7 +62,7 @@ html,body {
     width: 25%;
     height: 101%;
     overflow-y: auto;
-    display: inline-block;
+    float: left;
 }
 
 .content-pane .content-item {
@@ -104,6 +108,10 @@ html,body {
         width: 201%;
     }
 
+    #content-viewpoint .step-zero {
+        left: 0;
+    }
+
     #content-viewpoint .step-one {
         left: -50%;
     }
@@ -146,6 +154,10 @@ html,body {
         width: 401%;
     }
 
+    #content-viewpoint .step-zero {
+        left: 0;
+    }
+
     #content-viewpoint .step-one {
         left: -100%;
     }
@@ -185,6 +197,10 @@ html,body {
 
     #content-viewpoint #content-container {
         width: 400%;
+    }
+
+    #content-viewpoint .step-zero {
+        left: 0;
     }
 
     #content-viewpoint .step-one {
