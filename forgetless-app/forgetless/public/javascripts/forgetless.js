@@ -37,80 +37,152 @@ forgetlessApp.config(function($stateProvider, $urlRouterProvider) {
 });
 
 forgetlessApp.controller('ContentViewPointController', function($scope) {
-    $scope.stepClass = '';
+
+    $scope.stepClass = 'step-zero';
 
     $scope.nextStep = function(step) {
         switch(step) {
-            case 0:
-                $scope.stepClass = 'step-zero';
-                break;
             case 1:
                 $scope.stepClass = 'step-one';
                 break;
-            case 2:
-                $scope.stepClass = 'step-two';
-                break;
-            case 3:
-                $scope.stepClass = 'step-three';
-                break;
+            case 0:
             default:
-                $scope.stepClass = '';
+                $scope.stepClass = 'step-zero';
                 break;
         }
     };
 
 });
 
-forgetlessApp.controller('ContentController', function($scope, $stateParams, $state) {
-    if($stateParams.itemId !== undefined && $stateParams.itemId != '') {
-        $scope.nextStep(3);
-    } else if($stateParams.listId !== undefined && $stateParams.listId != '') {
-        $scope.nextStep(2);
-    } else if($stateParams.categoryId !== undefined && $stateParams.categoryId != '') {
-        $scope.nextStep(1);
-    } else {
-        $scope.nextStep(0);
-    }
-    // keep beady eye on this...
-    $state.reload();
-});
+forgetlessApp.controller('ContentController', function($scope, $stateParams, $state, $window) {
 
-forgetlessApp.controller('CategoryController', function($scope, $stateParams) {
+    var routeSteps = function() {
+        if($stateParams.categoryId !== undefined && $stateParams.categoryId != '') {
+            $scope.nextStep(1);
+        } else {
+            $scope.nextStep(0);
+        }
+    };
+
+//    angular.element($window).bind('popstate', routeSteps);
+
+    // tempin!
+    angular.element($window).bind('popstate', function() {
+        $scope.nextStep(0);
+    });
+
+    routeSteps();
+
+    $scope.selectedCategoryIndex = 0;
+    $scope.selectedListIndex = 0;
+    $scope.selectedItemIndex = 0;
 
     $scope.categories = [];
 
-    for(var inc = 1; inc < 20; inc++) {
+    for(var catInc = 0; catInc <  20; catInc++) {
+
         $scope.categories.push({
-            id: inc,
-            title: 'Category ' + inc
+            id: catInc,
+            title: 'category ' + catInc,
+            selected: (catInc == 0),
+            lists: []
         });
+
+        for(var listInc = 0; listInc <  20; listInc++) {
+
+            $scope.categories[catInc].lists.push({
+                id: listInc,
+                title: 'title: ' + catInc + ' : ' + listInc,
+                selected: (listInc == 0),
+                items: []
+            });
+
+            for(var itemInc = 0; itemInc <  20; itemInc++) {
+
+                $scope.categories[catInc].lists[listInc].items.push({
+                    id: itemInc,
+                    title: 'item: ' + catInc + ' : ' + listInc + ' : ' + itemInc,
+                    content: 'im a content-der ' + itemInc,
+                    selected: (itemInc == 0)
+                });
+
+            }
+
+        }
+
     }
+
+    $scope.selectCategory = function(id) {
+
+        // Falls back on first index if fail
+        $scope.selectedCategoryIndex = 0;
+
+        // Resets selections
+        for(var inc = 0; inc < $scope.categories.length; inc++) {
+            if($scope.categories[inc].id == id) {
+                $scope.categories[inc].selected = true;
+                $scope.selectedCategoryIndex = inc;
+            } else {
+                $scope.categories[inc].selected = false;
+            }
+        }
+
+        $scope.nextStep(1);
+
+    };
+
+    $scope.selectList = function(id) {
+
+        // Falls back on first index if fail
+        $scope.selectedListIndex = 0;
+
+        // Save on width...
+        var catIndex = $scope.selectedCategoryIndex;
+
+        // Resets selections
+        var numberOfLists = $scope.categories[catIndex].lists.length;
+        for(var inc = 0; inc < numberOfLists; inc++) {
+            if($scope.categories[catIndex].lists[inc].id == id) {
+                $scope.categories[catIndex].lists[inc].selected = true;
+                $scope.selectedListIndex = inc;
+            } else {
+                $scope.categories[catIndex].lists[inc].selected = false;
+            }
+        }
+    };
+
+    $scope.selectItem = function(id) {
+
+        // Falls back on first index if fail
+        $scope.selectedItemIndex = 0;
+
+        // Save on width...
+        var catIndex = $scope.selectedCategoryIndex;
+        var lstIndex = $scope.selectedListIndex;
+
+        // Resets selections
+        var numberOfItems = $scope.categories[catIndex].lists[lstIndex].items.length;
+        for(var inc = 0; inc < numberOfItems; inc++) {
+            if($scope.categories[catIndex].lists[lstIndex].items[inc].id == id) {
+                $scope.categories[catIndex].lists[lstIndex].items[inc].selected = true;
+                $scope.selectedListIndex = inc;
+            } else {
+                $scope.categories[catIndex].lists[lstIndex].items[inc].selected = false;
+            }
+        }
+    };
 
 });
 
-forgetlessApp.controller('ListController', function($scope) {
 
-    $scope.lists = [];
+forgetlessApp.directive('testingStuff', function() {
 
-    for(var inc = 1; inc < 20; inc++) {
-        $scope.lists.push({
-            id: inc,
-            title: 'List ' + inc
+    return function($scope, element, $attr) {
+        element.on('click', function() {
+            var inc = JSON.parse($attr.testingStuff);
+            console.log($scope.categories[inc[0]].lists[inc[1]].items);
         });
-    }
-
-});
-
-forgetlessApp.controller('ItemController', function($scope) {
-
-    $scope.items = [];
-
-    for(var inc = 1; inc < 20; inc++) {
-        $scope.items.push({
-            id: inc,
-            title: 'Item ' + inc
-        });
-    }
+    };
 
 });
 

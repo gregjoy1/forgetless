@@ -1,11 +1,17 @@
 html,body {
     height: 100%;
     color: #333333;
+    background-color: brown;
 }
 
 #header-outer-container {
     background-color: #222222;
     height: 30px;
+
+    transition: height 0.3s;
+    -webkit-transition: height 0.3s ease;
+    -moz-transition: height 0.3s ease;
+    -o-transition: height 0.3s ease;
 }
 
 #header-outer-container .menu-button {
@@ -28,6 +34,7 @@ html,body {
 
 #content-viewpoint {
     overflow: hidden;
+    background-color: white;
 }
 
 #content-viewpoint #content-container {
@@ -36,10 +43,10 @@ html,body {
     overflow: hidden;
     position: relative;
 
-    transition: left 0.5s ease;
-    -webkit-transition: left 0.2s ease;
-    -moz-transition: left 0.2s ease;
-    -o-transition: left 0.2s ease;
+    transition: left 0.3s;
+    -webkit-transition: left 0.3s ease;
+    -moz-transition: left 0.3s ease;
+    -o-transition: left 0.3s ease;
 }
 
 #content-viewpoint .step-zero {
@@ -50,28 +57,33 @@ html,body {
     left: 0;
 }
 
-#content-viewpoint .step-two {
-    left: 0;
-}
-
-#content-viewpoint .step-three {
-    left: 0;
-}
-
-#content-viewpoint #content-container .content-pane {
-    width: 25%;
-    height: 101%;
+.content-pane {
+    height: 100%;
     overflow-y: auto;
     float: left;
 }
 
+.content-pane.left {
+    width: 30%;
+    background-color: green;
+}
+
+.content-pane.right {
+    width: 70%;
+    background-color: blue;
+}
+
 .content-pane .content-item {
-    border-top: 1px solid lightgrey;
     border-bottom: 1px solid lightgrey;
     height: 40px;
     line-height: 40px;
     font-size: 30px;
     cursor: pointer;
+
+    transition: height 0.3s;
+    -webkit-transition: height 0.3s ease;
+    -moz-transition: height 0.3s ease;
+    -o-transition: height 0.3s ease;
 }
 
 /* #Medium Screens
@@ -104,27 +116,6 @@ html,body {
         border: 1px solid black
     }
 
-    #content-viewpoint #content-container {
-        width: 201%;
-    }
-
-    #content-viewpoint .step-zero {
-        left: 0;
-    }
-
-    #content-viewpoint .step-one {
-        left: -50%;
-    }
-
-    #content-viewpoint .step-two {
-        left: -100%;
-    }
-
-    #content-viewpoint .step-three {
-        left: -100%;
-    }
-
-
 }
 
 /*  #Mobile (Portrait)
@@ -151,7 +142,7 @@ html,body {
     }
 
     #content-viewpoint #content-container {
-        width: 401%;
+        width: 200%;
     }
 
     #content-viewpoint .step-zero {
@@ -162,12 +153,18 @@ html,body {
         left: -100%;
     }
 
-    #content-viewpoint .step-two {
-        left: -200%;
+    .content-pane.left {
+        width: 50%;
     }
 
-    #content-viewpoint .step-three {
-        left: -300%;
+    .content-pane.right {
+        width: 50%;
+    }
+
+    .content-pane .content-item {
+        height: 60px;
+        line-height: 60px;
+        font-size: 40px;
     }
 
 }
@@ -196,7 +193,7 @@ html,body {
     }
 
     #content-viewpoint #content-container {
-        width: 400%;
+        width: 200%;
     }
 
     #content-viewpoint .step-zero {
@@ -207,12 +204,18 @@ html,body {
         left: -100%;
     }
 
-    #content-viewpoint .step-two {
-        left: -200%;
+    .content-pane.left {
+        width: 50%;
     }
 
-    #content-viewpoint .step-three {
-        left: -300%;
+    .content-pane.right {
+        width: 50%;
+    }
+
+    .content-pane .content-item {
+        height: 60px;
+        line-height: 60px;
+        font-size: 40px;
     }
 
 }

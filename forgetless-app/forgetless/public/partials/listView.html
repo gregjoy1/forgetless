@@ -1,42 +1,26 @@
-<div class="{{stepClass}}" id="content-container" data-sync-height data-sync-pane-width data-ng-controller="ContentController">
+<div data-ng-class="stepClass" id="content-container" data-sync-height data-sync-pane-width data-ng-controller="ContentController">
 
-    <div class="content-pane" data-ng-controller="CategoryController">
-
+    <div class="left content-pane">
         <div class="content-item"
              data-ng-repeat="category in categories"
-             data-ng-click="nextStep(1)"
-             data-ui-sref="app.category({ categoryId: category.id })">
-            {{category.title}}
-        </div>
+             data-ng-click="selectCategory(category.id)">
 
+            <span>{{category.title}}</span>
+            <input type="checkbox" data-ng-model="category.selected">
+
+        </div>
     </div>
 
-    <div class="content-pane" data-ng-controller="ListController">
-
+    <div class="right content-pane">
         <div class="content-item"
-             data-ng-repeat="list in lists"
-             data-ng-click="nextStep(2)"
-             data-ui-sref="app.category.list({ listId: list.id })">
-            {{list.title}}
+             data-ng-repeat="list in categories[selectedCategoryIndex].lists"
+             data-ng-click="selectList(list.id)"
+             data-testing-stuff="{{[categories[selectedCategoryIndex].id, list.id]}}">
+
+            <span>{{list.title}}</span>
+            <input type="checkbox" data-ng-model="list.selected">
+
         </div>
-
-    </div>
-
-    <div class="content-pane" data-ng-controller="ItemController">
-
-        <div class="content-item"
-             data-ng-repeat="item in items"
-             data-ng-click="nextStep(3)"
-             data-ui-sref="app.category.list.item({ itemId: item.id })">
-            {{item.title}}
-        </div>
-
-    </div>
-
-    <div class="content-pane">
-
-        <h1>item details</h1>
-
     </div>
 
 </div>
