@@ -1,0 +1,21 @@
+<div data-ng-class="stepClass"
+     id="content-container"
+     data-sync-height
+     data-sync-pane-width
+     data-ng-controller="ContentController">
+
+    <div class="left content-pane">
+        <div class="category-item-container"
+             data-ng-repeat="category in categories"
+             data-handle-category>
+        </div>
+    </div>
+
+    <div class="right content-pane">
+        <div class="list-item-container"
+             data-ng-repeat="list in categories[selectedCategoryIndex].lists"
+             data-handle-list>
+        </div>
+    </div>
+
+</div>

@@ -1,7 +1,10 @@
 html,body {
     height: 100%;
+    color: #888888;
+}
+
+.selected {
     color: #333333;
-    background-color: brown;
 }
 
 #header-outer-container {
@@ -65,12 +68,11 @@ html,body {
 
 .content-pane.left {
     width: 30%;
-    background-color: green;
+    /*background-color: green;*/
 }
 
 .content-pane.right {
     width: 70%;
-    background-color: blue;
 }
 
 .content-pane .content-item {
@@ -84,6 +86,21 @@ html,body {
     -webkit-transition: height 0.3s ease;
     -moz-transition: height 0.3s ease;
     -o-transition: height 0.3s ease;
+}
+
+.list-item-container {
+
+}
+
+.items-container {
+    color: #333333;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.items-container .item-container {
+
+    background-color: white;
 }
 
 /* #Medium Screens
