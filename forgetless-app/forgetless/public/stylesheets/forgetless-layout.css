@@ -52,6 +52,70 @@ html,body {
     -o-transition: left 0.3s ease;
 }
 
+.title-container {
+    float: left;
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.options-container {
+
+    height: 100%;
+    width: 100px;
+
+    position: relative;
+
+    transition: width 0.3s;
+    -webkit-transition: left 0.3s ease;
+    -moz-transition: left 0.3s ease;
+    -o-transition: left 0.3s ease;
+
+    float: right;
+}
+
+.options-container .show-options-button {
+    background-image: url('/images/icons/more-icon.png');
+    background-size: 8px;
+    background-position: 4px 5px;
+    width: 15px;
+}
+
+.options-container .edit-icon {
+    background-image: url('/images/icons/edit-icon.png');
+    width: 39px;
+}
+
+.options-container .delete-icon {
+    background-image: url('/images/icons/delete-icon.png');
+    width: 39px;
+}
+
+.options-group .button {
+    background-size: 32px;
+    background-position: 4px 4px;
+}
+
+.options-container .button {
+    height: 100%;
+    background-repeat: no-repeat;
+    float: left;
+    cursor: pointer;
+    border-left: 1px solid lightgrey;
+}
+
+.main {
+    width: 100px;
+}
+
+.hide-options {
+    left: 84px;
+}
+
+.hide-option {
+    display: none;
+}
+
 #content-viewpoint .step-zero {
     left: 0;
 }
@@ -77,10 +141,12 @@ html,body {
 
 .content-pane .content-item {
     border-bottom: 1px solid lightgrey;
+    border-left: 1px solid lightgrey;
     height: 40px;
     line-height: 40px;
     font-size: 30px;
     cursor: pointer;
+    overflow: hidden;
 
     transition: height 0.3s;
     -webkit-transition: height 0.3s ease;
@@ -133,6 +199,35 @@ html,body {
         border: 1px solid black
     }
 
+    .options-container {
+        width: 38px;
+        left: -78px;
+    }
+
+    .options-container .show-options-button {
+        background-position: 16px;
+        width: 38px;
+    }
+
+    .options-container .edit-icon {
+        width: 38px;
+        background-size: 30px;
+        background-position: 4px 5px;
+    }
+
+    .options-container .delete-icon {
+        width: 38px;
+        background-size: 30px;
+        background-position: 4px 5px;
+    }
+
+    .main {
+        width: 120px;
+    }
+
+    .hide-options {
+        left: 0;
+    }
 }
 
 /*  #Mobile (Portrait)
@@ -184,6 +279,36 @@ html,body {
         font-size: 40px;
     }
 
+    .options-container {
+        width: 58px;
+        left: -119px;
+    }
+
+    .options-container .show-options-button {
+        background-position: 23px;
+        width: 58px;
+    }
+
+    .options-container .edit-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .options-container .delete-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .main {
+        width: 180px;
+    }
+
+    .hide-options {
+        left: 0;
+    }
+
 }
 
 /* #Mobile (Landscape)
@@ -233,6 +358,24 @@ html,body {
         height: 60px;
         line-height: 60px;
         font-size: 40px;
+    }
+
+    .options-container {
+        width: 58px;
+        left: -119px;
+    }
+
+    .options-container .show-options-button {
+        background-position: 23px;
+        width: 58px;
+    }
+
+    .main {
+        width: 180px;
+    }
+
+    .hide-options {
+        left: 0;
     }
 
 }

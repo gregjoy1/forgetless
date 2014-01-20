@@ -2,8 +2,35 @@
      data-ng-class="{selected: (selectedCategoryIndex == $index)}"
      data-ng-click="selectCategory(category.id)">
 
-    <span>
+    <div class="title-container">
         {{category.title}}
-    </span>
+    </div>
+
+    <div class="options-container" data-ng-class="optionsContainerClassParam">
+
+        <div class="button show-options-button">
+            &nbsp;
+        </div>
+
+        <div class="main options-group" data-ng-class="mainOptionClassParam">
+            <div class="edit-icon button">
+                &nbsp;
+            </div>
+            <div class="delete-icon button">
+                &nbsp;
+            </div>
+        </div>
+
+        <div class="hide-options confirm">
+            <img src="/images/icons/tick-icon.png">
+            <img src="/images/icons/x-icon.png">
+        </div>
+
+        <div class="hide-options delete-confirm">
+            <img src="/images/icons/delete-yes-icon.png">
+            <img src="/images/icons/delete-no-icon.png">
+        </div>
+
+    </div>
 
 </div>
