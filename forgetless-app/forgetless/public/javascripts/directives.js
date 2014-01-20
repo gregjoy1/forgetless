@@ -2,17 +2,41 @@ forgetlessApp.directive('handleCategory', function() {
 
     return {
         templateUrl: '/partials/category_item_view.html',
-        controller: function($scope, $element) {
+        controller: function($scope, $element, $window) {
             var element = $element[0];
             var categoryHeader = element.querySelector('.content-item');
+            var titleContainer = categoryHeader.querySelector('.title-container');
             var optionsContainer = categoryHeader.querySelector('.options-container');
-            var toggleOptionsButton = optionsContainer.querySelector('.show-options-button');
-            var deleteEditOptionContainer = optionsContainer.querySelector('.main');
+            var optionsGroup = categoryHeader.querySelector('.options-group');
+
+            var showOptionsButton = optionsContainer.querySelector('.show-options-button');
+
+            var mainOptionContainer = optionsContainer.querySelector('.main');
+            var editButton = mainOptionContainer.querySelector('.edit-icon');
+            var deleteButton = mainOptionContainer.querySelector('.delete-icon');
+
             var deleteConfirmOptionsContainer = categoryHeader.querySelector('.delete-confirm');
-            var confirmOptionsContainer = categoryHeader.querySelector('.delete-confirm');
+            var deleteYesButton = deleteConfirmOptionsContainer.querySelector('.delete-yes-icon');
+            var deleteNoButton = deleteConfirmOptionsContainer.querySelector('.delete-no-icon');
+
+            var confirmOptionsContainer = categoryHeader.querySelector('.confirm');
+            var confirmYesButton = confirmOptionsContainer.querySelector('.confirm-yes-icon');
+            var confirmNoButton = confirmOptionsContainer.querySelector('.confirm-no-icon');
 
             $scope.mainOptionClassParam = {
                 'hide-option': false
+            };
+
+            $scope.titleContainerStyleParam = {
+                'max-width': '80%'
+            };
+
+            $scope.confirmOptionClassParam = {
+                'hide-option': true
+            };
+
+            $scope.deleteOptionClassParam = {
+                'hide-option': true
             };
 
             $scope.optionsContainerClassParam = {
@@ -24,19 +48,86 @@ forgetlessApp.directive('handleCategory', function() {
                 event.stopImmediatePropagation();
             });
 
-            angular.element(toggleOptionsButton).on('click', function(event) {
+            angular.element(showOptionsButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                var selected = $scope.optionsContainerClassParam['hide-options'];
+                var optionsContainerWidth = parseInt($window.getComputedStyle(optionsGroup, null).getPropertyValue('width'));
+                var categoryHeaderWidth = parseInt($window.getComputedStyle(categoryHeader, null).getPropertyValue('width'));
+
+                if(!selected &&
+                    optionsContainerWidth != undefined &&
+                    categoryHeaderWidth != undefined) {
+                    maxWidth = '80%';
+                } else {
+                    maxWidth = (categoryHeaderWidth - optionsContainerWidth) + 'px';
+                }
+
+                $scope.$apply(function() {
+
+                    $scope.titleContainerStyleParam['max-width'] = maxWidth;
+
+                    $scope.optionsContainerClassParam['hide-options'] = !selected;
+                });
+            });
+
+            angular.element(editButton).on('click', function(event) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
 
                 $scope.$apply(function() {
-//                    $scope.mainOptionClassParam['hide-option'] = !$scope.mainOptionClassParam['hide-option'];
-                    $scope.optionsContainerClassParam['hide-options'] = !$scope.optionsContainerClassParam['hide-options'];
+                    $scope.mainOptionClassParam['hide-option'] = true;
+                    $scope.confirmOptionClassParam['hide-option'] = false;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                });
+            });
+
+            angular.element(deleteYesButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+            });
+
+            angular.element(deleteNoButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.mainOptionClassParam['hide-option'] = false;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                });
+            });
+
+            angular.element(deleteButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.mainOptionClassParam['hide-option'] = true;
+                    $scope.deleteOptionClassParam['hide-option'] = false;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
+                });
+            });
+
+            angular.element(confirmYesButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+            });
+
+            angular.element(confirmNoButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.mainOptionClassParam['hide-option'] = false;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
                 });
             });
 
         }
     };
-
 
 });
 
@@ -44,10 +135,131 @@ forgetlessApp.directive('handleList', function() {
 
     return {
         templateUrl: '/partials/list_item_view.html',
-        controller: function($scope, $element, $state) {
+        controller: function($scope, $element, $state, $window) {
             var element = $element[0];
             var listHeader = element.querySelector('.content-item');
             var itemsContainer = element.querySelector('.items-container');
+
+            var titleContainer = listHeader.querySelector('.title-container');
+            var optionsContainer = listHeader.querySelector('.options-container');
+            var optionsGroup = listHeader.querySelector('.options-group');
+
+            var showOptionsButton = optionsContainer.querySelector('.show-options-button');
+
+            var mainOptionContainer = optionsContainer.querySelector('.main');
+            var editButton = mainOptionContainer.querySelector('.edit-icon');
+            var deleteButton = mainOptionContainer.querySelector('.delete-icon');
+
+            var deleteConfirmOptionsContainer = listHeader.querySelector('.delete-confirm');
+            var deleteYesButton = deleteConfirmOptionsContainer.querySelector('.delete-yes-icon');
+            var deleteNoButton = deleteConfirmOptionsContainer.querySelector('.delete-no-icon');
+
+            var confirmOptionsContainer = listHeader.querySelector('.confirm');
+            var confirmYesButton = confirmOptionsContainer.querySelector('.confirm-yes-icon');
+            var confirmNoButton = confirmOptionsContainer.querySelector('.confirm-no-icon');
+
+            $scope.mainOptionClassParam = {
+                'hide-option': false
+            };
+
+            $scope.titleContainerStyleParam = {
+                'max-width': '80%'
+            };
+
+            $scope.confirmOptionClassParam = {
+                'hide-option': true
+            };
+
+            $scope.deleteOptionClassParam = {
+                'hide-option': true
+            };
+
+            $scope.optionsContainerClassParam = {
+                'hide-options': true
+            };
+
+            angular.element(optionsContainer).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+            });
+
+            angular.element(showOptionsButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                var selected = $scope.optionsContainerClassParam['hide-options'];
+                var optionsContainerWidth = parseInt($window.getComputedStyle(optionsGroup, null).getPropertyValue('width'));
+                var categoryHeaderWidth = parseInt($window.getComputedStyle(listHeader, null).getPropertyValue('width'));
+
+                if(!selected &&
+                    optionsContainerWidth != undefined &&
+                    categoryHeaderWidth != undefined) {
+                    maxWidth = '80%';
+                } else {
+                    maxWidth = (categoryHeaderWidth - optionsContainerWidth) + 'px';
+                }
+
+                $scope.$apply(function() {
+
+                    $scope.titleContainerStyleParam['max-width'] = maxWidth;
+
+                    $scope.optionsContainerClassParam['hide-options'] = !selected;
+                });
+            });
+
+            angular.element(editButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.mainOptionClassParam['hide-option'] = true;
+                    $scope.confirmOptionClassParam['hide-option'] = false;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                });
+            });
+
+            angular.element(deleteYesButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+            });
+
+            angular.element(deleteNoButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.mainOptionClassParam['hide-option'] = false;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                });
+            });
+
+            angular.element(deleteButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.mainOptionClassParam['hide-option'] = true;
+                    $scope.deleteOptionClassParam['hide-option'] = false;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
+                });
+            });
+
+            angular.element(confirmYesButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+            });
+
+            angular.element(confirmNoButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.mainOptionClassParam['hide-option'] = false;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
+                });
+            });
 
             angular.element(listHeader).on('click', function() {
 

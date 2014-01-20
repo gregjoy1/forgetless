@@ -2,7 +2,7 @@
      data-ng-class="{selected: (selectedCategoryIndex == $index)}"
      data-ng-click="selectCategory(category.id)">
 
-    <div class="title-container">
+    <div class="title-container" data-ng-style="titleContainerStyleParam">
         {{category.title}}
     </div>
 
@@ -21,14 +21,22 @@
             </div>
         </div>
 
-        <div class="hide-options confirm">
-            <img src="/images/icons/tick-icon.png">
-            <img src="/images/icons/x-icon.png">
+        <div class="confirm" data-ng-class="confirmOptionClassParam">
+            <div class="confirm-yes-icon button">
+                &nbsp;
+            </div>
+            <div class="confirm-no-icon button">
+                &nbsp;
+            </div>
         </div>
 
-        <div class="hide-options delete-confirm">
-            <img src="/images/icons/delete-yes-icon.png">
-            <img src="/images/icons/delete-no-icon.png">
+        <div class="delete-confirm" data-ng-class="deleteOptionClassParam">
+            <div class="delete-yes-icon button">
+                &nbsp;
+            </div>
+            <div class="delete-no-icon button">
+                &nbsp;
+            </div>
         </div>
 
     </div>

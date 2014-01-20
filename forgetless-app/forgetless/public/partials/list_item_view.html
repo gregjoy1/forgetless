@@ -1,9 +1,44 @@
 <div class="content-item"
      data-ng-class="{selected: list.selected}">
 
-    <span>
+    <div class="title-container" data-ng-style="titleContainerStyleParam">
         {{list.title}}
-    </span>
+    </div>
+
+    <div class="options-container" data-ng-class="optionsContainerClassParam">
+
+        <div class="button show-options-button">
+            &nbsp;
+        </div>
+
+        <div class="main options-group" data-ng-class="mainOptionClassParam">
+            <div class="edit-icon button">
+                &nbsp;
+            </div>
+            <div class="delete-icon button">
+                &nbsp;
+            </div>
+        </div>
+
+        <div class="confirm" data-ng-class="confirmOptionClassParam">
+            <div class="confirm-yes-icon button">
+                &nbsp;
+            </div>
+            <div class="confirm-no-icon button">
+                &nbsp;
+            </div>
+        </div>
+
+        <div class="delete-confirm" data-ng-class="deleteOptionClassParam">
+            <div class="delete-yes-icon button">
+                &nbsp;
+            </div>
+            <div class="delete-no-icon button">
+                &nbsp;
+            </div>
+        </div>
+
+    </div>
 
 </div>
 <div class="items-container" data-ng-show="list.selected">

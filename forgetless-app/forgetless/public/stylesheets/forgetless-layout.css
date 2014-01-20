@@ -57,6 +57,11 @@ html,body {
     max-width: 80%;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    transition: max-width 0.3s;
+    -webkit-transition: max-width 0.3s ease;
+    -moz-transition: max-width 0.3s ease;
+    -o-transition: max-width 0.3s ease;
 }
 
 .options-container {
@@ -83,11 +88,43 @@ html,body {
 
 .options-container .edit-icon {
     background-image: url('/images/icons/edit-icon.png');
+    background-size: 30px;
+    background-position: 5px 7px;
     width: 39px;
 }
 
 .options-container .delete-icon {
     background-image: url('/images/icons/delete-icon.png');
+    background-size: 30px;
+    background-position: 5px 7px;
+    width: 39px;
+}
+
+.options-container .confirm-yes-icon {
+    background-image: url('/images/icons/tick-icon.png');
+    background-size: 30px;
+    background-position: 5px 7px;
+    width: 39px;
+}
+
+.options-container .confirm-no-icon {
+    background-image: url('/images/icons/x-icon.png');
+    background-size: 30px;
+    background-position: 5px 7px;
+    width: 39px;
+}
+
+.options-container .delete-yes-icon {
+    background-image: url('/images/icons/delete-yes-icon.png');
+    background-size: 30px;
+    background-position: 5px 7px;
+    width: 39px;
+}
+
+.options-container .delete-no-icon {
+    background-image: url('/images/icons/delete-no-icon.png');
+    background-size: 30px;
+    background-position: 5px 7px;
     width: 39px;
 }
 
@@ -104,7 +141,7 @@ html,body {
     border-left: 1px solid lightgrey;
 }
 
-.main {
+.main, .confirm, .delete-confirm {
     width: 100px;
 }
 
@@ -221,7 +258,31 @@ html,body {
         background-position: 4px 5px;
     }
 
-    .main {
+    .options-container .confirm-yes-icon {
+        width: 38px;
+        background-size: 30px;
+        background-position: 4px 5px;
+    }
+
+    .options-container .confirm-no-icon {
+        width: 38px;
+        background-size: 30px;
+        background-position: 4px 5px;
+    }
+
+    .options-container .delete-yes-icon {
+        width: 38px;
+        background-size: 30px;
+        background-position: 4px 5px;
+    }
+
+    .options-container .delete-no-icon {
+        width: 38px;
+        background-size: 30px;
+        background-position: 4px 5px;
+    }
+
+    .main, .confirm, .delete-confirm {
         width: 120px;
     }
 
@@ -301,7 +362,31 @@ html,body {
         background-position: 10px 10px;
     }
 
-    .main {
+    .options-container .confirm-yes-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .options-container .confirm-no-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .options-container .delete-yes-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .options-container .delete-no-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .main, .confirm, .delete-confirm {
         width: 180px;
     }
 
@@ -370,7 +455,43 @@ html,body {
         width: 58px;
     }
 
-    .main {
+    .options-container .edit-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .options-container .delete-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .options-container .confirm-yes-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .options-container .confirm-no-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .options-container .delete-yes-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .options-container .delete-no-icon {
+        width: 59px;
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
+    .main, .confirm, .delete-confirm {
         width: 180px;
     }
 
