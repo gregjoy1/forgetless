@@ -1,4 +1,4 @@
-<div class="content-item"
+<div class="content-item list-content-item"
      data-ng-class="{selected: list.selected}">
 
     <div class="title-container" data-ng-style="titleContainerStyleParam">
@@ -41,7 +41,7 @@
     </div>
 
 </div>
-<div class="items-container" data-ng-show="list.selected">
+<div class="items-container" data-ng-show="list.selected" data-handle-items data-ng-if="list.selected">
 
     <div class="item-container" data-ng-repeat="item in list.items" data-handle-item>
     </div>
