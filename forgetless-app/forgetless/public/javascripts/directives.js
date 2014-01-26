@@ -454,11 +454,13 @@ forgetlessApp.directive('syncHeight', function($window) {
             // Work out header height
             var header = document.getElementById('header-outer-container');
             var headerHeight = parseInt($window.getComputedStyle(header, null).getPropertyValue('height'));
-            headerHeight = headerHeight || 60;
+
+            headerHeight = (headerHeight != undefined ? headerHeight : 60);
 
             element.css({
                 'height': ($window.innerHeight - headerHeight) + 'px'
             });
+
         };
 
         window.on('resize', applyResize);
