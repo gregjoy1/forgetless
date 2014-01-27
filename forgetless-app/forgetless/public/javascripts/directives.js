@@ -317,6 +317,11 @@ forgetlessApp.directive('handleItem', function() {
             var itemTitleInput = itemDetails.querySelector('.title-input');
             var itemContentInput = itemDetails.querySelector('.content-input');
 
+            var saveConfirmContainer = itemDetails.querySelector('.save-confirm-container');
+            var saveButton = saveConfirmContainer.querySelector('.item-save-icon');
+            var saveYesButton = saveConfirmContainer.querySelector('.item-save-yes-icon');
+            var saveNoButton = saveConfirmContainer.querySelector('.item-save-no-icon');
+
             $scope.mainOptionClassParam = {
                 'hide-option': false
             };
@@ -442,12 +447,74 @@ forgetlessApp.directive('handleItem', function() {
 
             });
 
-            angular.element(itemTitleInput).on('click', function() {
+            angular.element(itemTitleInput).on('focus', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.hideMobileNav();
                 itemTitleInput.scrollIntoView();
             });
 
-            angular.element(itemContentInput).on('click', function() {
-                itemTitleInput.scrollIntoView();
+            angular.element(itemTitleInput).on('blur', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                $scope.showMobileNav();
+            });
+
+            angular.element(itemContentInput).on('focus', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.hideMobileNav();
+                itemContentInput.scrollIntoView();
+            });
+
+            angular.element(itemContentInput).on('blur', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                $scope.showMobileNav();
+            });
+
+            $scope.saveButtonClassParam = {
+                'hide-option': false
+            };
+
+            $scope.saveYesButtonClassParam = {
+                'hide-option': true
+            };
+
+            $scope.saveNoButtonClassParam = {
+                'hide-option': true
+            };
+
+            angular.element(saveButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.saveButtonClassParam['hide-option'] = true;
+                    $scope.saveYesButtonClassParam['hide-option'] = false;
+                    $scope.saveNoButtonClassParam['hide-option'] = false;
+                });
+            });
+
+            angular.element(saveNoButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                console.log('do something...');
+
+            });
+
+            angular.element(saveYesButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.saveButtonClassParam['hide-option'] = false;
+                    $scope.saveYesButtonClassParam['hide-option'] = true;
+                    $scope.saveNoButtonClassParam['hide-option'] = true;
+                });
             });
 
         }
@@ -463,6 +530,20 @@ forgetlessApp.directive('handleMobileNav', function() {
             var mobileNavHeader = mobileNavContainer.querySelector('.mobile-nav-pane');
             var backButton = mobileNavHeader.querySelector('.back-icon');
             var menuButton = mobileNavHeader.querySelector('.menu-icon');
+
+            $scope.mobileNavShow = true;
+
+            $scope.showMobileNav = function() {
+                $scope.$apply(function() {
+                    $scope.mobileNavShow = true;
+                });
+            };
+
+            $scope.hideMobileNav = function() {
+                $scope.$apply(function() {
+                    $scope.mobileNavShow = false;
+                });
+            };
 
             angular.element(backButton).on('click', function(event) {
                 event.preventDefault();

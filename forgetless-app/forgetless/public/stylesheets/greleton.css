@@ -143,23 +143,23 @@
     .container .offset-by-fifteen               { padding-left: 900px; }
 
     /* Visibility */
-    .container .display-only-desktop            { display: block !important; visibility: visible;}
-    .container .display-only-tablet             { display: none !important; visibility: hidden; }
-    .container .display-only-mobile             { display: none !important; visibility: hidden; }
-    .container .display-only-mobile-portrait    { display: none !important; visibility: hidden; }
-    .container .display-only-mobile-landscape   { display: none !important; visibility: hidden; }
+    .container .display-only-desktop            { display: block; visibility: visible;}
+    .container .display-only-tablet             { display: none; visibility: hidden; }
+    .container .display-only-mobile             { display: none; visibility: hidden; }
+    .container .display-only-mobile-portrait    { display: none; visibility: hidden; }
+    .container .display-only-mobile-landscape   { display: none; visibility: hidden; }
 
-    .container .display-tablet-up               { display: block !important; visibility: visible; }
-    .container .display-tablet-down             { display: none !important; visibility: hidden; }
+    .container .display-tablet-up               { display: block; visibility: visible; }
+    .container .display-tablet-down             { display: none; visibility: hidden; }
 
-    .container .hide-only-desktop               { display: none !important; visibility: hidden;}
-    .container .hide-only-tablet                { display: block !important; visibility: visible; }
-    .container .hide-only-mobile                { display: block !important; visibility: visible; }
-    .container .hide-only-mobile-portrait       { display: block !important; visibility: visible; }
-    .container .hide-only-mobile-landscape      { display: block !important; visibility: visible; }
+    .container .hide-only-desktop               { display: none; visibility: hidden;}
+    .container .hide-only-tablet                { display: block; visibility: visible; }
+    .container .hide-only-mobile                { display: block; visibility: visible; }
+    .container .hide-only-mobile-portrait       { display: block; visibility: visible; }
+    .container .hide-only-mobile-landscape      { display: block; visibility: visible; }
 
-    .container .hide-tablet-up                  { display: none !important; visibility: hidden; }
-    .container .hide-tablet-down                { display: block !important; visibility: visible; }
+    .container .hide-tablet-up                  { display: none; visibility: hidden; }
+    .container .hide-tablet-down                { display: block; visibility: visible; }
 
 
 /* #Large Screens
@@ -242,23 +242,23 @@
         .container .offset-by-fifteen               { padding-left: 900px; }
 
         /* Visibility */
-        .container .display-only-desktop            { display: block !important; visibility: visible;}
-        .container .display-only-tablet             { display: none !important; visibility: hidden; }
-        .container .display-only-mobile             { display: none !important; visibility: hidden; }
-        .container .display-only-mobile-portrait    { display: none !important; visibility: hidden; }
-        .container .display-only-mobile-landscape   { display: none !important; visibility: hidden; }
+        .container .display-only-desktop            { display: block; visibility: visible;}
+        .container .display-only-tablet             { display: none; visibility: hidden; }
+        .container .display-only-mobile             { display: none; visibility: hidden; }
+        .container .display-only-mobile-portrait    { display: none; visibility: hidden; }
+        .container .display-only-mobile-landscape   { display: none; visibility: hidden; }
 
-        .container .display-tablet-up               { display: block !important; visibility: visible; }
-        .container .display-tablet-down             { display: none !important; visibility: hidden; }
+        .container .display-tablet-up               { display: block; visibility: visible; }
+        .container .display-tablet-down             { display: none; visibility: hidden; }
 
-        .container .hide-only-desktop               { display: none !important; visibility: hidden;}
-        .container .hide-only-tablet                { display: block !important; visibility: visible; }
-        .container .hide-only-mobile                { display: block !important; visibility: visible; }
-        .container .hide-only-mobile-portrait       { display: block !important; visibility: visible; }
-        .container .hide-only-mobile-landscape      { display: block !important; visibility: visible; }
+        .container .hide-only-desktop               { display: none; visibility: hidden;}
+        .container .hide-only-tablet                { display: block; visibility: visible; }
+        .container .hide-only-mobile                { display: block; visibility: visible; }
+        .container .hide-only-mobile-portrait       { display: block; visibility: visible; }
+        .container .hide-only-mobile-landscape      { display: block; visibility: visible; }
 
-        .container .hide-tablet-up                  { display: none !important; visibility: hidden; }
-        .container .hide-tablet-down                { display: block !important; visibility: visible; }
+        .container .hide-tablet-up                  { display: none; visibility: hidden; }
+        .container .hide-tablet-down                { display: block; visibility: visible; }
 
     }
 
@@ -337,23 +337,23 @@
         .container .offset-by-fifteen               { padding-left: 720px; }
     
         /* Visibility */
-        .container .display-only-desktop            { display: none !important; visibility: hidden;}
-        .container .display-only-tablet             { display: block !important; visibility: visible; }
-        .container .display-only-mobile             { display: none !important; visibility: hidden; }
-        .container .display-only-mobile-portrait    { display: none !important; visibility: hidden; }
-        .container .display-only-mobile-landscape   { display: none !important; visibility: hidden; }
+        .container .display-only-desktop            { display: none; visibility: hidden;}
+        .container .display-only-tablet             { display: block; visibility: visible; }
+        .container .display-only-mobile             { display: none; visibility: hidden; }
+        .container .display-only-mobile-portrait    { display: none; visibility: hidden; }
+        .container .display-only-mobile-landscape   { display: none; visibility: hidden; }
 
-        .container .display-tablet-up               { display: block !important; visibility: visible; }
-        .container .display-tablet-down             { display: block !important; visibility: visible; }
+        .container .display-tablet-up               { display: block; visibility: visible; }
+        .container .display-tablet-down             { display: block; visibility: visible; }
 
-        .container .hide-only-desktop               { display: block !important; visibility: visible;}
-        .container .hide-only-tablet                { display: none !important; visibility: hidden; }
-        .container .hide-only-mobile                { display: block !important; visibility: visible; }
-        .container .hide-only-mobile-portrait       { display: block !important; visibility: visible; }
-        .container .hide-only-mobile-landscape      { display: block !important; visibility: visible; }
+        .container .hide-only-desktop               { display: block; visibility: visible;}
+        .container .hide-only-tablet                { display: none; visibility: hidden; }
+        .container .hide-only-mobile                { display: block; visibility: visible; }
+        .container .hide-only-mobile-portrait       { display: block; visibility: visible; }
+        .container .hide-only-mobile-landscape      { display: block; visibility: visible; }
 
-        .container .hide-tablet-up                  { display: none !important; visibility: hidden; }
-        .container .hide-tablet-down                { display: none !important; visibility: hidden; }
+        .container .hide-tablet-up                  { display: none; visibility: hidden; }
+        .container .hide-tablet-down                { display: none; visibility: hidden; }
     }
 
 
@@ -459,23 +459,23 @@
         /*.container .columns.fluid.with-gutter       { margin-left: 0; margin-right: 0; }*/
 
         /* Visibility */
-        .container .display-only-desktop            { display: none !important; visibility: hidden;}
-        .container .display-only-tablet             { display: none !important; visibility: hidden; }
-        .container .display-only-mobile             { display: block !important; visibility: visible; }
-        .container .display-only-mobile-portrait    { display: block !important; visibility: visible; }
-        .container .display-only-mobile-landscape   { display: none !important; visibility: hidden; }
+        .container .display-only-desktop            { display: none; visibility: hidden;}
+        .container .display-only-tablet             { display: none; visibility: hidden; }
+        .container .display-only-mobile             { display: block; visibility: visible; }
+        .container .display-only-mobile-portrait    { display: block; visibility: visible; }
+        .container .display-only-mobile-landscape   { display: none; visibility: hidden; }
 
-        .container .display-tablet-up               { display: none !important; visibility: hidden; }
-        .container .display-tablet-down             { display: block !important; visibility: visible; }
+        .container .display-tablet-up               { display: none; visibility: hidden; }
+        .container .display-tablet-down             { display: block; visibility: visible; }
 
-        .container .hide-only-desktop               { display: block !important; visibility: visible;}
-        .container .hide-only-tablet                { display: block !important; visibility: visible; }
-        .container .hide-only-mobile                { display: none !important; visibility: hidden; }
-        .container .hide-only-mobile-portrait       { display: none !important; visibility: hidden; }
-        .container .hide-only-mobile-landscape      { display: block !important; visibility: visible; }
+        .container .hide-only-desktop               { display: block; visibility: visible;}
+        .container .hide-only-tablet                { display: block; visibility: visible; }
+        .container .hide-only-mobile                { display: none; visibility: hidden; }
+        .container .hide-only-mobile-portrait       { display: none; visibility: hidden; }
+        .container .hide-only-mobile-landscape      { display: block; visibility: visible; }
 
-        .container .hide-tablet-up                  { display: block !important; visibility: visible; }
-        .container .hide-tablet-down                { display: none !important; visibility: hidden; }
+        .container .hide-tablet-up                  { display: block; visibility: visible; }
+        .container .hide-tablet-down                { display: none; visibility: hidden; }
     }
 
 
@@ -561,23 +561,23 @@
         /*.container .columns.fluid.with-gutter       { margin-left: 0; margin-right: 0; }*/
 
         /* Visibility */
-        .container .display-only-desktop            { display: none !important; visibility: hidden;}
-        .container .display-only-tablet             { display: none !important; visibility: hidden; }
-        .container .display-only-mobile             { display: block !important; visibility: visible; }
-        .container .display-only-mobile-portrait    { display: none !important; visibility: hidden; }
-        .container .display-only-mobile-landscape   { display: block !important; visibility: visible; }
+        .container .display-only-desktop            { display: none; visibility: hidden;}
+        .container .display-only-tablet             { display: none; visibility: hidden; }
+        .container .display-only-mobile             { display: block; visibility: visible; }
+        .container .display-only-mobile-portrait    { display: none; visibility: hidden; }
+        .container .display-only-mobile-landscape   { display: block; visibility: visible; }
 
-        .container .display-tablet-up               { display: none !important; visibility: hidden; }
-        .container .display-tablet-down             { display: block !important; visibility: visible; }
+        .container .display-tablet-up               { display: none; visibility: hidden; }
+        .container .display-tablet-down             { display: block; visibility: visible; }
 
-        .container .hide-only-desktop               { display: block !important; visibility: visible;}
-        .container .hide-only-tablet                { display: block !important; visibility: visible; }
-        .container .hide-only-mobile                { display: none !important; visibility: hidden; }
-        .container .hide-only-mobile-portrait       { display: block !important; visibility: visible; }
-        .container .hide-only-mobile-landscape      { display: none !important; visibility: hidden; }
+        .container .hide-only-desktop               { display: block; visibility: visible;}
+        .container .hide-only-tablet                { display: block; visibility: visible; }
+        .container .hide-only-mobile                { display: none; visibility: hidden; }
+        .container .hide-only-mobile-portrait       { display: block; visibility: visible; }
+        .container .hide-only-mobile-landscape      { display: none; visibility: hidden; }
 
-        .container .hide-tablet-up                  { display: block !important; visibility: visible; }
-        .container .hide-tablet-down                { display: none !important; visibility: hidden; }
+        .container .hide-tablet-up                  { display: block; visibility: visible; }
+        .container .hide-tablet-down                { display: none; visibility: hidden; }
     }
 
 
