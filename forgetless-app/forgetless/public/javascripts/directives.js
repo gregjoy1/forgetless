@@ -444,6 +444,32 @@ forgetlessApp.directive('handleItem', function() {
 
 });
 
+forgetlessApp.directive('handleMobileNav', function() {
+    return {
+        templateUrl: '/partials/mobile_nav_view.html',
+        controller: function($scope, $element, $state) {
+            var mobileNavContainer = $element[0];
+            var mobileNavHeader = mobileNavContainer.querySelector('.mobile-nav-pane');
+            var backButton = mobileNavHeader.querySelector('.back-icon');
+            var menuButton = mobileNavHeader.querySelector('.menu-icon');
+
+            angular.element(backButton).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                if($scope.getStep() == 1) {
+                    $scope.$apply(function() {
+                        $scope.nextStep(0);
+                        $state.go('app', {});
+                    });
+                }
+            });
+
+        }
+    };
+});
+
+
 forgetlessApp.directive('syncHeight', function($window) {
     return function(scope, element) {
 

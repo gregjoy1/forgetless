@@ -43,10 +43,11 @@
 </div>
 
 <div class="item-detail" data-ng-show="item.selected">
-    <span>
-        {{item.title}}
-    </span>
-    <p>
-        {{item.content}}
-    </p>
+    <div class="input-container">
+        <span class="input-label">
+            Title:
+        </span>
+        <input data-ng-model="item.title" class="title-input">
+    </div>
+    <!--<textarea data-ng-model="item.content" class="content-input"></textarea>-->
 </div>

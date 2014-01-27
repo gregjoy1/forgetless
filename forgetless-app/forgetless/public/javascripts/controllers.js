@@ -14,6 +14,18 @@ forgetlessApp.controller('ContentViewPointController', function($scope) {
         }
     };
 
+    $scope.getStep = function() {
+        switch($scope.stepClass) {
+            case 'step-one':
+                return 1;
+                break;
+            case 'step-zero':
+            default:
+                return 0;
+                break;
+        }
+    };
+
 });
 
 forgetlessApp.controller('ContentController', function($scope, $stateParams, $state, $location) {

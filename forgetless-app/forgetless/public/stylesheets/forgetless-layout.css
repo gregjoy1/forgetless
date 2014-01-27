@@ -253,8 +253,32 @@ html,body {
     border-left: 1px solid lightgrey;
     border-right: 1px solid lightgrey;
     border-bottom: 1px solid lightgrey;
+    padding-top: 5px;
+}
 
-    padding: 5px;
+.item-detail .input-container {
+    margin: 5px 1% 5px 1%;
+    border: 1px solid lightgrey;
+    background-color: #F0F0F0;
+    line-height: 35px;
+    width: 96%;
+    padding: 0 1% 0 1%;
+}
+
+.input-container .input-label {
+    width: 30%;
+    text-align: center;
+    float: left;
+}
+
+.input-container .title-input {
+    width: 70%;
+    float: left;
+    border: none;
+}
+
+.input-container .content-input {
+
 }
 
 .mobile-nav-container {
@@ -473,6 +497,19 @@ html,body {
         background-position: 10px 10px;
     }
 
+    .items-container {
+        padding: 1px 0 5px 0;
+        width: 98%;
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+
+    .items-container .item-container .item-detail {
+        width: 98%;
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+
     .mobile-nav-container .back-icon {
         width: 59px;
         background-size: 40px;
@@ -597,6 +634,19 @@ html,body {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
+    }
+
+    .items-container {
+        padding: 1px 0 5px 0;
+        width: 98%;
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+
+    .items-container .item-container .item-detail {
+        width: 98%;
+        margin-left: 1%;
+        margin-right: 1%;
     }
 
     .mobile-nav-container .back-icon {
