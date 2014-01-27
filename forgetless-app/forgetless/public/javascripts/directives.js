@@ -314,6 +314,9 @@ forgetlessApp.directive('handleItem', function() {
             var confirmYesButton = confirmOptionsContainer.querySelector('.confirm-yes-icon');
             var confirmNoButton = confirmOptionsContainer.querySelector('.confirm-no-icon');
 
+            var itemTitleInput = itemDetails.querySelector('.title-input');
+            var itemContentInput = itemDetails.querySelector('.content-input');
+
             $scope.mainOptionClassParam = {
                 'hide-option': false
             };
@@ -437,6 +440,14 @@ forgetlessApp.directive('handleItem', function() {
 
                  $state.go(stateName, params);
 
+            });
+
+            angular.element(itemTitleInput).on('click', function() {
+                itemTitleInput.scrollIntoView();
+            });
+
+            angular.element(itemContentInput).on('click', function() {
+                itemTitleInput.scrollIntoView();
             });
 
         }

@@ -257,28 +257,76 @@ html,body {
 }
 
 .item-detail .input-container {
-    margin: 5px 1% 5px 1%;
-    border: 1px solid lightgrey;
-    background-color: #F0F0F0;
-    line-height: 35px;
-    width: 96%;
-    padding: 0 1% 0 1%;
+    width: 95%;
+    min-height: 75px;
+    margin: auto;
 }
 
 .input-container .input-label {
-    width: 30%;
-    text-align: center;
+    width: 100%;
     float: left;
+    font-size: 15px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 .input-container .title-input {
-    width: 70%;
+    width: 98%;
     float: left;
-    border: none;
+    border: 1px solid lightgrey;
+    height: 35px;
+    line-height: 35px;
+    font-size: 20px;
+    padding-left: 1%;
+    padding-right: 1%;
 }
 
 .input-container .content-input {
+    width: 98%;
+    padding-left: 1%;
+    padding-right: 1%;
+    border: 1px solid lightgrey;
+    resize: vertical;
+    margin-bottom: 5px;
+}
 
+.save-confirm-container {
+    border: 1px solid lightgrey;
+    min-height: 30px;
+    margin: auto;
+    width: 95%;
+    margin-bottom: 5px;
+
+    transition: height, background-size, background-position 0.3s;
+    -webkit-transition: height, background-size, background-position 0.3s ease;
+    -moz-transition: height, background-size, background-position 0.3s ease;
+    -o-transition: height, background-size, background-position 0.3s ease;
+
+}
+
+.save-confirm-container .item-save-no-icon
+{
+    background-image: url('/images/icons/tick-icon.png');
+    width: 50%;
+    height: 30px;
+    background-size: 25px;
+    background-repeat: no-repeat;
+    border-right: 1px solid lightgrey;
+    background-position: 50%;
+    cursor: pointer;
+    float: left;
+}
+
+.save-confirm-container .item-save-yes-icon
+{
+    background-image: url('/images/icons/x-icon.png');
+    width: 49%;
+    height: 30px;
+    background-size: 25px;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    cursor: pointer;
+    float: left;
 }
 
 .mobile-nav-container {
@@ -530,6 +578,22 @@ html,body {
         left: 0;
     }
 
+    .save-confirm-container {
+        min-height: 50px;
+    }
+
+    .save-confirm-container .item-save-no-icon
+    {
+        height: 50px;
+        background-size: 35px;
+    }
+
+    .save-confirm-container .item-save-yes-icon
+    {
+        height: 50px;
+        background-size: 35px;
+    }
+
 }
 
 /* #Mobile (Landscape)
@@ -667,6 +731,22 @@ html,body {
 
     .hide-options {
         left: 0;
+    }
+
+    .save-confirm-container {
+        min-height: 50px;
+    }
+
+    .save-confirm-container .item-save-no-icon
+    {
+        height: 50px;
+        background-size: 35px;
+    }
+
+    .save-confirm-container .item-save-yes-icon
+    {
+        height: 50px;
+        background-size: 35px;
     }
 
 }
