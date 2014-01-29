@@ -290,7 +290,7 @@ html,body {
     margin-bottom: 5px;
 }
 
-.save-confirm-container {
+.item-detail-button-container {
     border: 1px solid lightgrey;
     min-height: 30px;
     margin: auto;
@@ -304,7 +304,24 @@ html,body {
 
 }
 
-.save-confirm-container .item-save-no-icon
+.item-detail-button-container.show-hide {
+    height: 30px;
+}
+
+.item-detail-button-container.show-hide .item-extras-show-hide-icon {
+    background-image: url('/images/icons/plus-icon.png');
+    height: 100%;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: 98% 50%;
+    cursor: pointer;
+
+    line-height: 30px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.item-detail-button-container .item-save-no-icon
 {
     background-image: url('/images/icons/tick-icon.png');
     width: 50%;
@@ -317,7 +334,7 @@ html,body {
     float: left;
 }
 
-.save-confirm-container .item-save-yes-icon
+.item-detail-button-container .item-save-yes-icon
 {
     background-image: url('/images/icons/x-icon.png');
     width: 49%;
@@ -329,7 +346,7 @@ html,body {
     float: left;
 }
 
-.save-confirm-container .item-save-icon
+.item-detail-button-container .item-save-icon
 {
     width: 100%;
     height: 30px;
@@ -589,25 +606,31 @@ html,body {
         left: 0;
     }
 
-    .save-confirm-container {
+    .item-detail-button-container {
         min-height: 50px;
     }
 
-    .save-confirm-container .item-save-icon
-    {
-        height: 50px;
+    .item-detail-button-container.show-hide .item-extras-show-hide-icon {
         line-height: 50px;
-        font-size: 25px;
+        font-size: 20px;
     }
 
-    .save-confirm-container .item-save-no-icon
-    {
+    .item-detail-button-container.show-hide {
+        height: 30px;
+    }
+
+    .item-detail-button-container .item-save-icon {
+        height: 50px;
+        line-height: 50px;
+        font-size: 20px;
+    }
+
+    .item-detail-button-container .item-save-no-icon {
         height: 50px;
         background-size: 35px;
     }
 
-    .save-confirm-container .item-save-yes-icon
-    {
+    .item-detail-button-container .item-save-yes-icon {
         height: 50px;
         background-size: 35px;
     }
@@ -751,24 +774,29 @@ html,body {
         left: 0;
     }
 
-    .save-confirm-container {
+    .item-detail-button-container {
         min-height: 50px;
     }
 
-    .save-confirm-container .item-save-icon
+    .item-detail-button-container.show-hide .item-extras-show-hide-icon {
+        line-height: 50px;
+        font-size: 20px;
+    }
+
+    .item-detail-button-container .item-save-icon
     {
         height: 50px;
         line-height: 50px;
-        font-size: 25px;
+        font-size: 20px;
     }
 
-    .save-confirm-container .item-save-no-icon
+    .item-detail-button-container .item-save-no-icon
     {
         height: 50px;
         background-size: 35px;
     }
 
-    .save-confirm-container .item-save-yes-icon
+    .item-detail-button-container .item-save-yes-icon
     {
         height: 50px;
         background-size: 35px;

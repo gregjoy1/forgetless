@@ -317,10 +317,12 @@ forgetlessApp.directive('handleItem', function() {
             var itemTitleInput = itemDetails.querySelector('.title-input');
             var itemContentInput = itemDetails.querySelector('.content-input');
 
-            var saveConfirmContainer = itemDetails.querySelector('.save-confirm-container');
+            var saveConfirmContainer = itemDetails.querySelector('.item-detail-button-container.save');
             var saveButton = saveConfirmContainer.querySelector('.item-save-icon');
             var saveYesButton = saveConfirmContainer.querySelector('.item-save-yes-icon');
             var saveNoButton = saveConfirmContainer.querySelector('.item-save-no-icon');
+
+            var extrasContainer = itemDetails.querySelector('.item-detail-button-container.show-hide');
 
             $scope.mainOptionClassParam = {
                 'hide-option': false
@@ -585,5 +587,11 @@ forgetlessApp.directive('syncHeight', function($window) {
 
         $window.scrollTop = 0;
         applyResize();
+    }
+});
+
+forgetlessApp.directive('addCalender', function() {
+    return function($scope, $element) {
+        SimpleCalenderWidget.initialise($element[0]);
     }
 });
