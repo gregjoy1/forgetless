@@ -1,32 +1,32 @@
 <div id="login-container">
 
     <div class="login-header-container">
-        <h1>test</h1>
+        <h1>Please login.</h1>
     </div>
 
     <div class="login-form-container">
 
         <form data-ng-submit="login()">
 
-            <div class="login-status-container" data-ng-if="!error">
+            <div class="login-status-container" data-ng-if="showStatus" data-ng-class="classParams">
                 <span>{{errorDescription}}</span>
             </div>
 
-            <div class="login-email-field-container">
+            <div class="login-field-container">
                 <label for="email-field">
                     Email
                 </label>
                 <input type="text" id="email-field" data-ng-model="emailInput">
             </div>
 
-            <div class="login-password-field-container">
+            <div class="login-field-container">
                 <label for="password-field">
                     Password
                 </label>
                 <input type="password" id="password-field" data-ng-model="passwordInput">
             </div>
 
-            <div class="login-submit-field-container">
+            <div class="login-field-container">
                 <!--// todo make fancy-->
                 <input type="submit">
             </div>

@@ -191,3 +191,14 @@ forgetlessApp.service('remoteStorageService', function($http) {
 
 });
 
+// TODO this is probably shit
+forgetlessApp.service('utilsService', function() {
+    this.safeApply = function(method, $scope) {
+        if($scope.$$phase || $scope.$root.$$phase) {
+            method();
+        } else {
+            method();
+        }
+    };
+});
+

@@ -372,6 +372,57 @@ html,body {
     background-color: #ffffff;
 }
 
+#login-container {
+    width: 500px;
+    border: 1px solid lightgrey;
+    margin: auto;
+    margin-top: 10px;
+    background-color: white;
+}
+
+#login-container .login-header-container {
+    padding: 5px;
+}
+
+#login-container .login-header-container > h1 {
+    margin: 0;
+    text-align: center;
+}
+
+.login-form-container {
+    width: 95%;
+    margin: auto;
+}
+
+.login-field-container {
+    margin-bottom: 10px;
+}
+
+.login-field-container > label {
+    float: left;
+    width: 100%;
+}
+
+.login-field-container > input {
+    width: 100%;
+    border: 1px solid lightgrey;
+    line-height: 30px;
+}
+
+.login-status-container {
+    padding: 5px 0 5px 0;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.login-status-container.success {
+    color: green;
+}
+
+.login-status-container.fail {
+    color: red;
+}
+
 /* #Medium Screens
 ================================================== */
 
@@ -633,6 +684,11 @@ html,body {
     .item-detail-button-container .item-save-yes-icon {
         height: 50px;
         background-size: 35px;
+    }
+
+    #login-container {
+        width: 100%;
+        margin-top: 0;
     }
 
 }

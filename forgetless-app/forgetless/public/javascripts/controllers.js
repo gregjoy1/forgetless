@@ -127,12 +127,40 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
 });
 
 forgetlessApp.controller('LoginController', function($scope) {
-    $scope.error = false;
+    $scope.showStatus = false;
+    $scope.error = true;
     $scope.errorDescription = '';
+
+    $scope.classParams = {
+        'success': false,
+        'fail': true
+    };
 
     $scope.emailInput = '';
     $scope.passwordInput = '';
     $scope.login = function() {
-        console.log('logged in with ' + $scope.emailInput + ' ' + $scope.passwordInput);
+
+        var doStuff = function() {
+            $scope.showStatus = true;
+            if($scope.emailInput == 'success') {
+                $scope.error = false;
+                $scope.errorDescription = 'Correct login.';
+                $scope.classParams['success'] = true;
+                $scope.classParams['fail'] = false;
+            } else {
+                $scope.error = true;
+                $scope.errorDescription = 'Incorrect login.';
+                $scope.classParams['success'] = true;
+                $scope.classParams['fail'] = false;
+            }
+
+        };
+
+        if($scope.$$phase || $scope.$root.$$phase) {
+            doStuff();
+        } else {
+            $scope.$apply(doStuff());
+        }
+
     };
 });
