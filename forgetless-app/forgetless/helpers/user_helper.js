@@ -102,6 +102,6 @@ module.exports = {
         } else {
             callback(false, null);
         }
-    },
+    }
 
 };

@@ -76,16 +76,20 @@ module.exports = function(id, loadWithJson, callback){
                 if(err){
                     console.log(err, model);
                 } else {
-
                     var ListLinks = [];
-                    for(var inc = 0; inc < rows.length; inc++){
-                        new GLOBAL.defs.ListLink(null, rows[inc], function(err, object){
-                            ListLinks.push(object);
 
-                            if(ListLinks.length == rows.length){
-                                callback(null, ListLinks);
-                            }
-                        });
+                    if(rows.length > 0) {
+                        for(var inc = 0; inc < rows.length; inc++){
+                            new GLOBAL.defs.ListLink(null, rows[inc], function(err, object){
+                                ListLinks.push(object);
+
+                                if(ListLinks.length == rows.length){
+                                    callback(null, ListLinks);
+                                }
+                            });
+                        }
+                    } else {
+                        callback(null, ListLinks);
                     }
                 }
                 connection.release();

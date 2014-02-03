@@ -1,5 +1,7 @@
 module.exports = {
 
+    // MAJOR TODO, add user check
+
     /*
     * ============================================================================
     * STACK CONTROLLERS

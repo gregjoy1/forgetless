@@ -64,15 +64,19 @@ module.exports = function(id, loadWithJson, callback){
                 } else {
                     var CategoryLinks = [];
 
-                    for(var inc = 0; inc < rows.length; inc++){
-                        new GLOBAL.defs.CategoryLink(null, rows[inc], function(err, link){
-                            CategoryLinks.push(link);
-                            if(CategoryLinks.length == rows.length){
-                                callback(null, CategoryLinks);
-                            }
-                        });
-
+                    if(rows.length > 0) {
+                        for(var inc = 0; inc < rows.length; inc++){
+                            new GLOBAL.defs.CategoryLink(null, rows[inc], function(err, link){
+                                CategoryLinks.push(link);
+                                if(CategoryLinks.length == rows.length){
+                                    callback(null, CategoryLinks);
+                                }
+                            });
+                        }
+                    } else {
+                        callback(null, CategoryLinks);
                     }
+
                 }
                 connection.release();
             });

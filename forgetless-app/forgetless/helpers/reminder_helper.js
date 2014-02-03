@@ -41,13 +41,17 @@ module.exports = {
                     callback(err, []);
                 } else {
                     var reminders = [];
-                    for(var inc = 0; inc < rows.length; inc++) {
-                        GLOBAL.defs.Reminder(rows[inc].id, false, function(err, reminder) {
-                            reminders.push(reminder);
-                            if(reminders.length == rows.length) {
-                                callback(false, reminders);
-                            }
-                        }, allZones);
+                    if(rows.length > 0) {
+                        for(var inc = 0; inc < rows.length; inc++) {
+                            GLOBAL.defs.Reminder(rows[inc].id, false, function(err, reminder) {
+                                reminders.push(reminder);
+                                if(reminders.length == rows.length) {
+                                    callback(false, reminders);
+                                }
+                            }, allZones);
+                        }
+                    } else {
+                        callback(false, reminders);
                     }
                 }
             });

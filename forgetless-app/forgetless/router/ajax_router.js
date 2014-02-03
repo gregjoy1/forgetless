@@ -7,6 +7,13 @@ module.exports = function(app) {
         ajaxController.stackDump(request, response);
     });
 
+    app.get('/ajax/test', function(request, response) {
+        console.log(GLOBAL.defs.HashHelper.HashEmailPassword('test@test.com', 'password', function(hash) {
+            console.log(hash);
+            response.end(hash);
+        }));
+    });
+
     // AJAX stack routes
 
     // GET ROUTES

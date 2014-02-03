@@ -5,7 +5,7 @@ forgetlessApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
 
     $stateProvider.state('app', {
-        url: '/',
+        url: '/app/',
         controller: 'ContentViewPointController',
         templateUrl: '/partials/list_view.html'
     });

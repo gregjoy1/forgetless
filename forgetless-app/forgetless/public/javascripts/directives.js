@@ -2,7 +2,7 @@ forgetlessApp.directive('handleCategory', function() {
 
     return {
         templateUrl: '/partials/category_item_view.html',
-        controller: function($scope, $element, $window) {
+        controller: function($scope, $element, $window, stackService) {
             var element = $element[0];
             var categoryHeader = element.querySelector('.content-item');
             var titleContainer = categoryHeader.querySelector('.title-container');
@@ -113,6 +113,7 @@ forgetlessApp.directive('handleCategory', function() {
             angular.element(confirmYesButton).on('click', function(event) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
+                stackService.getStack();
             });
 
             angular.element(confirmNoButton).on('click', function(event) {

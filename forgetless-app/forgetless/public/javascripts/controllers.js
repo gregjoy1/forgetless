@@ -127,11 +127,12 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
 });
 
 forgetlessApp.controller('LoginController', function($scope) {
-    $scope.testing = 123;
-    $scope.testfunc = function() {
-        console.log('tetsing');
+    $scope.error = false;
+    $scope.errorDescription = '';
+
+    $scope.emailInput = '';
+    $scope.passwordInput = '';
+    $scope.login = function() {
+        console.log('logged in with ' + $scope.emailInput + ' ' + $scope.passwordInput);
     };
-
-    $scope.testfunc();
-
 });

@@ -14,9 +14,7 @@ module.exports = {
                 function(user, callback){
                     GLOBAL.defs.CategoryLink(null, null, function(err, object) {
                         object.GetAllCategoryLinksForUser(userId, function(err, links) {
-                            if(links.length > 0) {
-                                user.CategoryLinks = links;
-                            }
+                            user.CategoryLinks = links;
                             callback(err, user);
                         });
                     });
@@ -28,18 +26,22 @@ module.exports = {
                     if(user.CategoryLinks == undefined) {
                         callback(null, user);
                     } else {
-                        for(var inc = 0; inc < user.CategoryLinks.length; inc++) {
-                            var index = inc;
-                            GLOBAL.defs.Category(user.CategoryLinks[inc].categoryId, null, function(err, category) {
-                                GLOBAL.defs.Audit(category.auditId, null, function(err, audit) {
-                                    category.Audit = audit;
-                                    user.CategoryLinks[index].Category = category;
-                                    count++;
-                                    if(count == user.CategoryLinks.length) {
-                                        callback(null, user);
-                                    }
+                        if(user.CategoryLinks.length > 0) {
+                            for(var inc = 0; inc < user.CategoryLinks.length; inc++) {
+                                var index = inc;
+                                GLOBAL.defs.Category(user.CategoryLinks[inc].categoryId, null, function(err, category) {
+                                    GLOBAL.defs.Audit(category.auditId, null, function(err, audit) {
+                                        category.Audit = audit;
+                                        user.CategoryLinks[index].Category = category;
+                                        count++;
+                                        if(count == user.CategoryLinks.length) {
+                                            callback(null, user);
+                                        }
+                                    });
                                 });
-                            });
+                            }
+                        } else {
+                            callback(true, user);
                         }
                     }
                 },
@@ -50,10 +52,10 @@ module.exports = {
                         var index = inc;
                         GLOBAL.defs.ListLink(null, null, function(err, listLink) {
                             listLink.GetAllListLinksForUser(userId, user.CategoryLinks[index].Category.id, function(err, listLinks){
+                                user.CategoryLinks[index].Category.ListLinks = listLinks;
                                 if(listLinks.length == 0) {
-                                    callback(null, user);
+                                    callback(true, user);
                                 } else {
-                                    user.CategoryLinks[index].Category.ListLinks = listLinks;
                                     count++;
                                     if(count == user.CategoryLinks.length){
                                         callback(null, user);
@@ -95,11 +97,11 @@ module.exports = {
                             var listId = user.CategoryLinks[categoryIndex].Category.ListLinks[listIndex].List.id;
                             GLOBAL.defs.ItemLink(null, null, function(err, list){
                                 list.GetAllItemLinksForUser(userId, listId, function(err, itemLinks){
+                                    user.CategoryLinks[categoryIndex].Category.ListLinks[listIndex].List.ItemLinks = itemLinks;
                                     // validates that there are itemLinks and skips if there are none
                                     if(itemLinks.length == 0) {
-                                        callback(null, user);
+                                        callback(true, user);
                                     } else {
-                                        user.CategoryLinks[categoryIndex].Category.ListLinks[listIndex].List.ItemLinks = itemLinks;
                                         count++;
                                         if(count == user.CategoryLinks[categoryIndex].Category.ListLinks.length){
                                             callback(null, user);

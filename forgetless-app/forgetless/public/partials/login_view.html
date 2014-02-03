@@ -1,1 +1,38 @@
-<h1>login View</h1>
+<div id="login-container">
+
+    <div class="login-header-container">
+        <h1>test</h1>
+    </div>
+
+    <div class="login-form-container">
+
+        <form data-ng-submit="login()">
+
+            <div class="login-status-container" data-ng-if="!error">
+                <span>{{errorDescription}}</span>
+            </div>
+
+            <div class="login-email-field-container">
+                <label for="email-field">
+                    Email
+                </label>
+                <input type="text" id="email-field" data-ng-model="emailInput">
+            </div>
+
+            <div class="login-password-field-container">
+                <label for="password-field">
+                    Password
+                </label>
+                <input type="password" id="password-field" data-ng-model="passwordInput">
+            </div>
+
+            <div class="login-submit-field-container">
+                <!--// todo make fancy-->
+                <input type="submit">
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
