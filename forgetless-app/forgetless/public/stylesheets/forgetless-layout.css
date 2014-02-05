@@ -378,6 +378,7 @@ html,body {
     margin: auto;
     margin-top: 10px;
     background-color: white;
+    color: black;
 }
 
 #login-container .login-header-container {
@@ -413,10 +414,7 @@ html,body {
     padding: 5px 0 5px 0;
     font-weight: bold;
     font-size: 18px;
-}
-
-.login-status-container.success {
-    color: green;
+    text-align: center;
 }
 
 .login-status-container.fail {

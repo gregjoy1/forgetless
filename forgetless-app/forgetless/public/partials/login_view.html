@@ -8,8 +8,8 @@
 
         <form data-ng-submit="login()">
 
-            <div class="login-status-container" data-ng-if="showStatus" data-ng-class="classParams">
-                <span>{{errorDescription}}</span>
+            <div class="login-status-container" data-ng-if="showStatus" data-ng-class="{fail:error}">
+                <span>{{statusText}}</span>
             </div>
 
             <div class="login-field-container">

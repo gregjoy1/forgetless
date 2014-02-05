@@ -34,12 +34,15 @@ module.exports = {
                                                                 callback(false, null);
                                                             } else {
                                                                 if(response != undefined) {
+                                                                    var date = new Date();
+                                                                    date.setTime(date.getTime() + 99999999999);
+
                                                                     response.cookie(
                                                                         'usertoken',
                                                                         userModel.userTokenHash,
                                                                         {
                                                                             // TODO check this out..
-                                                                            expires: new Date() + 99999,
+                                                                            expires: date,
                                                                             maxAge: 99999
                                                                         }
                                                                     );

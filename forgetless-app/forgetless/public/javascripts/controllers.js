@@ -1,4 +1,10 @@
-forgetlessApp.controller('ContentViewPointController', function($scope) {
+forgetlessApp.controller('ContentViewPointController', function($scope, $state, stackService) {
+
+    stackService.checkIfLoggedIn(function(success) {
+        if(!success) {
+            $state.go('login');
+        }
+    });
 
     $scope.stepClass = 'step-zero';
 
@@ -28,7 +34,7 @@ forgetlessApp.controller('ContentViewPointController', function($scope) {
 
 });
 
-forgetlessApp.controller('ContentController', function($scope, $stateParams, $state, $location) {
+forgetlessApp.controller('ContentController', function($scope, $stateParams, $state, $location, stackService) {
 
     $scope.routeSteps = function() {
         if($stateParams.categoryId !== undefined && $stateParams.categoryId != '') {
@@ -64,6 +70,7 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
 
     $scope.categories = [];
 
+/*
     for(var catInc = 0; catInc <  5; catInc++) {
 
         $scope.categories.push({
@@ -96,14 +103,22 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
         }
 
     }
+*/
+    stackService.getStack(function(stack) {
+        $scope.categories = stack;
+console.log('just errorign...', stack);
+
+        if(stack.length > 0) {
+            $scope.selectedCategoryId = ($scope.categories[0].id != undefined ? $scope.categories[0].id : null);
+            $scope.selectedListId = ($scope.categories[0].lists[0] != undefined ? $scope.categories[0].lists[0] : null);
+            $scope.selectedItemId = ($scope.categories[0].lists[0].items[0] != undefined ? $scope.categories[0].lists[0].items[0] : null);
+        }
+
+    });
 
     /*
      * -------------------------------------------
      */
-
-    $scope.selectedCategoryId = ($scope.categories[0].id != undefined ? $scope.categories[0].id : null);
-    $scope.selectedListId = ($scope.categories[0].lists[0] != undefined ? $scope.categories[0].lists[0] : null);
-    $scope.selectedItemId = ($scope.categories[0].lists[0].items[0] != undefined ? $scope.categories[0].lists[0].items[0] : null);
 
 
     $scope.selectCategory = function(id) {
@@ -126,41 +141,54 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
 
 });
 
-forgetlessApp.controller('LoginController', function($scope) {
+forgetlessApp.controller('LoginController', function($scope, $state, stackService) {
     $scope.showStatus = false;
     $scope.error = true;
-    $scope.errorDescription = '';
-
-    $scope.classParams = {
-        'success': false,
-        'fail': true
-    };
+    $scope.statusText = '';
 
     $scope.emailInput = '';
     $scope.passwordInput = '';
     $scope.login = function() {
 
-        var doStuff = function() {
-            $scope.showStatus = true;
-            if($scope.emailInput == 'success') {
-                $scope.error = false;
-                $scope.errorDescription = 'Correct login.';
-                $scope.classParams['success'] = true;
-                $scope.classParams['fail'] = false;
-            } else {
-                $scope.error = true;
-                $scope.errorDescription = 'Incorrect login.';
-                $scope.classParams['success'] = true;
-                $scope.classParams['fail'] = false;
-            }
-
+        var applyScope = function() {
+            stackService.login(
+                $scope.emailInput,
+                $scope.passwordInput,
+                function(success, userModel) {
+                    if(success) {
+                        $state.go('app');
+                    } else {
+                        $scope.showStatus = true;
+                        $scope.error = true;
+                        $scope.statusText = 'Incorrect login.';
+                    }
+                }
+            );
         };
 
         if($scope.$$phase || $scope.$root.$$phase) {
-            doStuff();
+            applyScope();
         } else {
-            $scope.$apply(doStuff());
+            $scope.$apply(applyScope());
         }
-
     };
+
+    stackService.checkIfLoggedIn(function(success) {
+        if(success) {
+            $state.go('app');
+        } else {
+            $state.go('login');
+        }
+    });
+
+});
+
+forgetlessApp.controller('RootController', function($scope, $state, stackService) {
+    stackService.checkIfLoggedIn(function(success) {
+        if(success) {
+            $state.go('app');
+        } else {
+            $state.go('login');
+        }
+    });
 });
