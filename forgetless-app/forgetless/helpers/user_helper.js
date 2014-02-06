@@ -34,17 +34,15 @@ module.exports = {
                                                                 callback(false, null);
                                                             } else {
                                                                 if(response != undefined) {
-                                                                    var date = new Date();
-                                                                    date.setTime(date.getTime() + 99999999999);
 
                                                                     response.cookie(
                                                                         'usertoken',
-                                                                        userModel.userTokenHash,
-                                                                        {
+                                                                        userModel.userTokenHash
+//                                                                        {
                                                                             // TODO check this out..
-                                                                            expires: date,
-                                                                            maxAge: 99999
-                                                                        }
+//                                                                            expires: new Date(Date.now() + 900000),
+//                                                                            maxAge: 99999
+//                                                                        }
                                                                     );
                                                                     callback(true, userModel);
                                                                 }
@@ -70,7 +68,9 @@ module.exports = {
         if(userTokenHash == ''){
             callback(false, null);
         } else {
+            console.log('testing');
             GLOBAL.dbPool.getConnection(function(err, connection){
+                console.log('testing2');
                 var sql = 'SELECT id FROM user WHERE user_token_hash = ?';
                 connection.query(sql, userTokenHash, function(err, rows){
                     if(err){

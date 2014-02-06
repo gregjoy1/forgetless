@@ -88,42 +88,42 @@ html,body {
     width: 15px;
 }
 
-.options-container .edit-icon {
+.edit-icon {
     background-image: url('/images/icons/edit-icon.png');
     background-size: 30px;
     background-position: 5px 7px;
     width: 39px;
 }
 
-.options-container .delete-icon {
+.delete-icon {
     background-image: url('/images/icons/delete-icon.png');
     background-size: 30px;
     background-position: 5px 7px;
     width: 39px;
 }
 
-.options-container .confirm-yes-icon {
+.confirm-yes-icon {
     background-image: url('/images/icons/tick-icon.png');
     background-size: 30px;
     background-position: 5px 7px;
     width: 39px;
 }
 
-.options-container .confirm-no-icon {
+.confirm-no-icon {
     background-image: url('/images/icons/x-icon.png');
     background-size: 30px;
     background-position: 5px 7px;
     width: 39px;
 }
 
-.options-container .delete-yes-icon {
+.delete-yes-icon {
     background-image: url('/images/icons/delete-yes-icon.png');
     background-size: 30px;
     background-position: 5px 7px;
     width: 39px;
 }
 
-.options-container .delete-no-icon {
+.delete-no-icon {
     background-image: url('/images/icons/delete-no-icon.png');
     background-size: 30px;
     background-position: 5px 7px;
@@ -167,6 +167,17 @@ html,body {
     border-left: 1px solid lightgrey;
 }
 
+.confirmation-button-container .button {
+    background-size: 32px;
+    background-position: 4px 4px;
+    height: 100%;
+    background-repeat: no-repeat;
+    float: left;
+    cursor: pointer;
+    border-left: 1px solid lightgrey;
+
+}
+
 .main, .confirm, .delete-confirm {
     width: 100px;
 }
@@ -206,6 +217,12 @@ html,body {
     margin-left: 0;
 }
 
+.content-pane .blanking-content-item {
+    height: 70px;
+    bottom: 5px;
+    width: 100%;
+}
+
 .content-pane .content-item {
     border: 1px solid lightgrey;
     height: 40px;
@@ -221,6 +238,27 @@ html,body {
     -o-transition: height 0.3s ease;
 
     background-color: white;
+}
+
+.content-pane .content-item.add-new-item {
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    background-image: url('/images/icons/plus-icon.png');
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: 99% 6px;
+}
+
+.title-container > input  {
+    border: 1px solid lightgrey;
+    width: 220px;
+}
+
+.confirmation-button-container {
+    float: right;
+    width: 80px;
+    height: 100%;
 }
 
 .content-pane .list-content-item {
@@ -461,37 +499,37 @@ html,body {
         width: 38px;
     }
 
-    .options-container .edit-icon {
+    .edit-icon {
         width: 38px;
         background-size: 30px;
         background-position: 4px 5px;
     }
 
-    .options-container .delete-icon {
+    .delete-icon {
         width: 38px;
         background-size: 30px;
         background-position: 4px 5px;
     }
 
-    .options-container .confirm-yes-icon {
+    .confirm-yes-icon {
         width: 38px;
         background-size: 30px;
         background-position: 4px 5px;
     }
 
-    .options-container .confirm-no-icon {
+    .confirm-no-icon {
         width: 38px;
         background-size: 30px;
         background-position: 4px 5px;
     }
 
-    .options-container .delete-yes-icon {
+    .delete-yes-icon {
         width: 38px;
         background-size: 30px;
         background-position: 4px 5px;
     }
 
-    .options-container .delete-no-icon {
+    .delete-no-icon {
         width: 38px;
         background-size: 30px;
         background-position: 4px 5px;
@@ -586,37 +624,37 @@ html,body {
         width: 58px;
     }
 
-    .options-container .edit-icon {
+    .edit-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
     }
 
-    .options-container .delete-icon {
+    .delete-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
     }
 
-    .options-container .confirm-yes-icon {
+    .confirm-yes-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
     }
 
-    .options-container .confirm-no-icon {
+    .confirm-no-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
     }
 
-    .options-container .delete-yes-icon {
+    .delete-yes-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
     }
 
-    .options-container .delete-no-icon {
+    .delete-no-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
@@ -759,37 +797,37 @@ html,body {
         width: 58px;
     }
 
-    .options-container .edit-icon {
+    .edit-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
     }
 
-    .options-container .delete-icon {
+    .delete-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
     }
 
-    .options-container .confirm-yes-icon {
+    .confirm-yes-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
     }
 
-    .options-container .confirm-no-icon {
+    .confirm-no-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
     }
 
-    .options-container .delete-yes-icon {
+    .delete-yes-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;
     }
 
-    .options-container .delete-no-icon {
+    .delete-no-icon {
         width: 59px;
         background-size: 40px;
         background-position: 10px 10px;

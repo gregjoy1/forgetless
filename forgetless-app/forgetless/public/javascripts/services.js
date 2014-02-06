@@ -15,13 +15,32 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                             remoteStorageModelParserService.respondToError(err);
                         } else {
                             stack = remoteStorageModelParserService.parseStack(detail);
-                            console.log('stack dump', stack);
+//                            console.log('stack dump', stack, detail);
                         }
                     });
                 }
                 callback(stack);
             }
         );
+
+//        remoteStorageService.makeGetRequest(
+//            '/ajax/stack/dump/',
+//            function(success, status, data, headers, config) {
+//                var stack = [];
+//                if(success) {
+//                    remoteStorageModelParserService.parseStatus(data, function(err, detail) {
+//                        if(err) {
+//                            remoteStorageModelParserService.respondToError(err);
+//                        } else {
+//                            stack = remoteStorageModelParserService.parseStack(detail);
+////                            console.log('stack dump', stack, detail);
+//                        }
+//                    });
+//                }
+//                callback(stack);
+//            }
+//        );
+
     };
 
     this.insertReminder = function() {
@@ -113,7 +132,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
     };
 
     this.checkIfLoggedIn = function(callback) {
-
+        console.log('%cCalled', 'color:green;');
         networkManagerService.makeRequest(
             '/ajax/user/',
             {},
@@ -159,49 +178,63 @@ forgetlessApp.service('networkManagerService', function(statusService, localStor
     var requestQueue = [];
 
     var timeoutId = undefined;
+    var processRequestsRunning = false;
 
     this.POST_METHOD = 'post';
     this.GET_METHOD = 'get';
 
     this.makeRequest = function(url, fields, method, callback) {
-        requestQueue.push({
+        var request = {
             method: method,
             url: url,
             fields: fields,
-            callback: callback,
-            callbackStr: callback.toString()
-        });
-        console.log(requestQueue);
-        processRequests();
+            callback: callback
+        };
+        requestQueue.push(request);
+        console.log('add request', request, requestQueue);
+        if(!processRequestsRunning) {
+            processRequests();
+        }
     };
 
     var processRequests = function() {
+        processRequestsRunning = true;
         if(requestQueue.length > 0) {
+            console.log(1);
             remoteStorageModelParserService.makeRequest(requestQueue[0], function(success, status, data, headers, config) {
-                // checks if callback exists and is not undefined, then calls callback
-                console.log('pre shift callback check', requestQueue[0] != undefined, typeof requestQueue[0].callback == 'function');
-                if(requestQueue[0] != undefined && typeof requestQueue[0].callback == 'function') {
-                    console.log('pre shift', requestQueue[0].callback.toString(), data, headers);
-                    requestQueue[0].callback(success, status, data, headers, config);
-                }
+                console.log(3);
                 // if success, then remove request from queue
                 if(success) {
-                    console.log('shift', requestQueue.shift());
+                    // checks if callback exists and is not undefined, then calls callback
+                    if(requestQueue[0] != undefined && typeof requestQueue[0].callback == 'function') {
+                        console.log('request callback called:', requestQueue[0].callback.toString(), data);
+                        requestQueue[0].callback(success, status, data, headers, config);
+                    }
+                    console.log('%cshift', 'color: purple;', requestQueue.shift());
 //                    requestQueue.shift();
+                    processRequests();
+
+                    if(timeoutId != undefined) {
+                        clearTimeout(timeoutId);
+                    }
+
+                } else {
+                    console.log('gone offline...');
+                    timeoutId = setTimeout(processRequests, 30000);
                 }
-                timeoutId = setTimeout(processRequests, 30000);
             });
         } else {
-            if(timeoutId != undefined) {
-                clearTimeout(timeoutId);
-            }
+            processRequestsRunning = false;
+            console.log('%cNothing in queue...', 'color: grey;');
         }
+
     };
 
 });
 
 forgetlessApp.service('remoteStorageModelParserService', function(remoteStorageService, userService) {
     this.makeRequest = function(request, callback) {
+        console.log(2);
         if(request.method == 'post') {
             remoteStorageService.makePostRequest(request.url, request.fields, callback);
         } else {
@@ -233,7 +266,6 @@ forgetlessApp.service('remoteStorageModelParserService', function(remoteStorageS
     this.parseStack = function(stack) {
         var stackOutput = [];
         var categoryLinks = stack['CategoryLinks'];
-        console.log('stack test', categoryLinks != undefined, stack);
         if(categoryLinks != undefined && categoryLinks.length > 0) {
             for(var catInc = 0; catInc < categoryLinks.length; catInc++) {
                 var category = this.parseCategory(categoryLinks[catInc]);
@@ -299,7 +331,8 @@ forgetlessApp.service('remoteStorageModelParserService', function(remoteStorageS
         if(item != undefined && item.Item.zoneId == 1) {
             itemOutput = {
                 id: item.itemId,
-                title: item.title,
+                title: item.Item.title,
+                content: item.Item.content,
                 selected: false,
                 reminders: []
             };
@@ -336,6 +369,7 @@ forgetlessApp.service('remoteStorageService', function($http) {
 
     this.makeGetRequest = function(url, callback) {
         $http.get(url).success(function(data, status, headers, config) {
+            console.log('make get request success', url, data);
             callback(true, status, data, headers, config);
         }).error(function(data, status, headers, config) {
             callback(false, status, data, headers, config);

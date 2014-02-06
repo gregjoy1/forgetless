@@ -5,17 +5,62 @@
      data-ng-controller="ContentController">
 
     <div class="left content-pane">
+
+        <div class="category-item-container">
+            <div class="content-item add-new-item">
+                <div class="title-container">
+                    Add new category
+                </div>
+            </div>
+        </div>
+
         <div class="category-item-container"
              data-ng-repeat="category in categories"
              data-handle-category>
         </div>
+
+        <div class="category-item-container">
+            <div class="content-item">
+                <div class="title-container">
+                    <input type="text" placeholder="New category name">
+                </div>
+
+                <div class="confirmation-button-container">
+                    <div class="confirm-yes-icon button">
+                        &nbsp;
+                    </div>
+                    <div class="confirm-no-icon button">
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="blanking-content-item display-only-mobile">
+            &nbsp;
+        </div>
+
     </div>
 
     <div class="right content-pane">
+
+        <div class="category-item-container">
+            <div class="content-item add-new-item">
+                <div class="title-container">
+                    Add new list
+                </div>
+            </div>
+        </div>
+
         <div class="list-item-container"
              data-ng-repeat="list in categories[selectedCategoryIndex].lists"
              data-handle-list>
         </div>
+
+        <div class="blanking-content-item display-only-mobile">
+            &nbsp;
+        </div>
+
     </div>
 
 </div>

@@ -51,83 +51,61 @@ module.exports = {
                     response.end(JSON.stringify(dumpSafeUser));
                 });
             } else {
-                // Checks if logging in with a user token
-                if(request.cookies.usertoken != null) {
-                    // checks if the user token is actually correct
-                    this.checkUser(request, response, function(success, user) {
-                        // if so, it JSON encodes limited user object (to avoid sending pw hashes etc)
+
+                // declare validation
+                var expectedFields = [
+                    {
+                        name: 'email',
+                        type: 'string',
+                        required: true
+                    },
+                    {
+                        name: 'password',
+                        type: 'string',
+                        required: true
+                    }
+                ];
+
+                GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
+                    request,
+                    expectedFields,
+                    function(success, obj) {
                         if(success) {
-                            user.loadDumpSafeObjectFromModel(user, function(err, dumpSafeUser) {
-                                response.end(JSON.stringify(dumpSafeUser));
-                            });
-                            // else sends JSON encoded error status object
+                            GLOBAL.defs.UserHelper.Login(
+                                obj.email,
+                                obj.password,
+                                response,
+                                function(success, user) {
+                                    // if so, it JSON encodes limited user object (to avoid sending pw hashes etc)
+                                    if(success) {
+                                        user.loadDumpSafeObjectFromModel(user, function(err, dumpSafeUser) {
+                                            console.log(dumpSafeUser);
+                                            response.end(JSON.stringify(dumpSafeUser));
+                                        });
+                                        // else sends JSON encoded error status object
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_LOGIN_CREDENTIALS,
+                                            'No user is currently logged in.',
+                                            function(errorJSONString) {
+                                                response.end(errorJSONString);
+                                            }
+                                        );
+                                    }
+                                }
+                            );
                         } else {
+                            // TODO consider logging these?
                             GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                GLOBAL.defs.StatusCodeHelper.StatusCodes.NOT_LOGGED_IN,
-                                'No user is currently logged in.',
-                                function(errorJSONString) {
-                                    response.end(errorJSONString);
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
                                 }
                             );
                         }
-                    });
-                } else {
-
-                    // declare validation
-                    var expectedFields = [
-                        {
-                            name: 'email',
-                            type: 'string',
-                            required: true
-                        },
-                        {
-                            name: 'password',
-                            type: 'string',
-                            required: true
-                        }
-                    ];
-
-                    GLOBAL.defs.HTTPHelper.ValidateAndCollatePOSTSubmission(
-                        request,
-                        expectedFields,
-                        function(success, obj) {
-                            if(success) {
-                                GLOBAL.defs.UserHelper.Login(
-                                    obj.email,
-                                    obj.password,
-                                    response,
-                                    function(success, user) {
-                                        // if so, it JSON encodes limited user object (to avoid sending pw hashes etc)
-                                        if(success) {
-                                            user.loadDumpSafeObjectFromModel(user, function(err, dumpSafeUser) {
-                                                console.log(dumpSafeUser);
-                                                response.end(JSON.stringify(dumpSafeUser));
-                                            });
-                                            // else sends JSON encoded error status object
-                                        } else {
-                                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_LOGIN_CREDENTIALS,
-                                                'No user is currently logged in.',
-                                                function(errorJSONString) {
-                                                    response.end(errorJSONString);
-                                                }
-                                            );
-                                        }
-                                    }
-                                );
-                            } else {
-                                // TODO consider logging these?
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
-                        }
-                    );
-                }
+                    }
+                );
             }
         });
     },

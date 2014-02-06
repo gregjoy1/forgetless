@@ -1,5 +1,7 @@
 forgetlessApp.controller('ContentViewPointController', function($scope, $state, stackService) {
 
+
+
     stackService.checkIfLoggedIn(function(success) {
         if(!success) {
             $state.go('login');
@@ -42,7 +44,7 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
         } else {
             $scope.nextStep(0);
         }
-        console.log($stateParams);
+//        console.log($stateParams);
     };
 
     $scope.$on('$locationChangeSuccess', function() {
@@ -106,7 +108,6 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
 */
     stackService.getStack(function(stack) {
         $scope.categories = stack;
-console.log('just errorign...', stack);
 
         if(stack.length > 0) {
             $scope.selectedCategoryId = ($scope.categories[0].id != undefined ? $scope.categories[0].id : null);
