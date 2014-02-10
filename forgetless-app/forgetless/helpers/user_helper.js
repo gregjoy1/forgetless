@@ -73,6 +73,7 @@ module.exports = {
                 console.log('testing2');
                 var sql = 'SELECT id FROM user WHERE user_token_hash = ?';
                 connection.query(sql, userTokenHash, function(err, rows){
+                    console.log('testing3', err, rows);
                     if(err){
                         console.log(err);
                         callback(err, model);

@@ -1,7 +1,5 @@
 forgetlessApp.controller('ContentViewPointController', function($scope, $state, stackService) {
 
-
-
     stackService.checkIfLoggedIn(function(success) {
         if(!success) {
             $state.go('login');
@@ -36,7 +34,7 @@ forgetlessApp.controller('ContentViewPointController', function($scope, $state, 
 
 });
 
-forgetlessApp.controller('ContentController', function($scope, $stateParams, $state, $location, stackService) {
+forgetlessApp.controller('ContentController', function($scope, $stateParams, $state, $location, $window, stackService) {
 
     $scope.routeSteps = function() {
         if($stateParams.categoryId !== undefined && $stateParams.categoryId != '') {
@@ -72,6 +70,50 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
 
     $scope.categories = [];
 
+    $scope.newCategory = false;
+    $scope.newCategoryTitle = '';
+
+    $scope.cancelNewCategory = function() {
+        $scope.newCategory = false;
+        $scope.newCategoryTitle = '';
+    };
+
+    $scope.addNewCategory = function(parameters) {
+        if(parameters == undefined) {
+            $scope.newCategory = true;
+            $scope.newCategoryTitle = '';
+        } else {
+            stackService.insertCategory({title: $scope.newCategoryTitle}, updateStack);
+            $scope.cancelNewCategory();
+        }
+    };
+
+    $scope.newList = false;
+    $scope.newListTitle = '';
+
+    $scope.cancelNewList = function() {
+        $scope.newList = false;
+        $scope.newListTitle = '';
+    };
+
+    $scope.addNewList = function(parameters) {
+        if(parameters == undefined) {
+            $scope.newList = true;
+            $scope.newListTitle = '';
+        } else {
+
+            stackService.insertList(
+                $scope.selectedCategoryId,
+                {
+                    title: $scope.newListTitle
+                },
+                updateStack
+            );
+
+            $scope.cancelNewList();
+        }
+    };
+
 /*
     for(var catInc = 0; catInc <  5; catInc++) {
 
@@ -106,16 +148,26 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
 
     }
 */
-    stackService.getStack(function(stack) {
-        $scope.categories = stack;
+    var updateStack = function() {
+        stackService.getStack(function(stack) {
+            console.log('%cUpdate Stack DUMP', 'color:blue;', stack);
+            $scope.categories = stack;
 
-        if(stack.length > 0) {
-            $scope.selectedCategoryId = ($scope.categories[0].id != undefined ? $scope.categories[0].id : null);
-            $scope.selectedListId = ($scope.categories[0].lists[0] != undefined ? $scope.categories[0].lists[0] : null);
-            $scope.selectedItemId = ($scope.categories[0].lists[0].items[0] != undefined ? $scope.categories[0].lists[0].items[0] : null);
-        }
+            // TODO check this out, its killing the adding new lists and stuff
+            if(stack.length > 0) {
+                $scope.selectedCategoryId = ($scope.categories[0].id != undefined ? $scope.categories[0].id : null);
+                $scope.selectedListId = ($scope.categories[0].lists[0] != undefined ? $scope.categories[0].lists[0] : null);
+                if($scope.selectedListId != null) {
+                    $scope.selectedItemId = ($scope.categories[0].lists[0].items[0] != undefined ? $scope.categories[0].lists[0].items[0] : null);
+                } else {
+                    $scope.selectedItemId = null;
+                }
+            }
 
-    });
+        });
+    };
+
+    updateStack();
 
     /*
      * -------------------------------------------

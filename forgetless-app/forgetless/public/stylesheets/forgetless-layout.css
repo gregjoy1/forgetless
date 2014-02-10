@@ -66,6 +66,10 @@ html,body {
     -o-transition: max-width 0.3s ease;
 }
 
+.add-new-item .title-container:hover {
+    color: #333333;
+}
+
 .options-container {
 
     height: 100%;
@@ -175,7 +179,6 @@ html,body {
     float: left;
     cursor: pointer;
     border-left: 1px solid lightgrey;
-
 }
 
 .main, .confirm, .delete-confirm {
@@ -252,7 +255,8 @@ html,body {
 
 .title-container > input  {
     border: 1px solid lightgrey;
-    width: 220px;
+    /*width: 220px;*/
+    width: 99%;
 }
 
 .confirmation-button-container {
@@ -619,9 +623,23 @@ html,body {
         left: -119px;
     }
 
+    .confirmation-button-container {
+        width: 120px;
+    }
+
+    .confirmation-button-container .button {
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
     .options-container .show-options-button {
         background-position: 23px;
         width: 58px;
+    }
+
+    .options-group .button {
+        background-size: 40px;
+        background-position: 10px 10px;
     }
 
     .edit-icon {
@@ -792,9 +810,23 @@ html,body {
         left: -119px;
     }
 
+    .confirmation-button-container {
+        width: 120px;
+    }
+
+    .confirmation-button-container .button {
+        background-size: 40px;
+        background-position: 10px 10px;
+    }
+
     .options-container .show-options-button {
         background-position: 23px;
         width: 58px;
+    }
+
+    .options-group .button {
+        background-size: 40px;
+        background-position: 10px 10px;
     }
 
     .edit-icon {

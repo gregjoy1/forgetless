@@ -7,7 +7,7 @@
     <div class="left content-pane">
 
         <div class="category-item-container">
-            <div class="content-item add-new-item">
+            <div class="content-item add-new-item" data-ng-click="addNewCategory()">
                 <div class="title-container">
                     Add new category
                 </div>
@@ -19,17 +19,17 @@
              data-handle-category>
         </div>
 
-        <div class="category-item-container">
+        <div class="category-item-container" data-ng-show="(newCategory != false)">
             <div class="content-item">
                 <div class="title-container">
-                    <input type="text" placeholder="New category name">
+                    <input type="text" placeholder="New category name" data-ng-model="newCategoryTitle">
                 </div>
 
                 <div class="confirmation-button-container">
-                    <div class="confirm-yes-icon button">
+                    <div class="confirm-yes-icon button" data-ng-click="addNewCategory({test:'test'})">
                         &nbsp;
                     </div>
-                    <div class="confirm-no-icon button">
+                    <div class="confirm-no-icon button" data-ng-click="cancelNewCategory()">
                         &nbsp;
                     </div>
                 </div>
@@ -45,7 +45,7 @@
     <div class="right content-pane">
 
         <div class="category-item-container">
-            <div class="content-item add-new-item">
+            <div class="content-item add-new-item" data-ng-click="addNewList()">
                 <div class="title-container">
                     Add new list
                 </div>
@@ -55,6 +55,24 @@
         <div class="list-item-container"
              data-ng-repeat="list in categories[selectedCategoryIndex].lists"
              data-handle-list>
+        </div>
+
+        <div class="category-item-container" data-ng-show="(newList != false)">
+            <div class="content-item">
+                <div class="title-container">
+                    <input type="text" placeholder="New list name" data-ng-model="newListTitle">
+                </div>
+
+
+                <div class="confirmation-button-container">
+                    <div class="confirm-yes-icon button" data-ng-click="addNewList({test:'test'})">
+                        &nbsp;
+                    </div>
+                    <div class="confirm-no-icon button" data-ng-click="cancelNewList()">
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="blanking-content-item display-only-mobile">

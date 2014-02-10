@@ -1,45 +1,37 @@
 forgetlessApp.service('stackService', function(userService, remoteStorageModelParserService, networkManagerService, remoteStorageService) {
 
-    this.stack = {};
+    this.stack = [];
 
     this.getStack = function(callback) {
+        var _this = this;
+        if(_this.stack.length == 0) {
+            this.loadStack(function(loadedStack) {
+                _this.stack = loadedStack;
+                callback(_this.stack);
+            });
+        } else {
+            callback(this.stack);
+        }
+    };
+
+    this.loadStack = function(callback) {
         networkManagerService.makeRequest(
             '/ajax/stack/dump/',
             {},
             networkManagerService.GET_METHOD,
             function(success, status, data, headers, config) {
-                var stack = [];
                 if(success) {
                     remoteStorageModelParserService.parseStatus(data, function(err, detail) {
                         if(err) {
                             remoteStorageModelParserService.respondToError(err);
                         } else {
                             stack = remoteStorageModelParserService.parseStack(detail);
-//                            console.log('stack dump', stack, detail);
                         }
                     });
                 }
                 callback(stack);
             }
         );
-
-//        remoteStorageService.makeGetRequest(
-//            '/ajax/stack/dump/',
-//            function(success, status, data, headers, config) {
-//                var stack = [];
-//                if(success) {
-//                    remoteStorageModelParserService.parseStatus(data, function(err, detail) {
-//                        if(err) {
-//                            remoteStorageModelParserService.respondToError(err);
-//                        } else {
-//                            stack = remoteStorageModelParserService.parseStack(detail);
-////                            console.log('stack dump', stack, detail);
-//                        }
-//                    });
-//                }
-//                callback(stack);
-//            }
-//        );
 
     };
 
@@ -51,24 +43,49 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 
     };
 
-    this.insertItem = function(listId, itemFields) {
+    this.insertItem = function(categoryId, listId, itemFields) {
 
     };
 
-    this.updateItem = function(itemId, itemFields) {
+    this.updateItem = function(categoryId, listId, itemId, itemFields) {
 
     };
 
-    this.insertList = function(categoryId, listFields) {
+    this.insertList = function(categoryId, listFields, callback) {
 
+        for(var inc = 0; inc < this.stack.length; inc++) {
+            if(this.stack[inc].id == categoryId) {
+                console.log(this.stack[inc]);
+                this.stack[inc].lists.push(
+                    {
+                        // this is shit, todo sort this out
+                        id: new Date().getTime(),
+                        title: listFields.title,
+                        selected: false,
+                        items: []
+                    }
+                );
+            }
+        }
+
+        callback();
     };
 
     this.updateList = function(listId, listFields) {
 
     };
 
-    this.insertCategory = function(categoryFields) {
-
+    this.insertCategory = function(categoryFields, callback) {
+        this.stack.push(
+            {
+                // this is shit, todo sort this out
+                id: new Date().getTime(),
+                title: categoryFields.title,
+                selected: false,
+                lists: []
+            }
+        );
+        callback();
     };
 
     this.updateCategory = function(categoryId, categoryFields) {
@@ -132,7 +149,6 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
     };
 
     this.checkIfLoggedIn = function(callback) {
-        console.log('%cCalled', 'color:green;');
         networkManagerService.makeRequest(
             '/ajax/user/',
             {},
@@ -191,7 +207,6 @@ forgetlessApp.service('networkManagerService', function(statusService, localStor
             callback: callback
         };
         requestQueue.push(request);
-        console.log('add request', request, requestQueue);
         if(!processRequestsRunning) {
             processRequests();
         }
@@ -200,18 +215,14 @@ forgetlessApp.service('networkManagerService', function(statusService, localStor
     var processRequests = function() {
         processRequestsRunning = true;
         if(requestQueue.length > 0) {
-            console.log(1);
             remoteStorageModelParserService.makeRequest(requestQueue[0], function(success, status, data, headers, config) {
-                console.log(3);
                 // if success, then remove request from queue
                 if(success) {
                     // checks if callback exists and is not undefined, then calls callback
                     if(requestQueue[0] != undefined && typeof requestQueue[0].callback == 'function') {
-                        console.log('request callback called:', requestQueue[0].callback.toString(), data);
                         requestQueue[0].callback(success, status, data, headers, config);
                     }
-                    console.log('%cshift', 'color: purple;', requestQueue.shift());
-//                    requestQueue.shift();
+                    requestQueue.shift();
                     processRequests();
 
                     if(timeoutId != undefined) {
@@ -225,7 +236,6 @@ forgetlessApp.service('networkManagerService', function(statusService, localStor
             });
         } else {
             processRequestsRunning = false;
-            console.log('%cNothing in queue...', 'color: grey;');
         }
 
     };
@@ -234,7 +244,6 @@ forgetlessApp.service('networkManagerService', function(statusService, localStor
 
 forgetlessApp.service('remoteStorageModelParserService', function(remoteStorageService, userService) {
     this.makeRequest = function(request, callback) {
-        console.log(2);
         if(request.method == 'post') {
             remoteStorageService.makePostRequest(request.url, request.fields, callback);
         } else {
@@ -369,7 +378,6 @@ forgetlessApp.service('remoteStorageService', function($http) {
 
     this.makeGetRequest = function(url, callback) {
         $http.get(url).success(function(data, status, headers, config) {
-            console.log('make get request success', url, data);
             callback(true, status, data, headers, config);
         }).error(function(data, status, headers, config) {
             callback(false, status, data, headers, config);
