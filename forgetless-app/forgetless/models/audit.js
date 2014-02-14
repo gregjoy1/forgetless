@@ -98,7 +98,7 @@ module.exports = function(id, loadWithJson, callback){
 
     model.createNewAudit = function(user, callback) {
 
-        GLOBAL.def.Utils.GetTimeStampFromDate(new Date(), function(timeStamp) {
+        GLOBAL.defs.Utils.GetTimeStampFromDate(new Date(), function(timeStamp) {
             model.dateCreated = timeStamp;
             model.dateDeleted = null;
             model.lastModified = timeStamp;
@@ -121,6 +121,10 @@ module.exports = function(id, loadWithJson, callback){
     model.addAuditLogEntry = function(log, user, callback) {
 
         var date = new Date();
+
+        if(model.auditLog == undefined) {
+            model.auditLog = [];
+        }
 
         model.auditLog.push({
             date: date.toJSON(),

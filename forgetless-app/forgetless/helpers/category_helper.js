@@ -29,20 +29,24 @@ module.exports = {
             });
         });
     },
-    CreateAndAssociateCategoryToUser: function(title, categoryId, userId, callback) {
-        GLOBAL.defs.Category.createNewCategory(title, userId, function(err, category) {
-            if(err) {
-                callback(err, null);
-            } else {
-                GLOBAL.defs.CategoryLink.createNewCategoryLink(title, categoryId, userId, function(err, categoryLink) {
-                    if(err) {
-                        callback(err, null);
-                    } else {
-                        categoryLink.Category = category;
-                        callback(err, categoryLink);
-                    }
-                });
-            }
+    CreateAndAssociateCategoryToUser: function(title, userId, callback) {
+        GLOBAL.defs.Category(null, null, function(err, category) {
+            category.createNewCategory(title, userId, function(err, category) {
+                if(err) {
+                    callback(err, null);
+                } else {
+                    GLOBAL.defs.CategoryLink(null, null, function(err, categoryLink) {
+                        categoryLink.createNewCategoryLink(title, category.id, userId, function(err, categoryLink) {
+                            if(err) {
+                                callback(err, null);
+                            } else {
+                                categoryLink.Category = category;
+                                callback(err, categoryLink);
+                            }
+                        });
+                    });
+                }
+            });
         });
     },
     UpdateCategoryStack: function(title, categoryId, userId, callback) {

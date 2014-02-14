@@ -1,6 +1,9 @@
 module.exports = {
     GetTimeStampFromDate: function(date, callback) {
-        callback(Math.round(date.getTime() / 1000));
+        if(typeof date == 'object' && date instanceof Date) {
+            date = Math.round(date.getTime() / 1000);
+        }
+        callback(date);
     },
     GetDateFromISODate: function(date, callback) {
         // creates date instance from ISO date

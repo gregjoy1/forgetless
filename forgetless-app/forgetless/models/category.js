@@ -53,21 +53,23 @@ module.exports = function(id, loadWithJson, callback){
     };
 
     model.createNewCategory = function(title, user, callback) {
-        GLOBAL.defs.Audit.createNewAudit(user, function(err, auditModel) {
-            model.zoneId = 1;
-            model.title = title;
+        GLOBAL.defs.Audit(null, null, function(err, audit) {
+            audit.createNewAudit(user, function(err, auditModel) {
+                model.zoneId = 1;
+                model.title = title;
 
-            if(!err) {
-                model.auditId = auditModel.id;
-            }
-
-            model.save(function(err, categoryModel) {
-                if(err) {
-                    // TODO proper logging
+                if(!err) {
+                    model.auditId = auditModel.id;
                 }
 
-                callback(err, categoryModel);
+                model.save(function(err, categoryModel) {
+                    if(err) {
+                        // TODO proper logging
+                    }
 
+                    callback(err, categoryModel);
+
+                });
             });
         });
     };

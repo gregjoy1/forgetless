@@ -852,11 +852,6 @@ module.exports = {
                 required: true
             },
             {
-                name: 'categoryId',
-                type: 'number',
-                required: true
-            },
-            {
                 name: 'title',
                 type: 'string',
                 required: true
@@ -870,7 +865,6 @@ module.exports = {
                 if(success) {
                     GLOBAL.defs.CategoryHelper.CreateAndAssociateCategoryToUser(
                         obj.title,
-                        obj.categoryId,
                         obj.userId,
                         function(err, categoryLink) {
                             if(err) {
