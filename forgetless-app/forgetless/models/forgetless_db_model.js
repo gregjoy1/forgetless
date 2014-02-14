@@ -43,8 +43,8 @@ var model = {
 
     saveModel:function(tableName, saveModel, callback){
         GLOBAL.dbPool.getConnection(function(err, connection){
-            if(saveModel.id == '' || saveModel.id == undefined){
-                saveModel.createDbExportObject(true, function(object){
+            if(saveModel.id == '' || saveModel.id == undefined) {
+                saveModel.createDbExportObject(true, function(object) {
                     connection.query('INSERT ?? SET ?', [tableName, object], function(err, rows){
                         saveModel.id = rows.insertId;
                         callback(err, saveModel);
@@ -52,7 +52,7 @@ var model = {
                     });
                 });
             } else {
-                saveModel.createDbExportObject(false, function(object){
+                saveModel.createDbExportObject(false, function(object) {
                     connection.query('UPDATE ?? SET ? WHERE id = ?', [tableName, object, saveModel.id], function(err, rows){
                         callback(err, saveModel);
                         connection.release();

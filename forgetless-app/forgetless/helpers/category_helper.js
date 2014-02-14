@@ -1,6 +1,6 @@
 module.exports = {
     FindCategoryStack: function(userId, categoryId, callback) {
-        var sql = 'SELECT id, category_id FROM category_link WHERE user_id = ? category_id = ?';
+        var sql = 'SELECT id, category_id FROM category_link WHERE user_id = ? AND category_id = ?';
 
         var escapeArray = [userId, categoryId];
 
@@ -75,13 +75,15 @@ module.exports = {
             if(err) {
                 callback(err, null);
             } else {
-                GLOBAL.defs.ItemLink.createNewCategoryLink(title, category.id, userId, function(err, categoryLink) {
-                    if(err) {
-                        callback(err, null);
-                    } else {
-                        categoryLink.Category = category;
-                        callback(err, categoryLink);
-                    }
+                GLOBAL.defs.CategoryLink(null, null, function(err, categoryLink) {
+                    categoryLink.createNewCategoryLink(category.title, category.id, userId, function(err, categoryLink) {
+                        if(err) {
+                            callback(err, null);
+                        } else {
+                            categoryLink.Category = category;
+                            callback(err, categoryLink);
+                        }
+                    });
                 });
             }
         });

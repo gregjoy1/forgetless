@@ -47,6 +47,7 @@ module.exports = function(id, loadWithJson, callback){
 
         exportObject.zone_id = model.zoneId;
         exportObject.title = model.title;
+        exportObject.audit_id = model.auditId;
 
         callback(exportObject);
 

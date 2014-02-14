@@ -144,7 +144,7 @@ module.exports = function(id, loadWithJson, callback){
 
     if(loadWithJson != null && loadWithJson){
         model.loadFromJson(loadWithJson, model, callback);
-    } else if(id != null) {
+    } else if(id != null && id != '') {
         model.loadFromId(id, 'audit', model, null, callback);
     } else {
         callback(null, model);

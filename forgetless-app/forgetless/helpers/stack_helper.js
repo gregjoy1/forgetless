@@ -21,7 +21,6 @@ module.exports = {
                 },
                 // Gets the category linked to the category links
                 function(user, callback){
-
                     // validates that there are category lists, skips if not
                     if(user.CategoryLinks == undefined) {
                         callback(null, user);
