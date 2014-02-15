@@ -5,7 +5,6 @@ module.exports = function(id, loadWithJson, callback){
     model.TABLE_NAME = 'audit';
 
     model.loadWithObject = function(object, callback){
-
 //        var model = Object.create(GLOBAL.defs.DbModelBase);
         object = (object == undefined ? {} : object);
 
@@ -76,44 +75,48 @@ module.exports = function(id, loadWithJson, callback){
             exportObject.id = model.id;
         }
 
-        GLOBAL.defs.Utils.GetTimeStampFromDate(model.dateCreated, function(timestamp) {
+        GLOBAL.defs.Utils.GetISODateFromTimeStamp(model.dateCreated, function(timestamp) {
             exportObject.date_created = timestamp;
 
-            GLOBAL.defs.Utils.GetTimeStampFromDate(model.dateDeleted, function(timestamp) {
-                exportObject.date_deleted = timestamp;
+            GLOBAL.defs.Utils.GetISODateFromTimeStamp(model.lastModified, function(timestamp) {
 
-                GLOBAL.defs.Utils.GetTimeStampFromDate(model.lastModified, function(timestamp) {
-                    exportObject.last_modified = timestamp;
+                exportObject.last_modified = timestamp;
 
-                    exportObject.last_modified_by = model.lastModifiedBy;
-                    exportObject.audit_log = JSON.stringify(model.auditLog);
+                exportObject.last_modified_by = model.lastModifiedBy;
+                exportObject.audit_log = JSON.stringify(model.auditLog);
 
+                if(model.dateDeleted != null) {
+                    GLOBAL.defs.Utils.GetISODateFromTimeStamp(model.dateDeleted, function(timestamp) {
+                        exportObject.date_deleted = timestamp;
+                        callback(exportObject);
+                    });
+                } else {
                     callback(exportObject);
+                }
 
-                });
             });
+
         });
 
     };
 
     model.createNewAudit = function(user, callback) {
 
-        GLOBAL.defs.Utils.GetTimeStampFromDate(new Date(), function(timeStamp) {
-            model.dateCreated = timeStamp;
-            model.dateDeleted = null;
-            model.lastModified = timeStamp;
-            model.lastModifiedBy = user;
+        var timeStamp = new Date();
 
-            model.addAuditLogEntry("Created", user, function(auditModel) {
-                auditModel.save(function(err, auditModel) {
-                    if(err) {
-                        // TODO add proper logging...
-                    }
+        model.dateCreated = timeStamp;
+        model.dateDeleted = null;
+        model.lastModified = timeStamp;
+        model.lastModifiedBy = user;
 
-                    callback(err, auditModel);
+        model.addAuditLogEntry("Created", user, function(err, auditModel) {
 
-                });
-            });
+            if(err) {
+                // TODO add proper logging...
+            }
+
+            callback(err, auditModel);
+
         });
 
     };
@@ -135,7 +138,10 @@ module.exports = function(id, loadWithJson, callback){
         model.lastModified = date;
         model.lastModifiedBy = user;
 
-        callback(model);
+        model.save(function(err, audit) {
+            callback(err, audit);
+        });
+
     };
 
     model.save = function(callback) {

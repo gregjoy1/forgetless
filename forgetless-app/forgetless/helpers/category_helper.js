@@ -57,11 +57,26 @@ module.exports = {
             } else {
 
                 if(title != null) {
+                    var originalTitle = categoryLink.title;
                     categoryLink.title = title;
 
                     categoryLink.save(function(err) {
                         callback(err);
                     });
+
+                    // checks if audit id exists and if the title has changed
+                    if(categoryLink.Category.auditId != undefined && (originalTitle != title)) {
+                        GLOBAL.defs.Audit(categoryLink.Category.auditId, null, function(err, audit) {
+                            audit.addAuditLogEntry(
+                                'Title changed from ' + originalTitle + ' to ' + title,
+                                userId,
+                                // do nothing for now
+                                function(err, auditModel) {
+                                    console.log(err, auditModel);
+                                }
+                            )
+                        });
+                    }
 
                 } else {
                     callback(null);
