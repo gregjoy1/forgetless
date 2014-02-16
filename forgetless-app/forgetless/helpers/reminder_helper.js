@@ -10,6 +10,8 @@ module.exports = {
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err, rows){
+                connection.release();
+
                 if(err) {
                     callback(err, []);
                 } else {
@@ -37,6 +39,8 @@ module.exports = {
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err, rows){
+                connection.release();
+
                 if(err) {
                     callback(err, []);
                 } else {

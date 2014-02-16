@@ -62,28 +62,29 @@ module.exports = function(id, loadWithJson, callback){
 
     model.createNewList = function(title, description, user, callback) {
 
-        GLOBAL.defs.Audit.createNewAudit(user, function(err, audit) {
-            model.title = title;
+        GLOBAL.defs.Audit(null, null, function(err, audit) {
+            audit.createNewAudit(user, function(err, audit) {
+                model.title = title;
 
-            if(description != (undefined || null)) {
-                model.description = description;
-            }
-
-            if(!err) {
-                model.auditId = audit.id;
-            }
-
-            model.zoneId = 1;
-
-            model.save(function(err, listModel) {
-
-                if(err) {
-                    // TODO implement logging...
+                if(description != (undefined || null)) {
+                    model.description = description;
                 }
 
-                callback(err, listModel);
-            });
+                if(!err) {
+                    model.auditId = audit.id;
+                }
 
+                model.zoneId = 1;
+
+                model.save(function(err, listModel) {
+
+                    if(err) {
+                        // TODO implement logging...
+                    }
+
+                    callback(err, listModel);
+                });
+            });
         });
 
     };

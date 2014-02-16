@@ -68,6 +68,8 @@ module.exports = function(id, loadWithJson, callback){
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err, rows){
+                connection.release();
+
                 if(err){
                     console.log(err, model);
                     // TODO handle this error...
@@ -89,7 +91,6 @@ module.exports = function(id, loadWithJson, callback){
                     }
 
                 }
-                connection.release();
             });
         });
     };

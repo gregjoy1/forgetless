@@ -6,6 +6,8 @@ module.exports = {
             GLOBAL.dbPool.getConnection(function(err, connection){
                 var sql = 'SELECT id, password_hash FROM user WHERE email = ?';
                 connection.query(sql, email, function(err, rows){
+                    connection.release();
+
                     if(err){
                         console.log(err);
                         callback(err, model);
@@ -73,6 +75,7 @@ module.exports = {
                 console.log('testing2');
                 var sql = 'SELECT id FROM user WHERE user_token_hash = ?';
                 connection.query(sql, userTokenHash, function(err, rows){
+                    connection.release();
                     console.log('testing3', err, rows);
                     if(err){
                         console.log(err);

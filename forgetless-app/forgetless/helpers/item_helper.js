@@ -6,6 +6,7 @@ module.exports = {
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err, rows){
+                connection.release();
                 if(err) {
                     callback(err, null);
                 } else if(rows.length == 0) {
@@ -120,6 +121,29 @@ module.exports = {
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err){
+                connection.release();
+
+                // log list being dis-associated to user
+                GLOBAL.defs.Item(itemId, null, function(err, item) {
+                    if(!err) {
+                        if(item.auditId != undefined) {
+                            GLOBAL.defs.Audit(item.auditId, null, function(err, audit) {
+                                if(!err) {
+                                    audit.addAuditLogEntry(
+                                        'Item dis-associated with user id ' + userId,
+                                        userId,
+                                        function(err) {
+                                            if(err) {
+                                                // todo some logging
+                                            }
+                                        }
+                                    );
+                                }
+                            });
+                        }
+                    }
+                });
+
                 callback(err);
             });
         });
@@ -131,10 +155,9 @@ module.exports = {
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err, rows){
+                connection.release();
                 if(err) {
                     callback(err, null);
-                } else if(rows.length == 0){
-                    callback('Empty Result Set', null);
                 } else {
                     if(rows.length == 0) {
                         callback(err, null);

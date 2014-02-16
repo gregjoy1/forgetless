@@ -90,6 +90,24 @@ module.exports = {
             if(err) {
                 callback(err, null);
             } else {
+
+                // log category being associated to user
+                if(category.auditId != undefined) {
+                    GLOBAL.defs.Audit(category.auditId, null, function(err, audit) {
+                        if(!err) {
+                            audit.addAuditLogEntry(
+                                'Category associated with user id ' + userId,
+                                userId,
+                                function(err, audit) {
+                                    if(err) {
+                                        // todo some logging
+                                    }
+                                }
+                            );
+                        }
+                    });
+                }
+
                 GLOBAL.defs.CategoryLink(null, null, function(err, categoryLink) {
                     categoryLink.createNewCategoryLink(category.title, category.id, userId, function(err, categoryLink) {
                         if(err) {
@@ -110,6 +128,29 @@ module.exports = {
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err){
+                connection.release();
+
+                // log category being dis-associated to user
+                GLOBAL.defs.Category(categoryId, null, function(err, category) {
+                    if(!err) {
+                        if(category.auditId != undefined) {
+                            GLOBAL.defs.Audit(category.auditId, null, function(err, audit) {
+                                if(!err) {
+                                    audit.addAuditLogEntry(
+                                        'Category dis-associated with user id ' + userId,
+                                        userId,
+                                        function(err) {
+                                            if(err) {
+                                                // todo some logging
+                                            }
+                                        }
+                                    );
+                                }
+                            });
+                        }
+                    }
+                });
+
                 callback(err);
             });
         });

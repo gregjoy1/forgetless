@@ -59,7 +59,11 @@ module.exports = function(id, loadWithJson, callback){
 
         exportObject.user_id = model.userId;
         exportObject.list_id = model.listId;
-        exportObject.parent_list_id = model.parentListId;
+
+        if(model.parentListId != '') {
+            exportObject.parent_list_id = model.parentListId;
+        }
+
         exportObject.title = model.title;
         exportObject.category_id = model.categoryId;
 
@@ -73,6 +77,8 @@ module.exports = function(id, loadWithJson, callback){
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err, rows){
+                connection.release();
+
                 if(err){
                     console.log(err, model);
                 } else {
@@ -92,7 +98,21 @@ module.exports = function(id, loadWithJson, callback){
                         callback(null, ListLinks);
                     }
                 }
+            });
+        });
+    };
+
+    model.checkForDuplicates = function(callback) {
+
+        var sql = 'SELECT id FROM list_link WHERE user_id = ? AND list_id = ?';
+
+        var escapeArray = [model.userId, model.listId];
+
+        GLOBAL.dbPool.getConnection(function(err, connection){
+            connection.query(sql, escapeArray, function(err, rows){
                 connection.release();
+
+                callback(err, rows.length > 0, (rows.length > 0 ? rows.id : null));
             });
         });
     };
@@ -108,15 +128,28 @@ module.exports = function(id, loadWithJson, callback){
         model.listId = listId;
         model.categoryId = categoryId;
 
-        model.save(function(err, listLinkModel) {
+        model.checkForDuplicates(function(err, duplicates, duplicateRecordId) {
 
             if(err) {
-                // TODO add logging
+                callback(err, false)
+            } else if(duplicates) {
+                GLOBAL.defs.CategoryLink(duplicateRecordId, null, function(err, categoryLink) {
+                    callback(err, categoryLink);
+                });
+            } else {
+
+
+                model.save(function(err, listLinkModel) {
+
+                    if(err) {
+                        // TODO add logging
+                    }
+
+                    callback(err, listLinkModel);
+                    connection.release();
+                });
             }
-
-            callback(err, listLinkModel);
         });
-
     };
 
     model.save = function(callback) {

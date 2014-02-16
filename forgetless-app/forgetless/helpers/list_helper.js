@@ -7,6 +7,7 @@ module.exports = {
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err, rows){
+                connection.release();
                 if(err) {
                     callback(err, null);
                 } else if(rows.length == 0) {
@@ -31,62 +32,101 @@ module.exports = {
         });
     },
     CreateAndAssociateListToCategory: function(userId, categoryId, title, parentListId, description, callback) {
-        GLOBAL.defs.List.createNewList(title, description, userId, function(err, list) {
-            if(err) {
-                callback(err, null);
-            } else {
-                GLOBAL.defs.ListLink.createNewListLink(title, userId, parentListId, list.id, categoryId, function(err, listLink) {
-                    if(err) {
-                        callback(err, null);
-                    } else {
-                        listLink.List = list;
-                        callback(err, listLink);
-                    }
-                });
-            }
+        GLOBAL.defs.List(null, null, function(err, list) {
+            list.createNewList(title, description, userId, function(err, list) {
+                if(err) {
+                    callback(err, null);
+                } else {
+                    GLOBAL.defs.ListLink(null, null, function(err, listLink) {
+                        listLink.createNewListLink(title, userId, parentListId, list.id, categoryId, function(err, listLink) {
+                            if(err) {
+                                callback(err, null);
+                            } else {
+                                listLink.List = list;
+                                callback(err, listLink);
+                            }
+                        });
+                    });
+                }
+            });
         });
     },
     UpdateListStack: function(userId, listId, categoryId, title, parentListId, description, callback) {
+
         this.FindListStack(userId, categoryId, listId, function(err, listLink) {
 
-            if(title != null) {
+            var changed = false;
+            var auditLog = '';
+
+            if(title != null && listLink.title != title) {
+                auditLog = 'Title changed from ' + listLink.title + ' to ' + title;
+                changed = true;
+
                 listLink.title = title;
             }
 
-            if(parentListId != null) {
+            if(parentListId != null && listLink.parentListId != parentListId) {
+                auditLog += (auditLog != '' ? ', ' : '');
+                auditLog += 'Parent List ID changed from ' + listLink.parentListId + ' to ' + parentListId;
+                changed = true;
+
                 listLink.parentListId = parentListId;
             }
 
-            if(description != null) {
+            if(description != null && listLink.List.description != description) {
+                auditLog += (auditLog != '' ? ', ' : '');
+                auditLog += 'Description changed from ' + listLink.description + ' to ' + description;
+                changed = true;
+
                 listLink.List.description = description;
             }
 
-            // if nothing has changed, then dont save...
-            GLOBAL.async.waterfall(
-                [
-                    function(callback) {
-                        if((title || parentListId) != null) {
-                            listLink.save(function(err) {
-                                callback(err);
-                            });
-                        } else {
-                            callback(null);
+            // checks if audit id exists and if the title has changed
+            if(listLink.List.auditId != undefined && changed) {
+                GLOBAL.defs.Audit(listLink.List.auditId, null, function(err, audit) {
+                    audit.addAuditLogEntry(
+                        auditLog,
+                        userId,
+                        // do nothing for now
+                        function(err, auditModel) {
+
+                            if(err) {
+                                // todo properly log
+                            }
+
+                            // if nothing has changed, then dont save...
+                            GLOBAL.async.waterfall(
+                                [
+                                    function(callback) {
+                                        if((title || parentListId) != null) {
+                                            listLink.save(function(err) {
+                                                callback(err);
+                                            });
+                                        } else {
+                                            callback(null);
+                                        }
+                                    },
+                                    function(callback) {
+                                        if(description != null) {
+                                            listLink.List.save(function(err) {
+                                                callback(err);
+                                            });
+                                        } else {
+                                            callback(null);
+                                        }
+                                    }
+                                ],
+                                function(err) {
+                                    callback(err, listLink);
+                                }
+                            );
                         }
-                    },
-                    function(callback) {
-                        if(description != null) {
-                            listLink.List.save(function(err) {
-                                callback(err);
-                            });
-                        } else {
-                            callback(null);
-                        }
-                    }
-                ],
-                function(err) {
-                    callback(err, listLink);
-                }
-            );
+                    )
+                });
+            } else {
+                callback(err, listLink);
+            }
+
         });
     },
     AssociatePreExistingListToCategory: function(userId, fromUserId, listId, categoryId, parentListId, callback) {
@@ -94,26 +134,52 @@ module.exports = {
             if(err) {
                 callback(err, null);
             } else {
-                GLOBAL.defs.ListLink.createNewListLink(list.title, userId, parentListId, listId, categoryId, function(err, listLink) {
-                    if(err) {
-                        callback(err, null);
-                    } else {
-                        listLink.List = list;
-                        GLOBAL.defs.ItemHelper.AssociateListOfItemsToUser(
-                            userId,
-                            fromUserId,
-                            listId,
-                            function(err, itemLinks) {
-                                listLink.List.ItemLink = itemLinks;
-                                callback(err, listLink);
+                GLOBAL.defs.ListLink(null, null, function(err, listLink) {
+                    listLink.createNewListLink(list.title, userId, parentListId, listId, categoryId, function(err, listLink) {
+                        // log list being dis-associated to user
+                        GLOBAL.defs.List(listId, null, function(err, list) {
+                            if(!err) {
+                                if(list.auditId != undefined) {
+                                    GLOBAL.defs.Audit(list.auditId, null, function(err, audit) {
+                                        if(!err) {
+                                            audit.addAuditLogEntry(
+                                                'List Associated with user id ' + userId,
+                                                userId,
+                                                function(err) {
+                                                    if(err) {
+                                                        // todo some logging
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    });
+                                }
                             }
-                        );
-                    }
+                        });
+
+                        if(err) {
+                            callback(err, null);
+                        } else {
+                            listLink.List = list;
+                            GLOBAL.defs.ItemHelper.AssociateListOfItemsToUser(
+                                userId,
+                                fromUserId,
+                                listId,
+                                function(err, itemLinks) {
+                                    listLink.List.ItemLink = itemLinks;
+                                    callback(err, listLink);
+                                }
+                            );
+                        }
+                    });
                 });
             }
         });
     },
     RemoveListAssociationToCategory: function(userId, listId, callback) {
+
+        var errors = [];
+
         // using waterfall as 2 step process
         GLOBAL.async.waterfall(
             [
@@ -126,16 +192,29 @@ module.exports = {
 
                     GLOBAL.dbPool.getConnection(function(err, connection){
                         connection.query(sql, escapeArray, function(err, rows){
-                            var errors = [];
-                            for(var inc = 0; inc <  rows.length; inc++) {
-                                GLOBAL.defs.ItemHelper.RemoveItemAssociationToList(userId, listId, rows[inc].id, function(err) {
-                                    if(err) {
-                                        errors.push(err);
-                                    }
-                                    if(inc == (rows.length - 1)) {
-                                        callback((errors.length > 0 ? errors : null));
-                                    }
-                                });
+                            connection.release();
+
+                            if(rows.length > 0) {
+                                for(var inc = 0; inc <  rows.length; inc++) {
+
+                                    GLOBAL.async.each(
+                                        rows,
+                                        function(row, callback) {
+                                            GLOBAL.defs.ItemHelper.RemoveItemAssociationToList(userId, listId, row.id, function(err) {
+                                                if(err) {
+                                                    errors.push(err);
+                                                }
+                                                callback(null);
+                                            });
+                                        },
+                                        function() {
+                                            callback((errors.length > 0 ? errors : null));
+                                        }
+                                    );
+
+                                }
+                            } else {
+                                callback(null);
                             }
                         });
                     });
@@ -148,6 +227,29 @@ module.exports = {
 
                     GLOBAL.dbPool.getConnection(function(err, connection){
                         connection.query(sql, escapeArray, function(err){
+                            connection.release();
+
+                            // log list being dis-associated to user
+                            GLOBAL.defs.List(listId, null, function(err, list) {
+                                if(!err) {
+                                    if(list.auditId != undefined) {
+                                        GLOBAL.defs.Audit(list.auditId, null, function(err, audit) {
+                                            if(!err) {
+                                                audit.addAuditLogEntry(
+                                                    'List dis-associated with user id ' + userId,
+                                                    userId,
+                                                    function(err) {
+                                                        if(err) {
+                                                            // todo some logging
+                                                        }
+                                                    }
+                                                );
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+
                             if(err) {
                                 errors.push(err);
                             }
@@ -168,6 +270,8 @@ module.exports = {
 
         GLOBAL.dbPool.getConnection(function(err, connection){
             connection.query(sql, escapeArray, function(err, rows){
+                connection.release();
+
                 if(err) {
                     callback(err, null);
                 } else if(rows.length == 0){

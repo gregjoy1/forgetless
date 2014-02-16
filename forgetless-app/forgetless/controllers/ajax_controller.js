@@ -681,7 +681,7 @@ module.exports = {
                             } else {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
                                     GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_UPDATED_SUCCESSFULLY,
-                                    itemStack,
+                                    listStack,
                                     function(status) {
                                         response.end(status);
                                     }
@@ -747,7 +747,7 @@ module.exports = {
                         function(err, listLink) {
                             if(err) {
                                 GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_TO_FIND_PREEXISTING_LIST,
+                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_LIST,
                                     err,
                                     function(status) {
                                         response.end(status);
@@ -804,7 +804,7 @@ module.exports = {
                         obj.listId,
                         function(err) {
                             if(err) {
-                                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
                                     GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_LIST_ASSOCIATION,
                                     err,
                                     function(status) {
@@ -812,7 +812,7 @@ module.exports = {
                                     }
                                 );
                             } else {
-                                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
                                     GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_REMOVED_SUCCESSFULLY,
                                     GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_REMOVED_SUCCESSFULLY.description,
                                     function(status) {
@@ -1047,7 +1047,7 @@ module.exports = {
                         obj.categoryId,
                         function(err) {
                             if(err) {
-                                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
                                     GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_CATEGORY_ASSOCIATION,
                                     err,
                                     function(status) {
@@ -1055,7 +1055,7 @@ module.exports = {
                                     }
                                 );
                             } else {
-                                GLOBAL.defs.StackHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
                                     GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY,
                                     GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY.description,
                                     function(status) {

@@ -76,9 +76,10 @@ module.exports = {
         if(typeof testUser.id == "number") {
             GLOBAL.dbPool.getConnection(function(err, connection){
                 connection.query(sql, escapeArray, function(err, rows){
+                    connection.release();
+
                     test.ok(!err, "Some error when running delete query: " + err);
                     test.done();
-                    connection.release();
                 });
             });
         } else {
