@@ -133,8 +133,8 @@ module.exports = function(id, loadWithJson, callback){
             if(err) {
                 callback(err, false)
             } else if(duplicates) {
-                GLOBAL.defs.CategoryLink(duplicateRecordId, null, function(err, categoryLink) {
-                    callback(err, categoryLink);
+                GLOBAL.defs.ListLink(duplicateRecordId, null, function(err, listLink) {
+                    callback(err, listLink);
                 });
             } else {
 

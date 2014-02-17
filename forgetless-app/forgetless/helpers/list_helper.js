@@ -75,7 +75,7 @@ module.exports = {
 
             if(description != null && listLink.List.description != description) {
                 auditLog += (auditLog != '' ? ', ' : '');
-                auditLog += 'Description changed from ' + listLink.description + ' to ' + description;
+                auditLog += 'Description changed from ' + listLink.Link.description + ' to ' + description;
                 changed = true;
 
                 listLink.List.description = description;

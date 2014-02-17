@@ -107,6 +107,21 @@ module.exports = function(id, loadWithJson, callback){
         });
     };
 
+    model.checkForDuplicates = function(callback) {
+
+        var sql = 'SELECT id FROM item_link WHERE user_id = ? AND item_id = ?';
+
+        var escapeArray = [model.userId, model.itemId];
+
+        GLOBAL.dbPool.getConnection(function(err, connection){
+            connection.query(sql, escapeArray, function(err, rows){
+                connection.release();
+
+                callback(err, rows.length > 0, (rows.length > 0 ? rows.id : null));
+            });
+        });
+    };
+
     model.createNewItemLink = function(userId, itemId, listId, callback) {
 
         model.userId = userId;
@@ -114,15 +129,26 @@ module.exports = function(id, loadWithJson, callback){
         model.listId = listId;
         model.flag = 0;
 
-        model.save(function(err, itemLinkObject) {
+        model.checkForDuplicates(function(err, duplicates, duplicateRecordId) {
+
             if(err) {
-                // TODO implment logging...
+                callback(err, false)
+            } else if(duplicates) {
+                GLOBAL.defs.ItemLink(duplicateRecordId, null, function(err, itemLink) {
+                    callback(err, itemLink);
+                });
+            } else {
+
+                model.save(function(err, itemLinkObject) {
+
+                    if(err) {
+                        // TODO implment logging...
+                    }
+
+                    callback(err, itemLinkObject);
+                });
             }
-
-            callback(err, itemLinkObject);
         });
-
-
     };
 
     model.save = function(callback) {

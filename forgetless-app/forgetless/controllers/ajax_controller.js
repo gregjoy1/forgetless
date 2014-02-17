@@ -356,7 +356,7 @@ module.exports = {
             expectedFields,
             function(success, obj) {
                 if(success) {
-                    GLOBAL.defs.AssociatePreExistingItemToList(
+                    GLOBAL.defs.ItemHelper.AssociatePreExistingItemToList(
                         obj.userId,
                         obj.listId,
                         obj.itemId,

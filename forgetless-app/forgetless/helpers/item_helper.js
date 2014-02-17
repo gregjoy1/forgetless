@@ -31,71 +31,117 @@ module.exports = {
         });
     },
     CreateAndAssociateItemToList: function(userId, listId, title, content, duration, deadline, itemType, callback) {
-        GLOBAL.defs.Item.createNewItem(title, content, duration, deadline, itemType, userId, function(err, item) {
-            if(err) {
-                callback(err, null);
-            } else {
-                GLOBAL.defs.ItemLink.createNewItemLink(userId, item.id, listId, function(err, itemLink) {
-                    if(err) {
-                        callback(err, null);
-                    } else {
-                        itemLink.Item = item;
-                        callback(err, itemLink);
-                    }
-                });
-            }
+        GLOBAL.defs.Item(null, null, function(err, item) {
+            item.createNewItem(title, content, duration, deadline, itemType, userId, function(err, item) {
+                if(err) {
+                    callback(err, null);
+                } else {
+                    GLOBAL.defs.ItemLink(null, null, function(err, itemLink) {
+                        itemLink.createNewItemLink(userId, item.id, listId, function(err, itemLink) {
+                            if(err) {
+                                callback(err, null);
+                            } else {
+                                itemLink.Item = item;
+                                callback(err, itemLink);
+                            }
+                        });
+                    });
+                }
+            });
         });
     },
     UpdateItemStack: function(itemId, userId, listId, title, content, duration, deadline, itemType, callback) {
         this.FindItemStack(userId, listId, itemId, function(err, itemLink) {
 
-            if(title != null) {
-                itemLink.title = title;
+            var changed = false;
+            var auditLog = '';
+
+            if(title != null && itemLink.Item.title != title) {
+                auditLog = 'Title changed from ' + itemLink.Item.title + ' to ' + title;
+                changed = true;
+
+                itemLink.Item.title = title;
             }
 
-            if(content != null) {
+            if(content != null && itemLink.Item.content != content) {
+                auditLog += (auditLog != '' ? ', ' : '');
+                auditLog += 'Content changed from ' + itemLink.Item.content + ' to ' + content;
+                changed = true;
+
                 itemLink.Item.content = content;
             }
 
-            if(duration != null) {
+            if(duration != null && itemLink.Item.duration != duration) {
+                auditLog += (auditLog != '' ? ', ' : '');
+                auditLog += 'Duration changed from ' + itemLink.Item.duration + ' to ' + duration;
+                changed = true;
+
                 itemLink.Item.duration = duration;
             }
 
-            if(deadline != null) {
+            if(deadline != null && itemLink.Item.deadline != deadline) {
+                auditLog += (auditLog != '' ? ', ' : '');
+                auditLog += 'Deadline changed from ' + itemLink.Item.deadline + ' to ' + deadline;
+                changed = true;
+
                 itemLink.Item.deadline = deadline;
             }
 
-            if(itemType != null) {
+            if(itemType != null && itemLink.Item.itemType != itemType) {
+                auditLog += (auditLog != '' ? ', ' : '');
+                auditLog += 'Item type changed from ' + itemLink.Item.itemType + ' to ' + itemType;
+                changed = true;
+
                 itemLink.Item.itemType = itemType;
             }
 
-            // if nothing has changed, then dont save...
-            GLOBAL.async.waterfall(
-                [
-                    function(callback) {
-                        if(title != null) {
-                            itemLink.save(function(err) {
-                                callback(err);
-                            });
-                        } else {
-                            callback(null);
-                        }
-                    },
-                    function(callback) {
-                        if((content || duration || deadline || itemType) != null) {
-                            itemLink.Item.save(function(err) {
-                                callback(err);
-                            });
-                        } else {
-                            callback(null);
-                        }
-                    }
-                ],
-                function(err) {
-                    callback(err, itemLink);
-                }
-            );
+            // checks if audit id exists and if anything has changed
+            // TODO ensure everything has an audit id or else it wont save
+            if(itemLink.Item.auditId != undefined && changed) {
+                GLOBAL.defs.Audit(itemLink.Item.auditId, null, function(err, audit) {
+                    audit.addAuditLogEntry(
+                        auditLog,
+                        userId,
+                        // do nothing for now
+                        function(err, auditModel) {
 
+                            if(err) {
+                                // todo properly log
+                            }
+
+                            // if nothing has changed, then dont save...
+                            GLOBAL.async.waterfall(
+                                [
+                                    function(callback) {
+                                        if(title != null) {
+                                            itemLink.save(function(err) {
+                                                callback(err);
+                                            });
+                                        } else {
+                                            callback(null);
+                                        }
+                                    },
+                                    function(callback) {
+                                        if((content || duration || deadline || itemType) != null) {
+                                            itemLink.Item.save(function(err) {
+                                                callback(err);
+                                            });
+                                        } else {
+                                            callback(null);
+                                        }
+                                    }
+                                ],
+                                function(err) {
+                                    callback(err, itemLink);
+                                }
+                            );
+
+                        }
+                    );
+                });
+            } else {
+                callback(err, itemLink);
+            }
         });
     },
     AssociatePreExistingItemToList: function(userId, listId, itemId, callback) {
@@ -103,13 +149,28 @@ module.exports = {
             if(err) {
                 callback(err, null);
             } else {
-                GLOBAL.defs.ItemLink.createNewItemLink(userId, itemId, listId, function(err, itemLink) {
-                    if(err) {
-                        callback(err, null);
-                    } else {
+                GLOBAL.defs.ItemLink(null, null, function(err, itemLink) {
+                    itemLink.createNewItemLink(userId, itemId, listId, function(err, itemLink) {
+
+                        if(item.auditId != undefined) {
+                            GLOBAL.defs.Audit(item.auditId, null, function(err, audit) {
+                                if(!err) {
+                                    audit.addAuditLogEntry(
+                                        'Item associated with user id ' + userId,
+                                        userId,
+                                        function(err) {
+                                            if(err) {
+                                                // todo some logging
+                                            }
+                                        }
+                                    );
+                                }
+                            });
+                        }
+
                         itemLink.Item = item;
                         callback(err, itemLink);
-                    }
+                    });
                 });
             }
         });

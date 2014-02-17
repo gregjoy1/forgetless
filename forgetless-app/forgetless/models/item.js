@@ -83,37 +83,38 @@ module.exports = function(id, loadWithJson, callback){
 
     model.createNewItem = function(title, content, duration, deadline, itemType, user, callback) {
 
-        GLOBAL.defs.Audit.createNewAudit(user, function(err, auditModel) {
-            model.zoneId = 1;
-            model.title = title;
+        GLOBAL.defs.Audit(null, null, function(err, audit) {
+            audit.createNewAudit(user, function(err, auditModel) {
+                model.zoneId = 1;
+                model.title = title;
 
-            if(content != (undefined || null)) {
-                model.content = content;
-            }
-
-            if(duration != (undefined || null)) {
-                model.duration = duration;
-            }
-
-            if(deadline != (undefined || null)) {
-                model.deadline = deadline;
-            }
-
-            model.itemType = itemType;
-
-            if(!err) {
-                model.auditId = auditModel.id;
-            }
-
-            model.save(function(err, itemModel) {
-
-                if(err) {
-                    // TODO add proper logging...
+                if(content != (undefined || null)) {
+                    model.content = content;
                 }
 
-                callback(err, itemModel);
-            });
+                if(duration != (undefined || null)) {
+                    model.duration = duration;
+                }
 
+                if(deadline != (undefined || null)) {
+                    model.deadline = deadline;
+                }
+
+                model.itemType = itemType;
+
+                if(!err) {
+                    model.auditId = auditModel.id;
+                }
+
+                model.save(function(err, itemModel) {
+
+                    if(err) {
+                        // TODO add proper logging...
+                    }
+
+                    callback(err, itemModel);
+                });
+            });
         });
 
     };
