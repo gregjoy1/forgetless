@@ -180,6 +180,16 @@ module.exports = function(id, loadWithJson, callback){
         callback(model);
     };
 
+    model.makeAdmin = function(callback) {
+        model.changeZone(2, callback);
+    };
+
+    model.isAdmin = function(callback) {
+        // just to ensure user model has a zone id
+        model.zoneId = (model.zoneId != undefined ? model.zoneId : 1);
+        callback((model.zoneId == 2));
+    };
+
     model.save = function(callback) {
         model.saveModel(model.TABLE_NAME, model, callback);
     };

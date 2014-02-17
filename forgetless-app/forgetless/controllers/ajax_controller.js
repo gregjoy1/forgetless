@@ -113,6 +113,42 @@ module.exports = {
     checkUser: function(request, response, callback) {
         GLOBAL.defs.UserHelper.IsUserLoggedIn(request, callback);
     },
+    checkUserAuthorisation: function(checkAgainstUserId, request, response, callback) {
+        this.checkUser(
+            request,
+            response,
+            function(loggedIn, userModel) {
+
+                if(loggedIn) {
+                    userModel.isAdmin(function(isAdmin) {
+
+                        if((checkAgainstUserId != null && checkAgainstUserId == userModel.id) || isAdmin) {
+                            callback(true);
+                        } else {
+                            callback(false);
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_USER_PRIVILEGES,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_USER_PRIVILEGES.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
+                        }
+                    });
+
+                } else {
+                    callback(false);
+                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.NOT_LOGGED_IN,
+                        GLOBAL.defs.StatusCodeHelper.StatusCodes.NOT_LOGGED_IN.description,
+                        function(status) {
+                            response.end(status);
+                        }
+                    );
+                }
+            }
+        );
+    },
     // checks if a user is logged in and returns status
     displayUserLoginStatus: function(request, response) {
         module.exports.checkUser(request, response, function(success, user) {
@@ -192,49 +228,53 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                // if all required fields are posted then yay!
-                if(success) {
-                    GLOBAL.defs.ItemHelper.CreateAndAssociateItemToList(
-                        obj.userId,
-                        obj.listId,
-                        obj.title,
-                        obj.content,
-                        obj.duration,
-                        obj.deadline,
-                        obj.itemType,
-                        function(err, itemLink) {
-                            if(err) {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_CREATE_AND_ASSOCIATE_ITEM,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        // if all required fields are posted then yay!
+                        if(success) {
+                            GLOBAL.defs.ItemHelper.CreateAndAssociateItemToList(
+                                obj.userId,
+                                obj.listId,
+                                obj.title,
+                                obj.content,
+                                obj.duration,
+                                obj.deadline,
+                                obj.itemType,
+                                function(err, itemLink) {
+                                    if(err) {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_CREATE_AND_ASSOCIATE_ITEM,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                                            itemLink,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
-                                    itemLink,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
-
     },
     updateItem: function(request, response) {
 
@@ -286,46 +326,51 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                if(success) {
-                    GLOBAL.defs.ItemHelper.UpdateItemStack(
-                        obj.itemId,
-                        obj.userId,
-                        obj.listId,
-                        obj.title,
-                        obj.content,
-                        obj.duration,
-                        obj.deadline,
-                        obj.itemType,
-                        function(err, itemStack) {
-                            if(err) {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_AND_UPDATE_ITEM,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.ItemHelper.UpdateItemStack(
+                                obj.itemId,
+                                obj.userId,
+                                obj.listId,
+                                obj.title,
+                                obj.content,
+                                obj.duration,
+                                obj.deadline,
+                                obj.itemType,
+                                function(err, itemStack) {
+                                    if(err) {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_AND_UPDATE_ITEM,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_UPDATED_SUCCESSFULLY,
+                                            itemStack,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_UPDATED_SUCCESSFULLY,
-                                    itemStack,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
     },
@@ -355,42 +400,47 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                if(success) {
-                    GLOBAL.defs.ItemHelper.AssociatePreExistingItemToList(
-                        obj.userId,
-                        obj.listId,
-                        obj.itemId,
-                        function(err, itemLink) {
-                            if(err) {
-                                // TODO logging...
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_ITEM,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.ItemHelper.AssociatePreExistingItemToList(
+                                obj.userId,
+                                obj.listId,
+                                obj.itemId,
+                                function(err, itemLink) {
+                                    if(err) {
+                                        // TODO logging...
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_ITEM,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                            itemLink,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
-                                    itemLink,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
     },
@@ -420,42 +470,47 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                if(success) {
-                    GLOBAL.defs.ItemHelper.RemoveItemAssociationToList(
-                        obj.userId,
-                        obj.listId,
-                        obj.itemId,
-                        function(err) {
-                            if(err) {
-                                // TODO logging...
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_ITEM_ASSOCIATION,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.ItemHelper.RemoveItemAssociationToList(
+                                obj.userId,
+                                obj.listId,
+                                obj.itemId,
+                                function(err) {
+                                    if(err) {
+                                        // TODO logging...
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_ITEM_ASSOCIATION,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY,
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY.description,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY,
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEM_FOUND_AND_REMOVED_SUCCESSFULLY.description,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
 
