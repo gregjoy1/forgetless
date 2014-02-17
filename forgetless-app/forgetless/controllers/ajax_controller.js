@@ -19,7 +19,7 @@ module.exports = {
                         stackDump,
                         function(status) {
                             response.end(status);
-                            console.log(status);
+//                            console.log(status);
                         }
                     );
                 });
@@ -541,54 +541,59 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                if(success) {
-                    GLOBAL.defs.ItemHelper.AssociateListOfItemsToUser(
-                        obj.userId,
-                        obj.fromUserId,
-                        obj.listId,
-                        function(err, itemLinks) {
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.ItemHelper.AssociateListOfItemsToUser(
+                                obj.userId,
+                                obj.fromUserId,
+                                obj.listId,
+                                function(err, itemLinks) {
 
-                            if(err) {
+                                    if(err) {
 
-                                var logDetails = JSON.stringify({
-                                    location:       'AssociateListOfItemsToUser',
-                                    'userId':       userId,
-                                    'fromUserId':   fromUserId,
-                                    'listId':       listId,
-                                    'error':        err
-                                });
+                                        var logDetails = JSON.stringify({
+                                            location:       'AssociateListOfItemsToUser',
+                                            'userId':       userId,
+                                            'fromUserId':   fromUserId,
+                                            'listId':       listId,
+                                            'error':        err
+                                        });
 
-                                GLOBAL.defs.LogHelper.WriteToLog(logDetails, function() {
-                                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                        GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_ITEM,
-                                        err,
-                                        function(status) {
-                                            response.end(status);
-                                        }
-                                    );
-                                });
+                                        GLOBAL.defs.LogHelper.WriteToLog(logDetails, function() {
+                                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                                GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_ITEM,
+                                                err,
+                                                function(status) {
+                                                    response.end(status);
+                                                }
+                                            );
+                                        });
 
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEMS_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
-                                    itemLinks,
-                                    function(status) {
-                                        response.end(status);
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.ITEMS_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                            itemLinks,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
 
@@ -635,43 +640,48 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                if(success) {
-                    GLOBAL.defs.ListHelper.CreateAndAssociateListToCategory(
-                        obj.userId,
-                        obj.categoryId,
-                        obj.title,
-                        obj.parentListId,
-                        obj.description,
-                        function(err, listLink) {
-                            if(err) {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_CREATE_AND_ASSOCIATE_LIST,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.ListHelper.CreateAndAssociateListToCategory(
+                                obj.userId,
+                                obj.categoryId,
+                                obj.title,
+                                obj.parentListId,
+                                obj.description,
+                                function(err, listLink) {
+                                    if(err) {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_CREATE_AND_ASSOCIATE_LIST,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                                            listLink,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
-                                    listLink,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
     },
@@ -715,45 +725,49 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-
-                if(success) {
-                    GLOBAL.defs.ListHelper.UpdateListStack(
-                        obj.userId,
-                        obj.listId,
-                        obj.categoryId,
-                        obj.title,
-                        obj.parentListId,
-                        obj.description,
-                        function(err, listStack) {
-                            if(err) {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_AND_UPDATE_LIST,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.ListHelper.UpdateListStack(
+                                obj.userId,
+                                obj.listId,
+                                obj.categoryId,
+                                obj.title,
+                                obj.parentListId,
+                                obj.description,
+                                function(err, listStack) {
+                                    if(err) {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_AND_UPDATE_LIST,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_UPDATED_SUCCESSFULLY,
+                                            listStack,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_UPDATED_SUCCESSFULLY,
-                                    listStack,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
     },
@@ -792,43 +806,48 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                if(success) {
-                    GLOBAL.defs.ListHelper.AssociatePreExistingListToCategory(
-                        obj.userId,
-                        obj.fromUserId,
-                        obj.listId,
-                        obj.categoryId,
-                        obj.parentListId,
-                        function(err, listLink) {
-                            if(err) {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_LIST,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.ListHelper.AssociatePreExistingListToCategory(
+                                obj.userId,
+                                obj.fromUserId,
+                                obj.listId,
+                                obj.categoryId,
+                                obj.parentListId,
+                                function(err, listLink) {
+                                    if(err) {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_LIST,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                            listLink,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
-                                    listLink,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
 
@@ -853,40 +872,45 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                if(success) {
-                    GLOBAL.defs.ListHelper.RemoveListAssociationToCategory(
-                        obj.userId,
-                        obj.listId,
-                        function(err) {
-                            if(err) {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_LIST_ASSOCIATION,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.ListHelper.RemoveListAssociationToCategory(
+                                obj.userId,
+                                obj.listId,
+                                function(err) {
+                                    if(err) {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_LIST_ASSOCIATION,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_REMOVED_SUCCESSFULLY,
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_REMOVED_SUCCESSFULLY.description,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_REMOVED_SUCCESSFULLY,
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LIST_FOUND_AND_REMOVED_SUCCESSFULLY.description,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
     },
@@ -917,40 +941,45 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                if(success) {
-                    GLOBAL.defs.CategoryHelper.CreateAndAssociateCategoryToUser(
-                        obj.title,
-                        obj.userId,
-                        function(err, categoryLink) {
-                            if(err) {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_CREATE_AND_ASSOCIATE_CATEGORY,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.CategoryHelper.CreateAndAssociateCategoryToUser(
+                                obj.title,
+                                obj.userId,
+                                function(err, categoryLink) {
+                                    if(err) {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_CREATE_AND_ASSOCIATE_CATEGORY,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
+                                            categoryLink,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_CREATED_AND_ASSOCIATED_SUCCESSFULLY,
-                                    categoryLink,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
     },
@@ -979,42 +1008,46 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-
-                if(success) {
-                    GLOBAL.defs.CategoryHelper.UpdateCategoryStack(
-                        obj.title,
-                        obj.categoryId,
-                        obj.userId,
-                        function(err, categoryStack) {
-                            if(err) {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_AND_UPDATE_CATEGORY,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.CategoryHelper.UpdateCategoryStack(
+                                obj.title,
+                                obj.categoryId,
+                                obj.userId,
+                                function(err, categoryStack) {
+                                    if(err) {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_AND_UPDATE_CATEGORY,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_UPDATED_SUCCESSFULLY,
+                                            categoryStack,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_UPDATED_SUCCESSFULLY,
-                                    categoryStack,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
     },
@@ -1038,40 +1071,45 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                if(success) {
-                    GLOBAL.defs.CategoryHelper.AssociatePreExistingCategoryToUser(
-                        obj.userId,
-                        obj.categoryId,
-                        function(err, categoryLink) {
-                            if(err) {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_CATEGORY,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.CategoryHelper.AssociatePreExistingCategoryToUser(
+                                obj.userId,
+                                obj.categoryId,
+                                function(err, categoryLink) {
+                                    if(err) {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_FIND_PREEXISTING_CATEGORY,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
+                                            categoryLink,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_ASSOCIATED_SUCCESSFULLY,
-                                    categoryLink,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
 
@@ -1096,40 +1134,45 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                if(success) {
-                    GLOBAL.defs.CategoryHelper.RemoveCategoryAssociationToUser(
-                        obj.userId,
-                        obj.categoryId,
-                        function(err) {
-                            if(err) {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_CATEGORY_ASSOCIATION,
-                                    err,
-                                    function(status) {
-                                        response.end(status);
+                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                    // if not authorised, function checkUserAuthorisation deals with status generation
+                    if(isAuthorised) {
+                        if(success) {
+                            GLOBAL.defs.CategoryHelper.RemoveCategoryAssociationToUser(
+                                obj.userId,
+                                obj.categoryId,
+                                function(err) {
+                                    if(err) {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.UNABLE_TO_REMOVE_CATEGORY_ASSOCIATION,
+                                            err,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
+                                    } else {
+                                        GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY,
+                                            GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY.description,
+                                            function(status) {
+                                                response.end(status);
+                                            }
+                                        );
                                     }
-                                );
-                            } else {
-                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY,
-                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.CATEGORY_FOUND_AND_REMOVED_SUCCESSFULLY.description,
-                                    function(status) {
-                                        response.end(status);
-                                    }
-                                );
-                            }
+                                }
+                            );
+                        } else {
+                            // TODO consider logging these?
+                            GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
+                                GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
+                                function(status) {
+                                    response.end(status);
+                                }
+                            );
                         }
-                    );
-                } else {
-                    // TODO consider logging these?
-                    GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION,
-                        GLOBAL.defs.StatusCodeHelper.StatusCodes.INCORRECT_FORM_SUBMISSION.description,
-                        function(status) {
-                            response.end(status);
-                        }
-                    );
-                }
+                    }
+                });
             }
         );
 

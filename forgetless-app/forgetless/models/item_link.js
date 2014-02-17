@@ -127,7 +127,7 @@ module.exports = function(id, loadWithJson, callback){
         model.userId = userId;
         model.itemId = itemId;
         model.listId = listId;
-        model.flag = 0;
+        model.flag = 1;
 
         model.checkForDuplicates(function(err, duplicates, duplicateRecordId) {
 
