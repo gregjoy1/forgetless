@@ -296,6 +296,7 @@ html,body {
     border-right: 1px solid lightgrey;
     border-bottom: 1px solid lightgrey;
     padding-top: 5px;
+    /*background-color: #F0F0FF;*/
 }
 
 .item-detail .input-container {

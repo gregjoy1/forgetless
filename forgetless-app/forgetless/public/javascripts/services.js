@@ -24,12 +24,13 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                     remoteStorageModelParserService.parseStatus(data, function(err, detail) {
                         if(err) {
                             remoteStorageModelParserService.respondToError(err);
+                            callback([]);
                         } else {
                             stack = remoteStorageModelParserService.parseStack(detail);
+                            callback(stack);
                         }
                     });
                 }
-                callback(stack);
             }
         );
 
@@ -76,41 +77,39 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
     };
 
     this.insertCategory = function(categoryFields, callback) {
+
+        var tempId = new Date().getTime();
+
         this.stack.push(
             {
                 // this is shit, todo sort this out
-                id: new Date().getTime(),
+                id: tempId,
                 title: categoryFields.title,
                 selected: false,
                 lists: []
             }
         );
-        callback();
-    };
 
-    this.updateCategory = function(categoryId, categoryFields) {
-
-    };
-
-    this.login = function(email, password, callback) {
-
-        remoteStorageService.makePostRequest(
-            '/ajax/user/login',
+        networkManagerService.makeRequest(
+            '/ajax/category/create',
             {
-                email: email,
-                password: password
+                userId: userService.userModel.id,
+                title: categoryFields.title
             },
+            networkManagerService.POST_METHOD,
             function(success, status, data, headers, config) {
                 if(success) {
                     remoteStorageModelParserService.parseStatus(data, function(err, detail) {
                         if(err) {
-                            // TODO add "incorrect password" notification to partial
-                            remoteStorageModelParserService.respondToError(err);
-                            userService.userModel = {};
-                            callback(false, null);
+                            // TODO sort this shit out properly
+                            console.log('Something went wrong!');
                         } else {
-                            userService.userModel = detail;
-                            callback(true, detail);
+                            for(var inc = 0; inc < stack.length; inc++) {
+                                if(stack[inc].id == tempId) {
+                                    stack[inc].id = detail.Category.id;
+                                    break;
+                                }
+                            }
                         }
                     });
                 } else {
@@ -120,7 +119,42 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
             }
         );
 
-/*        networkManagerService.makeRequest(
+        callback();
+    };
+
+    this.updateCategory = function(categoryId, categoryFields) {
+
+    };
+
+    this.login = function(email, password, callback) {
+
+//        remoteStorageService.makePostRequest(
+//            '/ajax/user/login',
+//            {
+//                email: email,
+//                password: password
+//            },
+//            function(success, status, data, headers, config) {
+//                if(success) {
+//                    remoteStorageModelParserService.parseStatus(data, function(err, detail) {
+//                        if(err) {
+//                            // TODO add "incorrect password" notification to partial
+//                            remoteStorageModelParserService.respondToError(err);
+//                            userService.userModel = {};
+//                            callback(false, null);
+//                        } else {
+//                            userService.userModel = detail;
+//                            callback(true, detail);
+//                        }
+//                    });
+//                } else {
+//                    // TODO sort this shit out properly
+//                    console.log('could not connect to server?!');
+//                }
+//            }
+//        );
+
+        networkManagerService.makeRequest(
             '/ajax/user/login',
             {
                 email: email,
@@ -145,7 +179,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                     console.log('could not connect to server?!');
                 }
             }
-        );*/
+        );
     };
 
     this.checkIfLoggedIn = function(callback) {
@@ -231,7 +265,7 @@ forgetlessApp.service('networkManagerService', function(statusService, localStor
 
                 } else {
                     console.log('gone offline...');
-                    timeoutId = setTimeout(processRequests, 30000);
+                    timeoutId = setTimeout(processRequests, 10000);
                 }
             });
         } else {
@@ -243,6 +277,7 @@ forgetlessApp.service('networkManagerService', function(statusService, localStor
 });
 
 forgetlessApp.service('remoteStorageModelParserService', function(remoteStorageService, userService) {
+
     this.makeRequest = function(request, callback) {
         if(request.method == 'post') {
             remoteStorageService.makePostRequest(request.url, request.fields, callback);

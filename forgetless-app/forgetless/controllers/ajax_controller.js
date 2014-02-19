@@ -1,4 +1,4 @@
-module.exports = {
+var ajaxController = {
 
     // MAJOR TODO, add user check
 
@@ -79,8 +79,16 @@ module.exports = {
                                     // if so, it JSON encodes limited user object (to avoid sending pw hashes etc)
                                     if(success) {
                                         user.loadDumpSafeObjectFromModel(user, function(err, dumpSafeUser) {
-                                            console.log(dumpSafeUser);
-                                            response.end(JSON.stringify(dumpSafeUser));
+                                            // if logged in, returns dump safe user model (to avoid sending hashes etc)
+                                            user.loadDumpSafeObjectFromModel(user, function(err, dumpSafeUser) {
+                                                GLOBAL.defs.StatusCodeHelper.GenerateStatusCodeJSONString(
+                                                    GLOBAL.defs.StatusCodeHelper.StatusCodes.LOGGED_IN,
+                                                    dumpSafeUser,
+                                                    function(errorJSONString) {
+                                                        response.end(errorJSONString);
+                                                    }
+                                                );
+                                            });
                                         });
                                         // else sends JSON encoded error status object
                                     } else {
@@ -941,7 +949,7 @@ module.exports = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -1178,3 +1186,5 @@ module.exports = {
 
     }
 };
+
+module.exports = ajaxController;
