@@ -163,7 +163,6 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
                     $scope.selectedItemId = null;
                 }
             }
-
         });
     };
 

@@ -146,7 +146,6 @@ module.exports = function(id, loadWithJson, callback){
                     }
 
                     callback(err, listLinkModel);
-                    connection.release();
                 });
             }
         });

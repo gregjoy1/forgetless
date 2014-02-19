@@ -236,7 +236,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         // if all required fields are posted then yay!
@@ -334,7 +334,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -408,7 +408,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -478,7 +478,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -549,7 +549,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -640,7 +640,7 @@ var ajaxController = {
             {
                 name: 'description',
                 type: 'string',
-                required: true
+                required: false
             }
         ];
 
@@ -648,7 +648,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -733,7 +733,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -814,7 +814,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -880,7 +880,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -1016,7 +1016,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -1079,7 +1079,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {
@@ -1142,7 +1142,7 @@ var ajaxController = {
             request,
             expectedFields,
             function(success, obj) {
-                this.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
+                ajaxController.checkUserAuthorisation(obj.userId, request, response, function(isAuthorised) {
                     // if not authorised, function checkUserAuthorisation deals with status generation
                     if(isAuthorised) {
                         if(success) {

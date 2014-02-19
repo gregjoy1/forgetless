@@ -54,13 +54,15 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 
     this.insertList = function(categoryId, listFields, callback) {
 
+        var tempId = new Date().getTime();
+
         for(var inc = 0; inc < this.stack.length; inc++) {
             if(this.stack[inc].id == categoryId) {
                 console.log(this.stack[inc]);
                 this.stack[inc].lists.push(
                     {
                         // this is shit, todo sort this out
-                        id: new Date().getTime(),
+                        id: tempId,
                         title: listFields.title,
                         selected: false,
                         items: []
@@ -68,6 +70,36 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                 );
             }
         }
+
+        networkManagerService.makeRequest(
+            '/ajax/list/create',
+            {
+                userId: userService.userModel.id,
+                title: listFields.title,
+                categoryId: categoryId
+            },
+            networkManagerService.POST_METHOD,
+            function(success, status, data, headers, config) {
+                if(success) {
+                    remoteStorageModelParserService.parseStatus(data, function(err, detail) {
+                        if(err) {
+                            // TODO sort this out properly
+                            console.log('Something went wrong!');
+                        } else {
+                            for(var inc = 0; inc < stack.length; inc++) {
+                                if(stack[inc].id == tempId) {
+                                    stack[inc].id = detail.List.id;
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    // TODO sort this out properly
+                    console.log('could not connect to server?!');
+                }
+            }
+        );
 
         callback();
     };
@@ -101,7 +133,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                 if(success) {
                     remoteStorageModelParserService.parseStatus(data, function(err, detail) {
                         if(err) {
-                            // TODO sort this shit out properly
+                            // TODO sort this out properly
                             console.log('Something went wrong!');
                         } else {
                             for(var inc = 0; inc < stack.length; inc++) {
@@ -113,7 +145,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                         }
                     });
                 } else {
-                    // TODO sort this shit out properly
+                    // TODO sort this out properly
                     console.log('could not connect to server?!');
                 }
             }
@@ -148,7 +180,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 //                        }
 //                    });
 //                } else {
-//                    // TODO sort this shit out properly
+//                    // TODO sort this out properly
 //                    console.log('could not connect to server?!');
 //                }
 //            }
@@ -175,7 +207,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                         }
                     });
                 } else {
-                    // TODO sort this shit out properly
+                    // TODO sort this out properly
                     console.log('could not connect to server?!');
                 }
             }
@@ -201,7 +233,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                         }
                     });
                 } else {
-                    // TODO sort this shit out properly
+                    // TODO sort this out properly
                     console.log('could not connect to server?!');
                 }
             }
