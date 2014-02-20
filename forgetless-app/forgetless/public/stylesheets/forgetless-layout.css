@@ -77,7 +77,7 @@ html,body {
 
     position: relative;
 
-    transition: width 0.3s;
+    transition: left 0.3s ease;
     -webkit-transition: left 0.3s ease;
     -moz-transition: left 0.3s ease;
     -o-transition: left 0.3s ease;
@@ -280,7 +280,7 @@ html,body {
 
 .items-container {
     color: #333333;
-    padding: 1px 10px 5px 10px;
+    padding: 5px 10px 5px 10px;
     border-left: 1px solid lightgrey;
     border-right: 1px solid lightgrey;
     border-bottom: 1px solid lightgrey;
@@ -351,8 +351,7 @@ html,body {
     height: 30px;
 }
 
-.item-detail-button-container.show-hide .item-extras-show-hide-icon {
-    background-image: url('/images/icons/plus-icon.png');
+.item-detail-button-container.show-hide .show-hide-item-extras {
     height: 100%;
     background-size: 20px;
     background-repeat: no-repeat;
@@ -362,6 +361,14 @@ html,body {
     line-height: 30px;
     text-align: center;
     font-size: 15px;
+}
+
+.show-hide-item-extras.show-icon {
+    background-image: url('/images/icons/plus-icon.png');
+}
+
+.show-hide-item-extras.hide-icon {
+    background-image: url('/images/icons/minus-icon.png');
 }
 
 .item-detail-button-container .item-save-no-icon

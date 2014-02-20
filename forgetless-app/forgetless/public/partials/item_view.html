@@ -59,12 +59,11 @@
 
     <div class="item-detail-extras-container">
         <div class="item-detail-button-container show-hide">
-            <div class="item-extras-show-hide-icon">
-                Show Reminder Options
+            <div class="show-hide-item-extras" data-ng-class="showHideItemExtrasClassParam">
+                {{showHideItemExtrasTitle}}
             </div>
         </div>
-        <div data-add-calender>
-
+        <div data-add-calender data-ng-show="showItemDetailExtras">
         </div>
     </div>
 

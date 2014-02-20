@@ -345,6 +345,32 @@ forgetlessApp.directive('handleItem', function() {
                 'hide-options': true
             };
 
+            $scope.showHideItemExtrasClassParam = {
+                'hide-icon': false,
+                'show-icon': true
+            };
+
+
+            $scope.showHideItemExtrasTitle = 'Show Reminder Options';
+
+            $scope.showItemDetailExtras = false;
+
+            angular.element(extrasContainer).on('click', function(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.showItemDetailExtras = !$scope.showItemDetailExtras;
+
+                    $scope.showHideItemExtrasClassParam['hide-icon'] = $scope.showItemDetailExtras;
+                    $scope.showHideItemExtrasClassParam['show-icon'] = !$scope.showItemDetailExtras;
+
+                    $scope.showHideItemExtrasTitle = ($scope.showItemDetailExtras ? 'Hide' : 'Show') + ' Reminder Options';
+
+                });
+
+            });
+
             angular.element(optionsContainer).on('click', function(event) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
