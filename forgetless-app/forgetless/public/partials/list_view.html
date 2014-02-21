@@ -7,7 +7,7 @@
     <div class="left content-pane">
 
         <div class="category-item-container">
-            <div class="content-item add-new-item" data-ng-click="addNewCategory()">
+            <div class="content-item add-new-item" data-ng-click="openNewCategoryPrompt()">
                 <div class="title-container">
                     Add new category
                 </div>
@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="confirmation-button-container">
-                    <div class="confirm-yes-icon button" data-ng-click="addNewCategory({test:'test'})">
+                    <div class="confirm-yes-icon button" data-ng-click="addNewCategory()">
                         &nbsp;
                     </div>
                     <div class="confirm-no-icon button" data-ng-click="cancelNewCategory()">
@@ -45,7 +45,7 @@
     <div class="right content-pane">
 
         <div class="category-item-container">
-            <div class="content-item add-new-item" data-ng-click="addNewList()">
+            <div class="content-item add-new-item" data-ng-click="openNewListPrompt()">
                 <div class="title-container">
                     Add new list
                 </div>
@@ -65,7 +65,7 @@
 
 
                 <div class="confirmation-button-container">
-                    <div class="confirm-yes-icon button" data-ng-click="addNewList({test:'test'})">
+                    <div class="confirm-yes-icon button" data-ng-click="addNewList()">
                         &nbsp;
                     </div>
                     <div class="confirm-no-icon button" data-ng-click="cancelNewList()">

@@ -350,7 +350,6 @@ forgetlessApp.directive('handleItem', function() {
                 'show-icon': true
             };
 
-
             $scope.showHideItemExtrasTitle = 'Show Reminder Options';
 
             $scope.showItemDetailExtras = false;

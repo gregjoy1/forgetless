@@ -43,13 +43,31 @@
 </div>
 <div class="items-container" data-ng-show="list.selected" data-handle-items data-ng-if="list.selected">
 
-    <div class="content-item add-new-item">
+    <div class="content-item add-new-item" data-ng-click="openNewItemPrompt(list.id)">
         <div class="title-container">
             Add new item
         </div>
     </div>
 
     <div class="item-container" data-ng-repeat="item in list.items" data-handle-item>
+    </div>
+
+    <div class="category-item-container" data-ng-show="(newItem != false)">
+        <div class="content-item">
+            <div class="title-container">
+                <input type="text" placeholder="New item name" data-ng-model="newItemTitle">
+            </div>
+
+
+            <div class="confirmation-button-container">
+                <div class="confirm-yes-icon button" data-ng-click="addNewItem()">
+                    &nbsp;
+                </div>
+                <div class="confirm-no-icon button" data-ng-click="cancelNewItem()">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>

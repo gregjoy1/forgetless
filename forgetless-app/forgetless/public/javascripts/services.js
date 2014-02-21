@@ -44,8 +44,69 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 
     };
 
-    this.insertItem = function(categoryId, listId, itemFields) {
+    this.insertItem = function(categoryId, listId, itemFields, callback) {
+        var tempId = new Date().getTime();
 
+        for(var categoryInc = 0; categoryInc < this.stack.length; categoryInc++) {
+            if(this.stack[categoryInc].id == categoryId) {
+                for(var listInc = 0; listInc < this.stack[categoryInc].lists.length; listInc++) {
+                    if(this.stack[categoryInc].lists[listInc].id == listId) {
+                        this.stack[categoryInc].lists[listInc].items.push(
+                            {
+                                id: tempId,
+                                title: itemFields.title,
+                                selected: true,
+                                itemType: 1,
+                                reminders: []
+                            }
+                        );
+                    }
+                }
+            }
+        }
+
+        networkManagerService.makeRequest(
+            '/ajax/item/create',
+            {
+                userId: userService.userModel.id,
+                title: itemFields.title,
+                listId: listId,
+                itemType: 1
+            },
+            networkManagerService.POST_METHOD,
+            function(success, status, data, headers, config) {
+                if(success) {
+                    remoteStorageModelParserService.parseStatus(data, function(err, detail) {
+                        if(err) {
+                            // TODO sort this out properly
+                            console.log('Something went wrong!');
+                        } else {
+
+                            for(var categoryInc = 0; categoryInc < stack.length; categoryInc++) {
+                                if(stack[categoryInc].id == categoryId) {
+                                    for(var listInc = 0; listInc < stack[categoryInc].lists.length; listInc++) {
+                                        if(stack[categoryInc].lists[listInc].id == listId) {
+                                            for(var itemInc = 0; itemInc < stack[categoryInc].lists[listInc].items.length; itemInc++) {
+                                                if(stack[categoryInc].lists[listInc].items[itemInc].id == tempId) {
+                                                    stack[categoryInc].lists[listInc].items[itemInc].id = detail.Item.id;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    });
+                } else {
+                    // TODO sort this out properly
+                    console.log('could not connect to server?!');
+                }
+            }
+        );
+
+        callback();
     };
 
     this.updateItem = function(categoryId, listId, itemId, itemFields) {
@@ -409,6 +470,7 @@ forgetlessApp.service('remoteStorageModelParserService', function(remoteStorageS
                 id: item.itemId,
                 title: item.Item.title,
                 content: item.Item.content,
+                itemType: item.Item.itemType,
                 selected: false,
                 reminders: []
             };

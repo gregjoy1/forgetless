@@ -78,14 +78,14 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
         $scope.newCategoryTitle = '';
     };
 
-    $scope.addNewCategory = function(parameters) {
-        if(parameters == undefined) {
-            $scope.newCategory = true;
-            $scope.newCategoryTitle = '';
-        } else {
-            stackService.insertCategory({title: $scope.newCategoryTitle}, updateStack);
-            $scope.cancelNewCategory();
-        }
+    $scope.openNewCategoryPrompt = function() {
+        $scope.newCategory = true;
+        $scope.newCategoryTitle = '';
+    };
+
+    $scope.addNewCategory = function() {
+        stackService.insertCategory({title: $scope.newCategoryTitle}, updateStack);
+        $scope.cancelNewCategory();
     };
 
     $scope.newList = false;
@@ -96,22 +96,48 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
         $scope.newListTitle = '';
     };
 
-    $scope.addNewList = function(parameters) {
-        if(parameters == undefined) {
-            $scope.newList = true;
-            $scope.newListTitle = '';
-        } else {
+    $scope.openNewListPrompt = function() {
+        $scope.newList = true;
+        $scope.newListTitle = '';
+    };
 
-            stackService.insertList(
-                $scope.selectedCategoryId,
-                {
-                    title: $scope.newListTitle
-                },
-                updateStack
-            );
+    $scope.addNewList = function() {
+        stackService.insertList(
+            $scope.selectedCategoryId,
+            {
+                title: $scope.newListTitle
+            },
+            updateStack
+        );
+        $scope.cancelNewList();
+    };
 
-            $scope.cancelNewList();
-        }
+    $scope.newItem = false;
+    $scope.newItemTitle = '';
+    $scope.selectedListId = '';
+
+    $scope.cancelNewItem = function() {
+        $scope.newItem = false;
+        $scope.newItemTitle = '';
+        $scope.selectedListId = '';
+    };
+
+    $scope.openNewItemPrompt = function(listId) {
+        $scope.newItem = true;
+        $scope.newItemTitle = '';
+        $scope.selectedListId = listId;
+    };
+
+    $scope.addNewItem = function() {
+        stackService.insertItem(
+            $scope.selectedCategoryId,
+            $scope.selectedListId,
+            {
+                title: $scope.newItemTitle
+            },
+            updateStack
+        );
+        $scope.cancelNewItem();
     };
 
 /*
