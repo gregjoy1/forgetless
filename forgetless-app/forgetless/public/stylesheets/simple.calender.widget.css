@@ -120,14 +120,14 @@
 
 .calender_day_contents {
 	/*background-color: black;*/
-	width: 100%;
+	width: 98%;
 	height: 25px;
 	text-align: center;
     border: 1px solid lightgrey;
 }
 
 .calender_day_contents_text {
-
+    line-height: 25px;
 }
 
 .calender_day_event {

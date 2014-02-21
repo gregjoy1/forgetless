@@ -551,6 +551,15 @@ forgetlessApp.directive('handleItem', function() {
 
 });
 
+forgetlessApp.directive('handleItemReminderOptions', function() {
+    return {
+        templateUrl: '/partials/item_reminder_view.html',
+        controller: function($scope, $element, $state) {
+
+        }
+    };
+});
+
 forgetlessApp.directive('handleMobileNav', function() {
     return {
         templateUrl: '/partials/mobile_nav_view.html',

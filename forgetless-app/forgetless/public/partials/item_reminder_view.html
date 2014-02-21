@@ -1,0 +1,11 @@
+<div data-ng-switch="(item.reminders.length > 0)">
+    <div data-ng-switch-when="true">
+        <div data-ng-repeat="reminder in item.reminders">
+            <div data-add-calender class="item-reminder-container"></div>
+        </div>
+    </div>
+
+    <div data-ng-switch-default>
+        <!--// no reminders-->
+    </div>
+</div>

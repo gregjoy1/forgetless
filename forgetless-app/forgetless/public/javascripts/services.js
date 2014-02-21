@@ -417,7 +417,7 @@ forgetlessApp.service('remoteStorageModelParserService', function(remoteStorageS
                 for(var reminderInc = 0; reminderInc < reminders.length; reminderInc++) {
                     var reminder = this.parseReminder(reminders[reminderInc]);
                     if(reminder != undefined) {
-                        itemOutput.reminders.push(reminders);
+                        itemOutput.reminders.push(reminder);
                     }
                 }
             }
@@ -432,7 +432,8 @@ forgetlessApp.service('remoteStorageModelParserService', function(remoteStorageS
         if(reminder != undefined && reminder.zoneId == 1) {
             reminderOutput = {
                 id: reminder.id,
-                dateTime: reminder.dateTime
+                dateTime: reminder.dateTime,
+                repeat: reminder.repeat
             };
         }
 
