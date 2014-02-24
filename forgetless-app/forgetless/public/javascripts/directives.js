@@ -136,7 +136,7 @@ forgetlessApp.directive('handleList', function() {
 
     return {
         templateUrl: '/partials/list_item_view.html',
-        controller: function($scope, $element, $state, $window) {
+        controller: function($scope, $element, $state, $window, stackService) {
             var element = $element[0];
             var listHeader = element.querySelector('.content-item');
             var itemsContainer = element.querySelector('.items-container');
@@ -281,6 +281,34 @@ forgetlessApp.directive('handleList', function() {
 
                 $state.go(stateName, params);
 
+                $scope.newItem = false;
+                $scope.newItemTitle = '';
+                $scope.selectedListId = '';
+
+                $scope.cancelNewItem = function() {
+                    $scope.newItem = false;
+                    $scope.newItemTitle = '';
+                    $scope.selectedListId = '';
+                };
+
+                $scope.openNewItemPrompt = function(listId) {
+                    $scope.newItem = true;
+                    $scope.newItemTitle = '';
+                    $scope.selectedListId = listId;
+                };
+
+                $scope.addNewItem = function() {
+                    stackService.insertItem(
+                        $scope.selectedCategoryId,
+                        $scope.selectedListId,
+                        {
+                            title: $scope.newItemTitle
+                        },
+                        $scope.updateStack
+                    );
+                    $scope.cancelNewItem();
+                };
+
             });
         }
     };
@@ -292,6 +320,7 @@ forgetlessApp.directive('handleItem', function() {
     return {
         templateUrl: '/partials/item_view.html',
         controller: function($scope, $element, $state, $window) {
+
             var element = $element[0];
             var itemHeader = element.querySelector('.content-item');
             var itemDetails = element.querySelector('.item-detail');

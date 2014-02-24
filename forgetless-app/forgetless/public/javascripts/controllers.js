@@ -70,6 +70,7 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
 
     $scope.categories = [];
 
+    /* Adding new category functionality */
     $scope.newCategory = false;
     $scope.newCategoryTitle = '';
 
@@ -84,10 +85,12 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
     };
 
     $scope.addNewCategory = function() {
-        stackService.insertCategory({title: $scope.newCategoryTitle}, updateStack);
+        stackService.insertCategory({title: $scope.newCategoryTitle}, $scope.updateStack);
         $scope.cancelNewCategory();
     };
+    /* ----------------------------------- */
 
+    /* Adding new list functionality */
     $scope.newList = false;
     $scope.newListTitle = '';
 
@@ -107,74 +110,17 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
             {
                 title: $scope.newListTitle
             },
-            updateStack
+            $scope.updateStack
         );
         $scope.cancelNewList();
     };
+    /* ----------------------------------- */
 
-    $scope.newItem = false;
-    $scope.newItemTitle = '';
-    $scope.selectedListId = '';
+    /*
+    * For adding new item functionality, refer to handle-list directive
+    */
 
-    $scope.cancelNewItem = function() {
-        $scope.newItem = false;
-        $scope.newItemTitle = '';
-        $scope.selectedListId = '';
-    };
-
-    $scope.openNewItemPrompt = function(listId) {
-        $scope.newItem = true;
-        $scope.newItemTitle = '';
-        $scope.selectedListId = listId;
-    };
-
-    $scope.addNewItem = function() {
-        stackService.insertItem(
-            $scope.selectedCategoryId,
-            $scope.selectedListId,
-            {
-                title: $scope.newItemTitle
-            },
-            updateStack
-        );
-        $scope.cancelNewItem();
-    };
-
-/*
-    for(var catInc = 0; catInc <  5; catInc++) {
-
-        $scope.categories.push({
-            id: catInc,
-            title: 'category ' + catInc,
-            selected: (catInc == 0),
-            lists: []
-        });
-
-        for(var listInc = 0; listInc <  10; listInc++) {
-
-            $scope.categories[catInc].lists.push({
-                id: listInc,
-                title: 'list: ' + catInc + ' : ' + listInc,
-                selected: false,
-                items: []
-            });
-
-            for(var itemInc = 0; itemInc <  10; itemInc++) {
-
-                $scope.categories[catInc].lists[listInc].items.push({
-                    id: itemInc,
-                    title: 'item: ' + catInc + ' : ' + listInc + ' : ' + itemInc,
-                    content: 'im a content-der ' + itemInc,
-                    selected: false
-                });
-
-            }
-
-        }
-
-    }
-*/
-    var updateStack = function() {
+    $scope.updateStack = function() {
         stackService.getStack(function(stack) {
             console.log('%cUpdate Stack DUMP', 'color:blue;', stack);
             $scope.categories = stack;
@@ -192,7 +138,7 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
         });
     };
 
-    updateStack();
+    $scope.updateStack();
 
     /*
      * -------------------------------------------
