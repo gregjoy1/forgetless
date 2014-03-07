@@ -2,6 +2,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 
     this.stack = [];
 
+    // Loads stack, if stack is empty then load from backend
     this.getStack = function(callback) {
         var _this = this;
         if(_this.stack.length == 0) {
@@ -14,6 +15,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
         }
     };
 
+    // make request for stack from backend with ajax
     this.loadStack = function(callback) {
         networkManagerService.makeRequest(
             '/ajax/stack/dump/',
@@ -36,17 +38,24 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 
     };
 
+    // make request to push newly created reminder to backend
     this.insertReminder = function() {
 
     };
 
+    // make request to push any changes to a reminder to the backend
     this.updateReminder = function() {
 
     };
 
+    // make request to push newly created item to backend
     this.insertItem = function(categoryId, listId, itemFields, callback) {
-        var tempId = new Date().getTime();
+        // creates temp id for the time being (until new item is synced with the server)
+        // with string prefix to avoid conflicts with numeric ids.
+        var tempId = 'temp' + (new Date().getTime()) + parseInt(Math.random() * 100);
 
+        // inserts new item into local stack, for it to be accessible to the user
+        // before syncing with the server
         for(var categoryInc = 0; categoryInc < this.stack.length; categoryInc++) {
             if(this.stack[categoryInc].id == categoryId) {
                 for(var listInc = 0; listInc < this.stack[categoryInc].lists.length; listInc++) {
@@ -65,12 +74,26 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
             }
         }
 
+        // sync new item with the server
         networkManagerService.makeRequest(
             '/ajax/item/create',
             {
                 userId: userService.userModel.id,
                 title: itemFields.title,
-                listId: listId,
+                // inject function to ensure newly created items created when there is no connection
+                // to the server dont sync with a temp list id
+                listId: function() {
+                    // scans local stack for the existence of temp id
+                    for(var categoryInc = 0; categoryInc < stack.length; categoryInc++) {
+                        for(var listInc = 0; listInc < stack[categoryInc].lists.length; listInc++) {
+                            var list = stack[categoryInc].lists[listInc];
+                            if(list.hasOwnProperty('tempId') && list.tempId == listId) {
+                                return list.id;
+                            }
+                        }
+                    }
+                    return listId;
+                },
                 itemType: 1
             },
             networkManagerService.POST_METHOD,
@@ -79,9 +102,10 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                     remoteStorageModelParserService.parseStatus(data, function(err, detail) {
                         if(err) {
                             // TODO sort this out properly
-                            console.log('Something went wrong!');
+                            console.log('Something went wrong!', err);
                         } else {
 
+                            // if everything went well then update the local stack with newly assigned item id
                             for(var categoryInc = 0; categoryInc < stack.length; categoryInc++) {
                                 if(stack[categoryInc].id == categoryId) {
                                     for(var listInc = 0; listInc < stack[categoryInc].lists.length; listInc++) {
@@ -89,6 +113,9 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                                             for(var itemInc = 0; itemInc < stack[categoryInc].lists[listInc].items.length; itemInc++) {
                                                 if(stack[categoryInc].lists[listInc].items[itemInc].id == tempId) {
                                                     stack[categoryInc].lists[listInc].items[itemInc].id = detail.Item.id;
+
+                                                    // record tempId just in case
+                                                    stack[categoryInc].lists[listInc].items[itemInc].tempId = tempId;
                                                     break;
                                                 }
                                             }
@@ -109,13 +136,17 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
         callback();
     };
 
+    // request to backend to sync updated item
     this.updateItem = function(categoryId, listId, itemId, itemFields) {
 
     };
 
+    // make request to push newly created list to backend
     this.insertList = function(categoryId, listFields, callback) {
 
-        var tempId = new Date().getTime();
+        // creates temp id for the time being (until new list is synced with the server)
+        // with string prefix to avoid conflicts with numeric ids.
+        var tempId = 'temp' + (new Date().getTime()) + parseInt(Math.random() * 100);
 
         for(var inc = 0; inc < this.stack.length; inc++) {
             if(this.stack[inc].id == categoryId) {
@@ -137,7 +168,16 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
             {
                 userId: userService.userModel.id,
                 title: listFields.title,
-                categoryId: categoryId
+                categoryId: function() {
+                    for(var categoryInc = 0; categoryInc < stack.length; categoryInc++) {
+                        var category = stack[categoryInc];
+                        if(category.hasOwnProperty('tempId') && category.tempId == categoryId) {
+                            return category.id;
+                        }
+                    }
+                    // TODO this should never happen but make sure its accounted for
+                    return categoryId;
+                }
             },
             networkManagerService.POST_METHOD,
             function(success, status, data, headers, config) {
@@ -145,7 +185,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                     remoteStorageModelParserService.parseStatus(data, function(err, detail) {
                         if(err) {
                             // TODO sort this out properly
-                            console.log('Something went wrong!');
+                            console.log('Something went wrong!', err);
                         } else {
                             for(var inc = 0; inc < stack.length; inc++) {
                                 if(stack[inc].id == tempId) {
@@ -171,7 +211,9 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 
     this.insertCategory = function(categoryFields, callback) {
 
-        var tempId = new Date().getTime();
+        // creates temp id for the time being (until new category is synced with the server)
+        // with string prefix to avoid conflicts with numeric ids.
+        var tempId = 'temp' + (new Date().getTime()) + parseInt(Math.random() * 100);
 
         this.stack.push(
             {
@@ -195,7 +237,7 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
                     remoteStorageModelParserService.parseStatus(data, function(err, detail) {
                         if(err) {
                             // TODO sort this out properly
-                            console.log('Something went wrong!');
+                            console.log('Something went wrong!', err);
                         } else {
                             for(var inc = 0; inc < stack.length; inc++) {
                                 if(stack[inc].id == tempId) {
@@ -372,11 +414,30 @@ forgetlessApp.service('networkManagerService', function(statusService, localStor
 forgetlessApp.service('remoteStorageModelParserService', function(remoteStorageService, userService) {
 
     this.makeRequest = function(request, callback) {
-        if(request.method == 'post') {
-            remoteStorageService.makePostRequest(request.url, request.fields, callback);
-        } else {
-            remoteStorageService.makeGetRequest(request.url, callback);
+        this.processRequestFields(request.fields, function(processedFields) {
+            if(request.method == 'post') {
+                remoteStorageService.makePostRequest(request.url, processedFields, callback);
+            } else {
+                remoteStorageService.makeGetRequest(request.url, callback);
+            }
+        });
+    };
+
+    this.processRequestFields = function(fields, callback) {
+
+        var returnedFields = {};
+
+        for(field in fields) {
+            if(fields.hasOwnProperty(field)) {
+                if(typeof fields[field] == 'function') {
+                    returnedFields[field] = fields[field]();
+                } else {
+                    returnedFields[field] = fields[field];
+                }
+            }
         }
+
+        callback(returnedFields);
     };
 
     this.parseStatus = function(data, callback) {
