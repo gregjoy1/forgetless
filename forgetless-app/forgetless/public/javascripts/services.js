@@ -48,6 +48,11 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 
     };
 
+    // make request to remove a reminder
+    this.removeReminder = function() {
+
+    };
+
     // make request to push newly created item to backend
     this.insertItem = function(categoryId, listId, itemFields, callback) {
         // creates temp id for the time being (until new item is synced with the server)
@@ -141,6 +146,49 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 
     };
 
+    // request to remove item from the backend
+    this.removeItem = function(categoryId, listId, itemId, callback) {
+
+        OuterLoop:
+        for(var categoryInc = 0; categoryInc < this.stack.length; categoryInc++) {
+            for(var listInc = 0; listInc < this.stack[categoryInc].lists.length; listInc++) {
+                for(var itemInc = 0; itemInc < this.stack[categoryInc].lists[listInc].items.length; itemInc++) {
+                    if(this.stack[categoryInc].lists[listInc].items[itemInc].id == listId) {
+                        delete this.stack[categoryInc].lists[listInc].items[itemInc];
+                        break OuterLoop;
+                    }
+                }
+            }
+        }
+
+        if(String(listId).length < 4 || String(listId).substr(0, 4) != 'temp') {
+
+            networkManagerService.makeRequest(
+                '/ajax/category/remove',
+                {
+                    userId: userService.userModel.id,
+                    categoryId: listId
+                },
+                networkManagerService.POST_METHOD,
+                function(success, status, data, headers, config) {
+                    if(success) {
+                        remoteStorageModelParserService.parseStatus(data, function(err, detail) {
+                            if(err) {
+                                // TODO sort this out properly
+                                console.log('Something went wrong!', err);
+                            }
+                        });
+                    } else {
+                        // TODO sort this out properly
+                        console.log('could not connect to server?!');
+                    }
+                }
+            );
+        }
+
+        callback();
+    };
+
     // make request to push newly created list to backend
     this.insertList = function(categoryId, listFields, callback) {
 
@@ -205,8 +253,49 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
         callback();
     };
 
-    this.updateList = function(listId, listFields) {
+    this.updateList = function(listId, listFields, callback) {
 
+    };
+
+    // request to remove list from the backend
+    this.removeList = function(listId, callback) {
+
+        OuterLoop:
+        for(var categoryInc = 0; categoryInc < this.stack.length; categoryInc++) {
+            for(var listInc = 0; listInc < this.stack[categoryInc].lists.length; listInc++) {
+                if(this.stack[categoryInc].lists[listInc].id == listId) {
+                    delete this.stack[categoryInc].lists[listInc];
+                    break OuterLoop;
+                }
+            }
+        }
+
+        if(String(listId).length < 4 || String(listId).substr(0, 4) != 'temp') {
+
+            networkManagerService.makeRequest(
+                '/ajax/list/remove',
+                {
+                    userId: userService.userModel.id,
+                    listId: listId
+                },
+                networkManagerService.POST_METHOD,
+                function(success, status, data, headers, config) {
+                    if(success) {
+                        remoteStorageModelParserService.parseStatus(data, function(err, detail) {
+                            if(err) {
+                                // TODO sort this out properly
+                                console.log('Something went wrong!', err);
+                            }
+                        });
+                    } else {
+                        // TODO sort this out properly
+                        console.log('could not connect to server?!');
+                    }
+                }
+            );
+        }
+
+        callback();
     };
 
     this.insertCategory = function(categoryFields, callback) {
@@ -257,8 +346,45 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
         callback();
     };
 
-    this.updateCategory = function(categoryId, categoryFields) {
+    this.updateCategory = function(categoryId, categoryFields, callback) {
 
+    };
+
+    this.removeCategory = function(categoryId, callback) {
+
+        for(var categoryInc = 0; categoryInc < this.stack.length; categoryInc++) {
+            if(this.stack[categoryInc].id == categoryId) {
+                delete this.stack[categoryInc];
+                break;
+            }
+        }
+
+        if(String(categoryId).length < 4 || String(categoryId).substr(0, 4) != 'temp') {
+
+            networkManagerService.makeRequest(
+                '/ajax/category/remove',
+                {
+                    userId: userService.userModel.id,
+                    categoryId: categoryId
+                },
+                networkManagerService.POST_METHOD,
+                function(success, status, data, headers, config) {
+                    if(success) {
+                        remoteStorageModelParserService.parseStatus(data, function(err, detail) {
+                            if(err) {
+                                // TODO sort this out properly
+                                console.log('Something went wrong!', err);
+                            }
+                        });
+                    } else {
+                        // TODO sort this out properly
+                        console.log('could not connect to server?!');
+                    }
+                }
+            );
+        }
+
+        callback();
     };
 
     this.login = function(email, password, callback) {

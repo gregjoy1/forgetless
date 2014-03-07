@@ -86,6 +86,16 @@ forgetlessApp.directive('handleCategory', function() {
             angular.element(deleteYesButton).on('click', function(event) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.mainOptionClassParam['hide-option'] = false;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                });
+
+                stackService.removeCategory($scope.category.id, function() {
+                    console.log('category deleted');
+                });
             });
 
             angular.element(deleteNoButton).on('click', function(event) {
