@@ -232,6 +232,17 @@ forgetlessApp.directive('handleList', function() {
             angular.element(deleteYesButton).on('click', function(event) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.mainOptionClassParam['hide-option'] = false;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                });
+
+                stackService.removeList($scope.list.id, function() {
+                    console.log('list deleted');
+                });
+
             });
 
             angular.element(deleteNoButton).on('click', function(event) {
@@ -329,7 +340,7 @@ forgetlessApp.directive('handleItem', function() {
 
     return {
         templateUrl: '/partials/item_view.html',
-        controller: function($scope, $element, $state, $window) {
+        controller: function($scope, $element, $state, $window, stackService) {
 
             var element = $element[0];
             var itemHeader = element.querySelector('.content-item');
@@ -452,6 +463,17 @@ forgetlessApp.directive('handleItem', function() {
             angular.element(deleteYesButton).on('click', function(event) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
+
+                $scope.$apply(function() {
+                    $scope.mainOptionClassParam['hide-option'] = false;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                });
+
+                stackService.removeItem($scope.list.id, $scope.item.id, function() {
+                    console.log('item removed...');
+                });
+
             });
 
             angular.element(deleteNoButton).on('click', function(event) {

@@ -120,13 +120,17 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
     * For adding new item functionality, refer to handle-list directive
     */
 
+    // TODO maximum cludge
+    var firstTime = true;
+
     $scope.updateStack = function() {
         stackService.getStack(function(stack) {
             console.log('%cUpdate Stack DUMP', 'color:blue;', stack);
             $scope.categories = stack;
 
             // TODO check this out, its killing the adding new lists and stuff
-            if(stack.length > 0) {
+            if(stack.length > 0 && firstTime) {
+
                 $scope.selectedCategoryId = ($scope.categories[0].id != undefined ? $scope.categories[0].id : null);
                 $scope.selectedListId = ($scope.categories[0].lists[0] != undefined ? $scope.categories[0].lists[0] : null);
                 if($scope.selectedListId != null) {
@@ -134,6 +138,9 @@ forgetlessApp.controller('ContentController', function($scope, $stateParams, $st
                 } else {
                     $scope.selectedItemId = null;
                 }
+
+                firstTime = false;
+
             }
         });
     };

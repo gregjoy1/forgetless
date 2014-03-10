@@ -147,14 +147,15 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
     };
 
     // request to remove item from the backend
-    this.removeItem = function(categoryId, listId, itemId, callback) {
+    this.removeItem = function(listId, itemId, callback) {
 
         OuterLoop:
         for(var categoryInc = 0; categoryInc < this.stack.length; categoryInc++) {
             for(var listInc = 0; listInc < this.stack[categoryInc].lists.length; listInc++) {
                 for(var itemInc = 0; itemInc < this.stack[categoryInc].lists[listInc].items.length; itemInc++) {
-                    if(this.stack[categoryInc].lists[listInc].items[itemInc].id == listId) {
-                        delete this.stack[categoryInc].lists[listInc].items[itemInc];
+                    if(this.stack[categoryInc].lists[listInc].items[itemInc].id == itemId) {
+                        // remove item element from array
+                        this.stack[categoryInc].lists[listInc].items.splice(itemInc, 1);
                         break OuterLoop;
                     }
                 }
@@ -164,10 +165,11 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
         if(String(listId).length < 4 || String(listId).substr(0, 4) != 'temp') {
 
             networkManagerService.makeRequest(
-                '/ajax/category/remove',
+                '/ajax/item/remove',
                 {
                     userId: userService.userModel.id,
-                    categoryId: listId
+                    listId: listId,
+                    itemId: itemId
                 },
                 networkManagerService.POST_METHOD,
                 function(success, status, data, headers, config) {
@@ -264,7 +266,8 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
         for(var categoryInc = 0; categoryInc < this.stack.length; categoryInc++) {
             for(var listInc = 0; listInc < this.stack[categoryInc].lists.length; listInc++) {
                 if(this.stack[categoryInc].lists[listInc].id == listId) {
-                    delete this.stack[categoryInc].lists[listInc];
+                    // remove element from list array
+                    this.stack[categoryInc].lists.splice(listInc, 1);
                     break OuterLoop;
                 }
             }
@@ -354,7 +357,8 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 
         for(var categoryInc = 0; categoryInc < this.stack.length; categoryInc++) {
             if(this.stack[categoryInc].id == categoryId) {
-                delete this.stack[categoryInc];
+                // remove category element from stack
+                this.stack.splice(categoryInc, 1);
                 break;
             }
         }
