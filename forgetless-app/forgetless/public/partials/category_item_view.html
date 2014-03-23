@@ -3,7 +3,10 @@
      data-ng-click="selectCategory(category.id)">
 
     <div class="title-container" data-ng-style="titleContainerStyleParam">
-        {{category.title}}
+        <span data-ng-show="isEditingTitle == false">
+            {{category.title}}
+        </span>
+        <input data-ng-model="newCategoryTitle" data-ng-show="isEditingTitle == true">
     </div>
 
     <div class="options-container" data-ng-class="optionsContainerClassParam">

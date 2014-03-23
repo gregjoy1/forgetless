@@ -2,7 +2,10 @@
      data-ng-class="{selected: list.selected}">
 
     <div class="title-container" data-ng-style="titleContainerStyleParam">
-        {{list.title}}
+        <span data-ng-show="isEditingTitle == false">
+            {{list.title}}
+        </span>
+        <input data-ng-model="newListTitle" data-ng-show="isEditingTitle == true">
     </div>
 
     <div class="options-container" data-ng-class="optionsContainerClassParam">

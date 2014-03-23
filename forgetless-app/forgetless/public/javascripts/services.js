@@ -257,6 +257,44 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
 
     this.updateList = function(listId, listFields, callback) {
 
+        var categoryId = null;
+
+        OuterLoop:
+            for(var categoryInc = 0; categoryInc < this.stack.length; categoryInc++) {
+                for(var listInc = 0; listInc < this.stack[categoryInc].lists.length; listInc++) {
+                    if(this.stack[categoryInc].lists[listInc].id == listId) {
+                        // remove element from list array
+                        this.stack[categoryInc].lists[listInc].title = listFields.title;
+                        categoryId = this.stack[categoryInc].id;
+                        break OuterLoop;
+                    }
+                }
+            }
+
+        listFields.userId = userService.userModel.id;
+        listFields.listId = listId;
+        listFields.categoryId = categoryId;
+
+        networkManagerService.makeRequest(
+            '/ajax/list/update',
+            listFields,
+            networkManagerService.POST_METHOD,
+            function(success, status, data, headers, config) {
+                if(success) {
+                    remoteStorageModelParserService.parseStatus(data, function(err, detail) {
+                        if(err) {
+                            // TODO sort this out properly
+                            console.log('Something went wrong!', err);
+                        }
+                    });
+                } else {
+                    // TODO sort this out properly
+                    console.log('could not connect to server?!');
+                }
+            }
+        );
+
+        callback();
     };
 
     // request to remove list from the backend
@@ -350,6 +388,37 @@ forgetlessApp.service('stackService', function(userService, remoteStorageModelPa
     };
 
     this.updateCategory = function(categoryId, categoryFields, callback) {
+
+        for(var categoryInc = 0; categoryInc < this.stack.length; categoryInc++) {
+            if(this.stack[categoryInc].id == categoryId) {
+                this.stack[categoryInc].title = categoryFields.title;
+                break;
+            }
+        }
+
+        categoryFields.userId = userService.userModel.id;
+        categoryFields.categoryId = categoryId;
+
+        networkManagerService.makeRequest(
+            '/ajax/category/update',
+            categoryFields,
+            networkManagerService.POST_METHOD,
+            function(success, status, data, headers, config) {
+                if(success) {
+                    remoteStorageModelParserService.parseStatus(data, function(err, detail) {
+                        if(err) {
+                            // TODO sort this out properly
+                            console.log('Something went wrong!', err);
+                        }
+                    });
+                } else {
+                    // TODO sort this out properly
+                    console.log('could not connect to server?!');
+                }
+            }
+        );
+
+        callback();
 
     };
 

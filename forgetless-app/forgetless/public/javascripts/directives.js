@@ -23,6 +23,9 @@ forgetlessApp.directive('handleCategory', function() {
             var confirmYesButton = confirmOptionsContainer.querySelector('.confirm-yes-icon');
             var confirmNoButton = confirmOptionsContainer.querySelector('.confirm-no-icon');
 
+            $scope.isEditingTitle = false;
+            $scope.newCategoryTitle = '';
+
             $scope.mainOptionClassParam = {
                 'hide-option': false
             };
@@ -59,9 +62,9 @@ forgetlessApp.directive('handleCategory', function() {
                 if(!selected &&
                     optionsContainerWidth != undefined &&
                     categoryHeaderWidth != undefined) {
-                    maxWidth = '80%';
+                    maxWidth = '60%';
                 } else {
-                    maxWidth = (categoryHeaderWidth - optionsContainerWidth) + 'px';
+                    maxWidth = (categoryHeaderWidth - optionsContainerWidth - 10) + 'px';
                 }
 
                 $scope.$apply(function() {
@@ -77,6 +80,10 @@ forgetlessApp.directive('handleCategory', function() {
                 event.stopImmediatePropagation();
 
                 $scope.$apply(function() {
+
+                    $scope.isEditingTitle = true;
+                    $scope.newCategoryTitle = $scope.category.title;
+
                     $scope.mainOptionClassParam['hide-option'] = true;
                     $scope.confirmOptionClassParam['hide-option'] = false;
                     $scope.deleteOptionClassParam['hide-option'] = true;
@@ -123,7 +130,27 @@ forgetlessApp.directive('handleCategory', function() {
             angular.element(confirmYesButton).on('click', function(event) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                stackService.getStack();
+
+                stackService.updateCategory(
+                    $scope.category.id,
+                    {
+                        title: $scope.newCategoryTitle
+                    },
+                    function() {
+                        console.log('updated category');
+                    }
+                );
+
+                $scope.$apply(function() {
+
+                    $scope.isEditingTitle = false;
+                    $scope.newCategoryTitle = '';
+
+                    $scope.mainOptionClassParam['hide-option'] = false;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
+                });
+
             });
 
             angular.element(confirmNoButton).on('click', function(event) {
@@ -131,6 +158,10 @@ forgetlessApp.directive('handleCategory', function() {
                 event.stopImmediatePropagation();
 
                 $scope.$apply(function() {
+
+                    $scope.isEditingTitle = false;
+                    $scope.newCategoryTitle = '';
+
                     $scope.mainOptionClassParam['hide-option'] = false;
                     $scope.deleteOptionClassParam['hide-option'] = true;
                     $scope.confirmOptionClassParam['hide-option'] = true;
@@ -168,6 +199,9 @@ forgetlessApp.directive('handleList', function() {
             var confirmOptionsContainer = listHeader.querySelector('.confirm');
             var confirmYesButton = confirmOptionsContainer.querySelector('.confirm-yes-icon');
             var confirmNoButton = confirmOptionsContainer.querySelector('.confirm-no-icon');
+
+            $scope.isEditingTitle = false;
+            $scope.newListTitle = '';
 
             $scope.mainOptionClassParam = {
                 'hide-option': false
@@ -223,6 +257,10 @@ forgetlessApp.directive('handleList', function() {
                 event.stopImmediatePropagation();
 
                 $scope.$apply(function() {
+
+                    $scope.isEditingTitle = true;
+                    $scope.newListTitle = $scope.list.title;
+
                     $scope.mainOptionClassParam['hide-option'] = true;
                     $scope.confirmOptionClassParam['hide-option'] = false;
                     $scope.deleteOptionClassParam['hide-option'] = true;
@@ -270,6 +308,27 @@ forgetlessApp.directive('handleList', function() {
             angular.element(confirmYesButton).on('click', function(event) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
+
+                stackService.updateList(
+                    $scope.list.id,
+                    {
+                        title: $scope.newListTitle
+                    },
+                    function() {
+                        console.log('updated list')
+                    }
+                );
+
+                $scope.$apply(function() {
+
+                    $scope.isEditingTitle = false;
+                    $scope.newListTitle = '';
+
+                    $scope.mainOptionClassParam['hide-option'] = false;
+                    $scope.deleteOptionClassParam['hide-option'] = true;
+                    $scope.confirmOptionClassParam['hide-option'] = true;
+                });
+
             });
 
             angular.element(confirmNoButton).on('click', function(event) {
@@ -277,6 +336,10 @@ forgetlessApp.directive('handleList', function() {
                 event.stopImmediatePropagation();
 
                 $scope.$apply(function() {
+
+                    $scope.isEditingTitle = false;
+                    $scope.newListTitle = '';
+
                     $scope.mainOptionClassParam['hide-option'] = false;
                     $scope.deleteOptionClassParam['hide-option'] = true;
                     $scope.confirmOptionClassParam['hide-option'] = true;
